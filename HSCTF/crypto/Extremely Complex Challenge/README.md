@@ -37,7 +37,7 @@ E = EllipticCurve(GF(p) , [a,b])
 G = E(G)
 P = E(P)
 PK = G.discrete_log(P)
-print(pk)
+print(PK)
 G*PK == P
 #17683067357
 ```
