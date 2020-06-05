@@ -29,19 +29,19 @@ Hence we get Flag as
 `(Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4))`
 
 Here are multiple ways of doing it in python
-```
+```python
 from pwn import xor
-k13 = bytes.fromhex('9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b')
-k235 = bytes.fromhex('557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05')
-k34 = bytes.fromhex('996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a')
+K13 = bytes.fromhex('9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b')
+K235 = bytes.fromhex('557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05')
+K34 = bytes.fromhex('996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a')
 F12345 = bytes.fromhex('306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139')
 
 #1 xor from pwntools
-flag = xor(k13, k235, k34, F12345)
+flag = xor(K13, K235, K34, F12345)
 print(flag.decode())
 
 #2 Doing shit yourself
-flag = "".join([ chr(k13[i] ^ k235[i] ^ k34[i] ^ F12345[i]) for i in range(len(k13) ])
+flag = "".join([ chr(K13[i] ^ K235[i] ^ K34[i] ^ F12345[i]) for i in range(len(K13) ])
 print(flag)
 
 #flag{n0t_t00_h4rD_h0p3fully} YES
