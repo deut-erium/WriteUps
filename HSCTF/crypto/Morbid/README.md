@@ -146,8 +146,17 @@ for perm in itertools.permutations(range(9)):
 ## Post-challenge analysis
 Since I found the challenge interesting, here is some analysis
 
+```python
+substitution = [substitution_token[i] for i in perm]
+frequency = [ct.count(str(digit + 1)) for digit in perm]
+for i in range(9):
+    print("digit {0}: {1} {2}".format(perm[i]+1, substitution[i], frequency[i]))
+```
+
 | Digits | 1  | 2  | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-| :--------: | :-------------: | :----------: | :-----------: |  :-----------: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
-| Substitution | •• | •– | •X | –•  | ––  | –X  | X•  | X– | XX  |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| Substitution | •• | •– | •X | –•  | –– | –X  | X• | X– | XX |
 | Frequency |13| 15| 12| 23| 3 | 15| 12| 9| 18 |
 
+Hmm, 
+`--` and `X-` are quite infrequent, while `-.` seems a little bit more frequent. I was expecting `.., .-, --, -.` to be equally frequent. Either I did some error or there is something which I cant see currently. 
