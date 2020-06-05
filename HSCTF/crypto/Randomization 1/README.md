@@ -1,7 +1,8 @@
 # Randomization 1
 
-[](Capture.PNG)
-We are provided a binary (rand1)[rand1] which supposedly runs on the server. We have to figure out how would capture the flag
+![](Capture.PNG)
+
+We are provided a binary [rand1](rand1) which supposedly runs on the server. We have to figure out how would capture the flag
 
 Lets decompile the binary quickly in [Ghidra](https://ghidra-sre.org/).  
 Seeing the output of `main` function we get
