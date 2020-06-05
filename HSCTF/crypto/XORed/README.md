@@ -1,4 +1,6 @@
 # XORed
+
+![](ChallengeDescription.PNG)
 ```
 I was given the following equations. Can you help me decode the flag?
 Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533
@@ -22,9 +24,9 @@ So if we want to recover Flag from `Flag ^ Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5`, we
 Notice that we dont need to recover each of the Key value. We can extract Flag (a bit) smartly. All we need is `Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5`
 
 We can get it by XORing (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4)
-Which is equvalent to `Key1 ~~^ Key3~~`^ Key2 ^ Key3 ^ Key5 ^ Key4 ~~^Key3~~`
+Which is equvalent to Key1 ~~^Key3~~^ Key2 ^ Key3 ^ Key5 ^ Key4 ~~^Key3~~
 Hence we get Flag as 
-`(Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4))
+`(Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4))`
 
 Here are multiple ways of doing it in python
 ```
