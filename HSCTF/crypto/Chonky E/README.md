@@ -1,7 +1,5 @@
 # Chonky E
-
-[](Capture.PNG)
-
+![](Capture.PNG)
 ```
 Allen and Jason rely on two different cryptosystems to keep their information secure.
 
