@@ -1,10 +1,10 @@
 # Affina and the Quadratics
 
-[](Capture.PNG)
+![](Capture.PNG)
 
 We are given this image, and hinted towards the name [Affina](https://en.wikipedia.org/wiki/Affine_cipher).
 
-[](affffinaaaa-page-001.jpg)
+![](affffinaaaa-page-001.jpg)
 With a description reading
 ```
 Affina was struggling with her graphing quadratics homework. Bored, she decided to cheat by using Desmos to graph the given quadratic, and then realized that she could use it to send messages to her best friend without anyone noticing!
