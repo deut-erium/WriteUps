@@ -35,8 +35,119 @@ CT: 27435 88151 28274 65679 378.
 
 > We have to decrypt 118289293938434193849271464117429364476994241473157664969879696938145689474393647294392739247721652822414624317164228466
 
-Since Morse code is (Huffman encoded)[https://en.wikipedia.org/wiki/Huffman_coding], the frequencies of - (dash) and . (dot) would be equivalent in the ciphertext.
-(I am not sure about x since spaces are way more frequent than any letter.) Without thinking more about analyzing the problem statistically, one simple way to solve the problem is (brute-forcing)[https://en.wikipedia.org/wiki/Brute-force_attack]
-the key which is 9 different decimal characters i.e 9! (362880) permutations to check, which is fairly easy.
+Since Morse code is [Huffman encoded](https://en.wikipedia.org/wiki/Huffman_coding), the frequencies of - (dash) and . (dot) would be equivalent in the ciphertext.
+(I am not sure about x since spaces are way more frequent than any letter) 
+Without thinking more about analyzing the problem statistically, one simple way to solve the problem is [brute-forcing](https://en.wikipedia.org/wiki/Brute-force_attack)
+the key which is 9 different decimal characters i.e **9! (362880)** permutations to check, which is fairly easy.
 
+```python
+import itertools  # creates iterators for efficient looping
+
+# dictionary of mapping as on
+# https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-English_variants
+
+morse = {
+    "a": ".-",
+    "b": "-...",
+    "c": "-.-.",
+    "d": "-..",
+    "e": ".",
+    "f": "..-.",
+    "g": "--.",
+    "h": "....",
+    "i": "..",
+    "j": ".---",
+    "k": "-.-",
+    "l": ".-..",
+    "m": "--",
+    "n": "-.",
+    "o": "---",
+    "p": ".--.",
+    "q": "--.-",
+    "r": ".-.",
+    "s": "...",
+    "t": "-",
+    "u": "..-",
+    "v": "...-",
+    "w": ".--",
+    "x": "-..-",
+    "y": "-.--",
+    "z": "--..",
+    "0": "-----",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "'": ".----.",
+    "!": "-.-.--",
+    "/": "-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "&": ".-...",
+    ":": "---...",
+    ";": "-.-.-.",
+    "=": "-...-",
+    "+": ".-.-.",
+    "-": "-....-",
+    "_": "..--.-",
+    "\"": ".-..-.",
+    "$": "...-..-",
+    "@": ".--.-.",
+    " ": ""
+}
+
+revMorse = {}  # Dictionary containing inverse mapping from morse code to its corresponding encoded character
+for key, value in morse.items():
+    revMorse[value] = key
+
+
+def decrypt_morse(message):
+    """
+    Finds the decryption of `message` encoded in morse with individual
+    letters separated by x and words separated by xx
+    """
+    words = message.split('x')
+    return "".join(revMorse[word] for word in words)
+
+
+# Checking the example given in the pdf
+print(decrypt_morse("---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x"))
+ct = "118289293938434193849271464117429364476994241473157664969879696938145689474393647294392739247721652822414624317164228466"
+
+substitution_token = ['..', '.-', '.x', '-.', '--', '-x', 'x.', 'x-', 'xx']
+for perm in itertools.permutations(range(9)):
+    # Iterate over permutations of substitution_tokens to find the
+    # permutations which finds the valid decryption
+    ct1 = ct
+    for i in range(9):
+        ct1 = ct1.replace(str(i + 1), substitution_token[perm[i]])
+        # Replace digit in ciphertext with given permutation of substitutions
+    try:
+        if 'flag' in decrypt_morse(ct1):
+            # if the decyrpted strings containts flag, we get our string
+            print(decrypt_morse(ct1))
+            break
+    except KeyError:
+        continue
+        
+# Output
+# once upon a time
+# congratulations. please wrap this message in a flag format: m0r3_b1t5
+```
+
+## Post-challenge analysis
+Since I found the challenge interesting, here is some analysis
+
+| Digits | 1  | 2  | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| :--------: | :-------------: | :----------: | :-----------: |  :-----------: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
+| Substitution | •• | •– | •X | –•  | ––  | –X  | X•  | X– | XX  |
+| Frequency |13| 15| 12| 23| 3 | 15| 12| 9| 18 |
 
