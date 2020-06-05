@@ -98,4 +98,4 @@ for perm in itertools.permutations(range(9)):
 substitution = [substitution_token[i] for i in perm]
 frequency = [ct.count(str(digit + 1)) for digit in perm]
 for i in range(9):
-    print("digit {0}: {1} {2}".format(i + 1, substitution[i], frequency[i]))
+    print("digit {0}: {1} {2}".format(perm[i]+1, substitution[i], frequency[i]))
