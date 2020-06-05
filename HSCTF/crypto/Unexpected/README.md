@@ -9,11 +9,12 @@ N1 = p*q
 N2 = q*r
 N3 = r*p
 ```
+This is a problem of classic [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) with a small twist.  
 Now, we know factoring N into their factors is hard. However this can be don easily considering we have a common factor between pairs of N
 i.e q is a common factor of N1 and N2, r is a common factor of N2 and N3
 and p is a common factor of N3 and N1.
 
-Once we get p, q and r, we can easily calculate Euler Totien phi and the modular inverse of E with respect to respective phis.
+Once we get p, q and r, we can easily calculate [Euler Totien phi](https://en.wikipedia.org/wiki/Euler%27s_totient_function) and the modular inverse of E with respect to respective phis.
 
 
 ```
