@@ -38,7 +38,9 @@ print noobie
 Hmm, python2 :frown: and quite a wierd script.
 
 Without using much of my small brain, I churned up a script quickly
-thinking I can bruteforce starting from current time backwards
+thinking I can bruteforce starting from current time backwards.  
+
+But it was actually xoring the flag with two values `b'0' or b'1'`, So there are a very little number of possiblities to try.
 ```python
 import base64
 from hashlib import md5
