@@ -53,8 +53,8 @@ func main() {
 //Hash: eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88
 ```
 
-We are provided with this go file, and a hash which we have to reverse
-TBH I dont know go, but the code is comprehendible enough in my opinion.  
+We are provided with this go file, and a hash which we have to reverse   
+TBH I dont know [go](https://golang.org/), but the code is comprehendible enough in my opinion.  
 Lets analyse the code chunk by chunk
 
 ```go
@@ -128,4 +128,6 @@ print(flag)
 #batpwn{Ch00se_y0uR_pR3fix_w1selY}
 ```
 
+I was not expecting it to give out the flag in first [go](https://golang.org/) since `00` were stripped out of the final hash.
+Turns out this step was redundant. If it were not, we could simply use all 4 values of `initialize` for the places where the flag seems to not make sense.
 
