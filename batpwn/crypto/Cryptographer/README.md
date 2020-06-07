@@ -35,7 +35,7 @@ xorer(flag,noobda)
 noobie = base64.encodestring(xorer).strip()
 print noobie
 ```
-Hmm, python2 :frown: and quite a wierd script.
+Hmm, python2 :disappointed: and quite a wierd script.
 
 Without using much of my small brain, I churned up a script quickly
 thinking I can bruteforce starting from current time backwards.  
