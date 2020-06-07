@@ -22,11 +22,10 @@ Lz ltii psxw rczfd xe fii Hbzzhbzj’r czpbitfmtwtzr ozmz; oxl oz zrpozlzu pxeez
 ```
 We are provided with cipher, we have to solve it. Sounds simple
 
-On a first look, this seems like a [monoalphabetic substitution cipher]() since word sizes are preserved and punctuations are hinting towards that too.
+On a first look, this seems like a [monoalphabetic substitution cipher](https://en.wikipedia.org/wiki/Substitution_cipher#Homophonic_substitution) since word sizes are preserved and punctuations are hinting towards that too.
 
-
-Without wasting any time further, I tried [quipquip](https://quipqiup.com/) which is an amazing cryptogram solver
-which spits out [solved.txt](solved.txt), the contents of which look like
+Without wasting any time further, I tried [quipquip](https://quipqiup.com/), which is an amazing cryptogram solver
+which spits out [solved.txt](solved.txt), the contents of which look like :-
 
 ```
 I bquickly followed suit, and descending into the bar-room accosted the grinning alandlord very pleasantly. I cherished no malice towards him, though he had been skylarking with me not a little in the matter of my bedfellow.
