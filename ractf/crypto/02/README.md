@@ -1,6 +1,6 @@
 # 02
 
-Progressing from [01]() we get to 02 and are presented with the following ciphertext
+Progressing from [01](https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/01) we get to `02` and are presented with the following ciphertext
 
 ```
 KFCHT QXXKR FSAHX IEIYP GYZRX
@@ -55,3 +55,4 @@ MEETING POINT AND COMPLETE THE DEAL YOURS DONNIE
 ```
 And we can see people talking about **ZURICH** which is the place we seek as the location of the bank
 
+For a better analysis, check [this video](https://www.youtube.com/watch?v=9Q5Q1Nn5Vss) by @hyperreality
