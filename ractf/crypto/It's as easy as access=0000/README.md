@@ -128,13 +128,13 @@ Lets see how would we do it.
 
 We know Decrypt(`token`) ^ `IV_server` = `access=9999;<timestamp>`, where `IV_server` is the iv provided by default by the server and `token` is the generated guest token.
 
-To change b'9999' to b'0000', we need to xor something to we
-b'9999' ^ `something` = b'0000', here `^` is byte-wise xor  
-`something` = b'9999' ^ b'0000'
+To change `b'9999'` to `b'0000'`, we need to xor something to we
+`b'9999'` ^ `something` = `b'0000'`, here `^` is byte-wise xor  
+`something` = `b'9999'` ^ `b'0000'`  
 Now lets try xoring `something` on both sides, (NOTE : I am xoring only the bytes at corresponding position, for the ease of explaination)     
 
 Decrypt(`token`) ^ `IV_server` ^ `something`= `access=9999;<timestamp>` ^ `something`  
-Decrypt(`token`) ^ `IV_server` ^ `something` = `access=9999;<timestamp>` ^ `b'9999' ^ b'0000'`
+Decrypt(`token`) ^ `IV_server` ^ `something` = `access=9999;<timestamp>` ^ `b'9999' ^ b'0000'`  
 Decrypt(`token`) ^ `IV_server` ^ `something` = `access=0000;<timestamp>`
 
 VOILA! we did it. Lets write a script.
