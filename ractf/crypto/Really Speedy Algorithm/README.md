@@ -59,7 +59,7 @@ Input format begins with specific tags
 Putting all the above information in a really hacky script
 ```python
 
-m pwn import remote
+from pwn import remote
 from gmpy2 import invert
 
 #HOST, PORT = "95.216.233.106" ,62467
@@ -68,7 +68,7 @@ REM = remote(HOST, PORT)
 
 
 def recieve():
-    n = None
+    n = None  # only the recieved parameters returned
     p = None
     q = None
     ct = None
@@ -76,14 +76,14 @@ def recieve():
     e = None
     d = None
     phi = None
-    param = None
+    param = None  # The parameter specified in a challenge to find
     while True:
         data = REM.recvn(3).decode()
         print(data, end="")
-        if data.startswith('[!]'):
+        if data.startswith('[!]'): # line of critical information
             print(REM.recvline().decode().strip())
             print(REM.recvline().decode().strip())
-        elif data.startswith('[:]'):
+        elif data.startswith('[:]'):  # line of parameter specification type
             param_name = REM.recvuntil(b': ').decode().strip()[:-1]
             print(param_name)
             val = int(REM.recvline().decode().strip())
@@ -103,12 +103,12 @@ def recieve():
                 e = val
             elif param_name == 'd':
                 d = val
-        elif data.startswith('[?]'):
+        elif data.startswith('[?]'): # line specifying which parameter to find
             param = REM.recvuntil(b': ').decode().strip()[:-1]
             print(param)
             return (n, p, q, ct, pt, e, d, phi, param)
             break
-        elif data.startswith('[*]') or data.startswith('[c]'):
+        elif data.startswith('[*]') or data.startswith('[c]'): # random informative line
             print(REM.recvline().decode().strip())
         else:
             print(data)
@@ -117,7 +117,10 @@ def recieve():
 
 
 def solve(values):
-    print(values)
+    """
+    Takes the parameters and calculates the desired parameter
+    """
+    # print(values)
     n, p, q, ct, pt, e, d, phi, param = values
     if param == 'pt':
         d = invert(e, phi)
