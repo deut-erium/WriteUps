@@ -51,7 +51,7 @@ Heading to frequency analysis section of [dcode.fr](https://www.dcode.fr/frequen
 |Z| 1x |0.25%|
 |J| 1x |0.25%|
 
-This cipher turned out to be [Columnar Shift cipher](), A good visual solver for the same turns out to be [this site](http://tholman.com/other/transposition/)
+This cipher turned out to be [Columnar Transposition](https://en.wikipedia.org/wiki/Transposition_cipher#Columnar_transposition), A good visual solver for the same turns out to be [this site](http://tholman.com/other/transposition/)
 
 ![](solve.PNG)
 
