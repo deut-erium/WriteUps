@@ -1,7 +1,7 @@
 # Really Simple Algorithm
 
 ![](Capture.PNG)
-This is a typical [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem\)) challenge. On netcatting the server, we get
+This is a typical [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) challenge. On netcatting the server, we get
 
 ```
 p: 692978822802216497910263439691526372004023822242590405470708610553024726
