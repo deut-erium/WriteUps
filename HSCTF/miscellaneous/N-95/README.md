@@ -25,6 +25,7 @@ Sir @deut-erium knows how to do stuff, and so he takes up the task of editing th
  Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below.
 
  ![alignment](alignment-exclusion.png)
+
  Since the alignment pattern is already there, we only need to add the position patterns, which is the next step.
 
  ![Step 2](step2.jpeg)
@@ -65,6 +66,7 @@ The green bits in the above image were masked originally, and hence, we don't kn
 The purple block in the above image denote the second last block, which decodes to `p` and the yellow block is the last block, which decodes to `Ó`. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to `r` and `S` respectively.
 Thus, our flag can now be read off as ```flag{60_dozen_quartz_jarS}```
 
-Our final QR :
+Our final QR here:
+
 ![Final QR](final.jpeg)
 ![Final QR](final_2.png)
