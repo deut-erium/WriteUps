@@ -1,6 +1,6 @@
 # Really Small Algorithm
 
-This is a follow up to [Really Simple Algorithm](), If you dont understand RSA, reading my writeup may be helpful.
+This is a follow up to [Really Simple Algorithm](https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/Really%20Simple%20Algorithm), If you dont understand RSA, reading my writeup may be helpful.
 
 Netcatting the provided server, we get the following information
 ```
