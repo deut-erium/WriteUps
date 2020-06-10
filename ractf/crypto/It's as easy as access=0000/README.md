@@ -82,7 +82,7 @@ def generate_token():
     return {"token": ciphertext}
 ```
   * It creates an expire time of one day
-  * Creates a token string starting with access=9999 specifying guest by 9999 and expiry time
+  * Creates a token string starting with `access=9999` specifying guest by 9999 and expiry time
   * Generates random IV
   * Pads the token to AES block size i.e. 16 bytes
   * creates new AES cipher instance
