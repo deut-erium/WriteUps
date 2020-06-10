@@ -1,6 +1,6 @@
 # B007L36 CRYP70... 4641N
 
-After finally solving [B007l3G CRYP70](), we are again presented with another variant. The description reads as follows:-
+After finally solving [B007l3G CRYP70](https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/BOO7l3G%20CRYP70), we are again presented with another variant. The description reads as follows:-
 
 ```
 As you continue your pentest of MEGACORP, you make your way to an 
