@@ -76,7 +76,15 @@ print(decoded_priv_key.decode())
 ```
 Voila! It reads
 ```
-If you are reading this, then you probably figured out that it wasn't actually an SSH key but a disguise. So you have made it this far and for that I say well done. It wasn't very hard, that I know, but nevertheless you have still made it here so congrats. Now you are probably reading this and thinking about annoying the person who made this, and you want to read the whole thing to check for clues, but you cant find any. You are starting to get frustrated at the person who made this as they still haven't mentioned anything to do with the challenge, except "well done you have got this far". You start slamming desks, and soon the monitor will follow. You are wondering where this is going and realising it's coming to the end of the paragraph, and you might not have seen anything. I have given you some things, although you will need something else as well good luck.
+If you are reading this, then you probably figured out that it wasn't actually an SSH key but a disguise.
+So you have made it this far and for that I say well done. It wasn't very hard, that I know, but nevertheless
+you have still made it here so congrats. Now you are probably reading this and thinking about annoying the
+person who made this, and you want to read the whole thing to check for clues, but you cant find any. You
+are starting to get frustrated at the person who made this as they still haven't mentioned anything to do
+with the challenge, except "well done you have got this far". You start slamming desks, and soon the monitor
+will follow. You are wondering where this is going and realising it's coming to the end of the paragraph,
+and you might not have seen anything. I have given you some things, although you will need something else
+as well good luck.
 696e656564746f6f70656e6c6f636b73
 696e697469616c69736174696f6e3132
 ```
@@ -121,9 +129,9 @@ Producing the hex string
 
 Now this got confusing at this point of time. I got 3 strings and not knowing what to do with them. I failed so many times XORing the strings creatively LOL.
 
-Later did I realise the `ineedtoopenlocks` is an hint to **KEY**  
-and `initialisation12` is a huge hint to **IV**  
-and the third string could be our ciphertext. By this time one would consider it to be AES encrypted.  
+Later did I realise the `ineedtoopenlocks` is a hint to **KEY**  
+And `initialisation12` is a huge hint to **IV**  
+And the third string could be our ciphertext. By this time one would consider it to be AES encrypted.  
 Which mode?  
 The mode which has `IV` and should be easy to guess :- `CBC`
 
