@@ -28,8 +28,9 @@ CNPEE TNOLL AITME EOTCH RMRIT
 ANANH LWTOU EOECA AHUTO BTRSA
 UC
 ```
+The first thing you should probably try while working with simple ciphers is calculating the [index of coincidence](https://www.dcode.fr/index-coincidence), for the given ciphertext it turns out to be `0.06618`, pretty close to that of English plaintext at `0.0667`. A low IC(around or lower than 0.04) indicates a flatter probability distribution(that is, random text), while a high IC(around or higher than 0.06) indicates either a transposition cipher or a monoalphabetic substitution cipher.
+The next thing which you can try to be sure is checking [letter frequency](https://en.wikipedia.org/wiki/Letter_frequency). 
 
-The first thing while dealing with simple ciphers is checking [letter frequency](https://en.wikipedia.org/wiki/Letter_frequency).  
 Heading to frequency analysis section of [dcode.fr](https://www.dcode.fr/frequency-analysis)
 |Letter|Count|Percentage|
 |:--:|:--:|:--:|
@@ -45,7 +46,7 @@ Heading to frequency analysis section of [dcode.fr](https://www.dcode.fr/frequen
 |L| 23×|4.17%|
 |C| 21×|3.8% |
 |U| 18×|3.26%|
-|P| 16×|2.9% |   
+|P| 16×|2.9% |
 |D| 15×|2.72%|
 |M| 15×|2.72%|
 |G| 12×|2.17%|
@@ -83,6 +84,6 @@ THESE WHEN WE FOUND THE MESSAGE IT CAME WITH A SLIP OF PAPER WHICH I VE
 INCLUDED A PHOTO OF FOR YOU ALL THE BEST AGENT B THE SECRET CODE IS
 ANUALLEAVE WITHOUT ANYSPACES
 ```
-And **ANNUALLEAVE** is finally the secret code which we seek
+And **ANUALLEAVE** is finally the secret code which we seek
 
 Check [this video](https://www.youtube.com/watch?v=9Q5Q1Nn5Vss) by @hyperreality for a better analysis

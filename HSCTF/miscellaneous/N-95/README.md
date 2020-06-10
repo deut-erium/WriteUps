@@ -63,8 +63,8 @@ The green bits in the above image were masked originally, and hence, we don't kn
 
 ![Step 7](step7.jpeg)
 
-The purple block in the above image denote the second last block, which decodes to `p` and the yellow block is the last block, which decodes to `Ó`. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to `r` and `S` respectively.
-Thus, our flag can now be read off as ```flag{60_dozen_quartz_jarS}```
+The purple block in the above image denote the second last block, which decodes to `p` and the yellow block is the last block, which decodes to `Ó`. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to `r` and `s` respectively.
+Thus, our flag can now be read off as ```flag{60_dozen_quartz_jars}```
 
 Our final QR here:
 
