@@ -12,7 +12,7 @@
 
 ## [Randomization 2](Randomization 2)
 
-## <a href="/Smol E">Smol E</a>
+## [Smol E](Smol E)
 
 ## [Unexpected](Unexpected)
 
