@@ -1,6 +1,7 @@
 # Homecooked
 
 ![](Capture.PNG)
+
 We are provided [decrypt.py](decrypt.py), the contents of which read
 
 ```python
@@ -82,7 +83,9 @@ python3 decrypt.py
 flag{pR1m3s_4re_co0ler_Wh3
 ```
 Hmm, seems stuck. What's the issue?  
-The issue is with function `a` which checks for prime by dividing it by all numbers. This can be done pretty efficiently by better [primality tests](https://en.wikipedia.org/wiki/Primality_test). One could simply use `is_prime` from `gmpy2` library of python and replace the function `a`
+The issue is with function `a` which checks for prime by dividing it by all numbers.  
+This can be done pretty efficiently by better [primality tests](https://en.wikipedia.org/wiki/Primality_test).  
+One could simply use `is_prime` from `gmpy2` library of python and replace the function `a`
 
 ```python
 import base64
