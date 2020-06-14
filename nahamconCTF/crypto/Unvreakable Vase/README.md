@@ -1,6 +1,7 @@
 # Unvreakable Vase
 
 ![](Capture.PNG)
+
 We are provided with [prompt.txt](prompt.txt), which reads
 ```
 zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30=
@@ -27,7 +28,7 @@ print(m1)
 Seems to be it, now our flag begins with `fla`.  
 All we need to do is keep capitalizing the letters of `data` such that base64 decoding results in a ASCII string which is readable.
 
-One can do this by hand. NOT ME :stuck_tongue_out:
+One can do this by hand. NOT ME :stuck_out_tongue:
 
 To automate this shit, lets take a look at how base64 actually works.  
 In base64, we have 64 possible characters, which means each base64 letter can hold 6 bits.  
