@@ -1,6 +1,6 @@
 # Writeups
-
-This is a page aimed towards writeups for recent ctfs
+Writeups for recent ctfs (mostly crypto)
+Check out on [https://deut-erium.github.io/WriteUps/](https://deut-erium.github.io/WriteUps/)
 
 ## [HSCTF 2020](HSCTF)
 
