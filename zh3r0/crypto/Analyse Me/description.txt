@@ -1,0 +1,4 @@
+i have a server's ip which gives us the flag, but i'm not so good in cracking it. Can you decode the flag for me?
+nc crypto.zh3r0.ml 3871
+
+Author : Whit3_D3vi1 
