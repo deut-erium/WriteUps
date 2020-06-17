@@ -167,19 +167,19 @@ Seems all right, now we need to decode the stuff.
 Well, one could say (most of the times) which decoding is it by simply looking at the characters used **AND** by the size of encoded string.
 
 |Encoding|Block size|characters|
-|:------:|:--------:|:--------:|
+|:------:|:--------:|:----------:|
 |Base16  | 2        | `0-9a-f` |
 |Base32  | 8        | `0-9A-Z` |
 |Base64  | 4        |`0-9a-zA-z+/`|
-|Base85  | 1        | `0-9a-zA-Z!#$%&()*+-;<=>?@^_\`{|}~`|
+|Base85  | 1        |`0-9a-zA-Z!#$%&()*+-;<=>?@^_{|}~\``|
 
 But why do these have an association of `block size` to decode properly?  
 Because, to decode a string, we need the result should be a byte-string.  
 and a byte is 8 bits, whereas what each character of an encoding could mean is its size.   
 > Base16 16 values = 4 bits => each character can contain 4 bits of information. And to make a multiple of 8 bits, we would require 2 characters.
 
-> Base32, 32 values = 5bits => each character can contain 5 bits of information. And to make a multiple of 8 bits, we would require a block of 8 characters, and each block would decode to a byte-string of size 5
-> Base64, 64 values = 6bits => we would require 4 characters to form a multiple of 8, and hence each 4 character block decodes to 3 character block
+> Base32, 32 values = 5bits => each character can contain 5 bits of information. And to make a multiple of 8 bits, we would require a block of 8 characters, and each block would decode to a byte-string of size 5  
+> Base64, 64 values = 6bits => we would require 4 characters to form a multiple of 8, and hence each 4 character block decodes to 3 character block  
 > Base85? We have a weird base, we stop caring. :smile:
 
 Enough of detour, lets decode now  
@@ -224,7 +224,7 @@ def decode(m):
 part_1 = b''.join( decode(i)[0] for i in chal1_data )
 print(part_1.decode())
 ```
-`G00D_TH3_FIRST_P4RT_I5_D0N3_HER3_I5_4_F14G_F0R_Y0U_H4RD_W0RK_=_zh3r0{f4k3_f14g}.` 
+`G00D_TH3_FIRST_P4RT_I5_D0N3_HER3_I5_4_F14G_F0R_Y0U_H4RD_W0RK_=_zh3r0{f4k3_f14g}.`  
 Awesome! We are now presented with the second part of the challenge
 
 ```bash
