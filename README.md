@@ -9,3 +9,5 @@ Check out on [https://deut-erium.github.io/WriteUps/](https://deut-erium.github.
 ## [Really Awesome CTF 2020](ractf/crypto)
 
 ## [NahamCon CTF](nahamconCTF)
+
+## [zh3r0 CTF](zh3r0)
