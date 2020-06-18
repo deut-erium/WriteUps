@@ -1,6 +1,6 @@
 import string
 from itertools import product
-k = '_0m\K2!2%\ggrdups\vd~gq'
+k = '_0m\K2!2%\ggrdups\\vd~gq'
 
 def xor(str1, str2):
     """perform string xor on str1 and str2 and return string"""
