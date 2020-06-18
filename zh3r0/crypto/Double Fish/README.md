@@ -20,6 +20,8 @@ xxkxxxxkxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxcddddddddddddddddddddddd
 ```
 
 Now, this is very **GUESSY** as it is Deadfish esolang, whose interpreter I found at [dcode.fr](https://www.dcode.fr/deadfish-language)  
+![](deadfish.PNG)
+
 The decoded string comes out to be `pFvkylIBH33Qlu0t7rgPk98SrYGz5kt1pKe+2lCKxZ0=` which looks to be the ciphertext or maybe key
 
 Again, whats up with `_0m\K2!2%\ggrdups\vd~gq` part? There may be XOR included taking a hint from `Xander's Operative Register`  
