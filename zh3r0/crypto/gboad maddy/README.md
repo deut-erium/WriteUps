@@ -4,8 +4,7 @@
 ```
 You see this everyday if you use android.
 
-?<³|⁰([{⁰|%f¹&<=f{³&f"{
-%)
+"?<³|⁰([{⁰|%f¹&<=f{³&f"{%)"
 
 Author : Finch
 ```
@@ -23,7 +22,7 @@ Someone pointed out after the ctf
 Substituting the accent symbols for the letter, we can get
 
 ```
-?<³|⁰([{⁰|%f¹&<=f{³&f"{%) 
+"?<³|⁰([{⁰|%f¹&<=f{³&f"{%)" 
 mu3e0{to0eq_1gur_o3g_xoq}
 ```
 rot13 of which produces  
