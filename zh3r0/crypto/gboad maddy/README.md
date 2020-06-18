@@ -1,13 +1,13 @@
 # gboad maddy
 
 ## Description
-<pre>
+```
 You see this everyday if you use android.
 
-?<³|⁰([{⁰|%f¹&<=f{³&f"{%)
+?<³|⁰([{⁰|%f¹&<=f{³&f"{ %)
 
 Author : Finch
-</pre>
+```
 ## Hint
 ```
 len(flag)=28
