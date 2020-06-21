@@ -1,5 +1,6 @@
 theme: jekyll-theme-hacker
 title: Welcome to my crypto-mostly writeups
+google_analytics: "UA-161905683-2"
 description: | 
   I wish to provide good writeups for crypto challenges
   Feel free to suggest changes for better flow of information/understanding
