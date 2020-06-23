@@ -1,8 +1,4 @@
----
-comments: true
----
-
-
+{% include disqus.html %}
 {% include mathjax.html %}
 
 
