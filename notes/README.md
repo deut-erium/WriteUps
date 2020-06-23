@@ -1,4 +1,3 @@
-{% include disqus.html %}
 {% include mathjax.html %}
 
 
@@ -95,3 +94,5 @@ exception handling frame information
 
 
 [this link is useful](https://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html)
+
+{% include disqus.html %}
