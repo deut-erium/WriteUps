@@ -98,5 +98,3 @@ exception handling frame information
 \]</p>
 
 [this link is useful](https://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html)
-
-        )
