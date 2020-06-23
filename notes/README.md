@@ -1,3 +1,7 @@
+---
+usemathjax: true
+---
+
 # Breakdown of an ELF binary
 
 * .interp
