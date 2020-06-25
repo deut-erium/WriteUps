@@ -2,12 +2,24 @@
 Writeups for recent ctfs (mostly crypto)
 Check out on [Github pages](https://deut-erium.github.io/WriteUps/) or [Github repo](https://github.com/deut-erium/WriteUps/)
 
-## [HSCTF 2020](HSCTF)
+Writeups arranged chronogically
 
-## [batpwn 2020](batpwn)
+## [zh3r0 CTF](zh3r0)  
+[event page](https://ctftime.org/event/1062)
 
-## [Really Awesome CTF 2020](ractf/crypto)
+## [NahamCon CTF](nahamconCTF)  
+[event page](https://ctftime.org/event/1067)
 
-## [NahamCon CTF](nahamconCTF)
+## [Really Awesome CTF 2020](ractf/crypto)  
+[event page](https://ctftime.org/event/1065)
 
-## [zh3r0 CTF](zh3r0)
+## [batpwn 2020](batpwn)  
+[event page](https://ctftime.org/event/1051)
+
+## [HSCTF 2020](HSCTF)  
+[event page](https://ctftime.org/event/939)
+
+{% include disqus.html %}
+
+
+
