@@ -39,3 +39,5 @@ print(data)
 ```
 A cool sarcasm on bad crypto challenges in CTFs :)  
 ### flag{l00ks_l1ke_a_l0t_of_64s}
+
+{% include disqus.html %}
