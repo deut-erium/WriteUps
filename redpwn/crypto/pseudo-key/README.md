@@ -54,15 +54,15 @@ But whats the challenge here?
 The key is encrypted with the key itself and we are provided the encrypted key (called Pseudo-key) `iigesssaemk`  
 
 Treating the alphabets as numbers from `0-26`  
-$ciphertext_i = plaintext_i + key_i \mod 26$  
-Where $key_i$ essentially suggests that $key$ is duplicated again and again to match the $plaintext$ length  
-And hence, if we encrypt the $key$ with $key$ itself, we get,  
-$pseudoKey_i = key_i + key_i \mod 26$  
-$pseudoKey_i = 2key_i \mod 26$  
+$$ciphertext_i = plaintext_i + key_i \mod 26$$  
+Where $$key_i$$ essentially suggests that $$key$$ is duplicated again and again to match the $plaintext$ length  
+And hence, if we encrypt the $key$ with $$key$$ itself, we get,  
+$$pseudoKey_i = key_i + key_i \mod 26$$  
+$$pseudoKey_i = 2key_i \mod 26$$  
 
-$key_i = pseudoKey_i/2 \ {\text{or}}\  pseudoKey_i/2 + 13$
+$$key_i = pseudoKey_i/2 \ {\text{or}}\  pseudoKey_i/2 + 13$$
 
-Since the length of $pseudoKey$ is 11, we have $2^{11} = 2048$ possibilities, which we could simply go through and check if we get a valid flag  
+Since the length of $$pseudoKey$$ is 11, we have $$2^{11} = 2048$$ possibilities, which we could simply go through and check if we get a valid flag  
 
 ```python
 from itertools import product
