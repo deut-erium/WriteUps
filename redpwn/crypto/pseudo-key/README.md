@@ -1,4 +1,5 @@
 {% include mathjax.html %}
+
 # Pseudo key
 
 ## Description
@@ -11,7 +12,7 @@ Note: Make sure to wrap the plaintext with flag{} before you submit!
 - [pseudo-key-output.txt](pseudo-key-output.txt)
 - [pseudo-key.py](pseudo-key.py)
 
-Lets take a quick look at the contents of [pseud-key.py](pseudo-key.py)  
+Lets take a quick look at the contents of [pseudo-key.py](pseudo-key.py)  
 ```python
 #!/usr/bin/env python3
 
@@ -85,6 +86,7 @@ for key in product(*possible_keys):
 
 Scrolling over the produced ciphertext, one could easily identify the correct flag  
 ```
+...
 i_guess_pfrudo_keyf_nee_pseudb_frcure redpwwwacgs
 i_guess_pseudo_keyf_are_pseudb_secure redpwwwactf
 i_guess_psrudo_keyf_aee_pseudb_srcure redpwwwacts
@@ -100,6 +102,7 @@ i_guess_cfeudo_keys_nre_pseudo_fecure redpwwwnpgf
 i_guess_cfrudo_keys_nee_pseudo_frcure redpwwwnpgs
 i_guess_cseudo_keys_are_pseudo_secure redpwwwnptf
 i_guess_csrudo_keys_aee_pseudo_srcure redpwwwnpts
+...
 ```
 The key appears to be `redpwwwnctf`  
 
