@@ -4,6 +4,9 @@ Check out on [Github pages](https://deut-erium.github.io/WriteUps/) or [Github r
 
 Writeups arranged chronogically
 
+## [redpwn CTF](redpwn)
+[event page](https://ctftime.org/event/995)
+
 ## [zh3r0 CTF](zh3r0)  
 [event page](https://ctftime.org/event/1062)
 
