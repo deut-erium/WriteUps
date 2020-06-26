@@ -10,14 +10,17 @@ I don't even know where to start, the wheel looks more like a clock than a ciphe
 ## Files
 
 - [color-wheel.jpg](color-wheel.jpg)
+
 ![](color-wheel.jpg)
 
 - [ciphertext.jpg](ciphertext.jpg) "Text" XD
+
 ![](ciphertext.jpg)
 
 Lets think like a clock, and start numbering colors from `0-11` 
 
 ![](color-wheel2.gif)
+
 And if we map the corresponding numbers, we get  
 
 ![](ciphertext-extracted.jpg)
