@@ -1,0 +1,1 @@
+Encoding something multiple times makes it exponentially more secure!
