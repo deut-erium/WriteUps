@@ -24,3 +24,6 @@ print(bytes.fromhex(hex(m)[2:]).decode())
 And hurray, we have our flag
 
 ### flag{t0000_m4nyyyy_pr1m355555}
+
+{% include disqus.html %}
+
