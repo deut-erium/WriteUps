@@ -95,4 +95,4 @@ Turns out there was only one model with all characters printable and which is ou
 
 ### flag{h3r3'5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}
 
-
+{% include disqus.html %}
