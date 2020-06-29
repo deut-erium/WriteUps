@@ -15,19 +15,13 @@
 ## [alien-transmissions-v2](alien-transmissions-v2)
 
 ## [worst-pw-manager](worst-pw-manager)
-TODO
 
-## [ratification](ratification)
-TODO
+## [ratification](ratification) TODO
 
-## [seekrypt](seekrypt)
-TODO
+## [seekrypt](seekrypt) TODO
 
-## [speedy-signatures](speedy-signatures)
-TODO
+## [speedy-signatures](speedy-signatures) TODO
 
-## [jeopardy](jeopardy)
-TODO
+## [jeopardy](jeopardy) TODO
 
-## [newcript](newcript)
-TODO
+## [newcript](newcript) TODO
