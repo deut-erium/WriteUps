@@ -157,7 +157,7 @@ for i in range(20):
 #b'\x12\x00\x00\x00\x00\x00\x00\x00\x00'
 #b'\x13y\x91aA\x81\x01\x01\x01'
 ```
-Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive.
+Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive.  
 Voila, lets try randomly decrypting with a key.
 ```python
 flag_enc = b64decode(b'hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==')
@@ -168,7 +168,7 @@ print(decyrpt(flag_enc, b'\x01'))
 ```
 One could aready read a lot of the flag! We only lack the first two blocks of the flag.  
 Why can we read the rest of the flag by decrypting with some non-sense key?  
-Since as in `encrypt` function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte `b'\x01'` for the last 6 bytes.  
+Since in `encrypt` function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte `b'\x01'` for the last 6 bytes.  
 And xoring with `b'\x01'` would be the same byte again hehe.  
 But wouldnt it be lost amidst all the permutation and substitution??  
 No, since we are exactly reversing the permutation and substitution since the xor part dies out!  
