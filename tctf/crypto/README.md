@@ -1,3 +1,3 @@
 Only Babyring, which I could manage to solve
 
-## [babyring](babyring)
+## [babyring](babyring) (192 points)
