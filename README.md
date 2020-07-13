@@ -4,6 +4,9 @@ Check out on [Github pages](https://deut-erium.github.io/WriteUps/) or [Github r
 
 Writeups arranged chronogically
 
+## [rgbCTF](rgbctf/crypto)
+[event page](https://ctftime.org/event/1042)
+
 ## [0CTF/TCTF 2020 Quals](tctf)
 [event page](https://ctftime.org/event/1026)
 
