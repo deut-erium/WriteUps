@@ -1,0 +1,58 @@
+# 02
+
+Progressing from [01](https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/01) we get to `02` and are presented with the following ciphertext
+
+```
+KFCHT QXXKR FSAHX IEIYP GYZRX
+YXCKK OKYPG YLNIX BQRFU WFKEH
+LNYGC VBDGT NVIMF NJJLV HJEJY
+PGZFO IKQTL KBJKW TXNEH FVEHD
+PQJBG MYEYW IPLRC YNWPM YEKNV
+CEKRF SAHXI MFDVG XUTTG MRXIF
+TWUGW ZNUJZ UHEBJ FKWLV MDECT
+BTHGF VMTGP JFZUM FHFAM UNJPN
+HQQGJ AGTCV MYEVZ IPMZT NJAQY
+DOSJG DXZNL RWXXU AWTCP WZFDT
+CCKVA AFQNT SLJBM ETEAW FVIXR
+MJJBK GXPTN VVTED HTURE VTJYP
+GWVAQ DWWKJ DTSVK X
+```
+
+Expecting the level to increase slightly, the first guess is [Vignere](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher)
+
+Without wasting time lets go to [dcode.fr](https://www.dcode.fr/vigenere-cipher) to see if it works, and it confidently spews out the [plaintext](decrypted.txt)
+```
+ROCCO IVETR ANSFE REDTH EFIRS
+TPART OFTHE FUNDS TOYOU RACCO
+UNTBU TIMGO INGTO NEEDT OSEET
+HEGOO DFIRS TBEFO REWEC ANCOM
+PLETE THETR ANSAC TIONT HEFIN
+ALTRA NSFER MAYNE EDTOB EPERF
+ORMED INPER SONBE ACUSE MYZUR
+ICHBA NKAPP EARST OHAVE SUSPI
+CIONS ABOUT THEQU ANTIT IESOF
+MONEY BEING MOVED AROUN DIFYO
+UAREA VAILA BLEWE CANAR ANGEA
+MEETI NGPOI NTAND COMPL ETETH
+EDEAL YOURS DONNI E
+
+The flag is the location of the bank
+```
+and the key `TRAFFIC`
+
+rearranging the spaces, we get
+```
+ROCCO I VE TRANSFERED THE
+FIRST PART OF THE FUNDS TO YOU RACCO
+UNT BUT I M GOING TO NEED TO SEE
+THE GOOD FIRST BEFORE WE CAN COMPLETE THE
+TRANSACTION THE FINAL TRANSFER MAY NEED TO BE
+PERFORMED IN PERSON BEACUSE MY ZURICH BANK APPEARS TO
+HAVE SUSPICIONS ABOUT THE QUANTITIES OF
+MONEY BEING MOVED AROUND IF YOU ARE
+AVAILABLE WE CAN ARANGE A
+MEETING POINT AND COMPLETE THE DEAL YOURS DONNIE
+```
+And we can see people talking about **ZURICH** which is the place we seek as the location of the bank
+
+For a better analysis, check [this video](https://www.youtube.com/watch?v=9Q5Q1Nn5Vss) by @hyperreality
