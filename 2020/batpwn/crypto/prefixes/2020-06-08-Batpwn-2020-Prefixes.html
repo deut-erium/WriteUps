@@ -1,27 +1,29 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Page 2 of 2 for CTF Writeups</title>
+<title>BATPWN 2020 Crypto - Prefixes | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
-<meta property="og:title" content="CTF Writeups" />
+<meta property="og:title" content="BATPWN 2020 Crypto - Prefixes" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/page2/" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/page2/" />
+<meta name="description" content="Prefixes package main import ( &quot;fmt&quot; &quot;strings&quot; ) func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } func main() { fmt.Println(encrypt(&quot;[REDACTED FLAG]&quot;)) } //Hash: eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88 We are provided with this go file, and a hash which we have to reverse TBH I dont know go, but the code is comprehendible enough in my opinion. Lets analyse the code chunk by chunk func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } It should return the character value 0-255 for the character at position ni in string st func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } I should hexlify, i.e. return the hexadecimal representation the the string st func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } This should encrypt the hash obviously. Now looking at how it does stuff, it should be easy enough to reverse all steps. We shall begin from the last step which is strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) Which simply replaces all occurences of &quot;00&quot; with &quot;&quot; (nothing) throught (-1) from hexlified string of ot. Hence, we should be able to get ot (sans “00”) from the final hash by simply hex-decoding. Now, since we dont know the final value of initialize, we can reverse it from the start since we know its initial value to be 0. The character at position i is simply the val which produces initialize ^ (val&lt;&lt;2) ^ val with corresponding character at position i in ot Here is a quick script to do the same ct = &quot;eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88&quot; ct = bytes.fromhex(ct) flag = &quot;&quot; initialize = 0 for i in range(len(ct)): for val in range(256): if (initialize ^ (val&lt;&lt;2)^val)&amp;0xff == ct[i]: flag += chr(val) #the value val is found initialize ^= (val&lt;&lt;2)^val #to get the value of initialize for nex iteration of i initialize &gt;&gt;=8 # initialize is [0-3] since (val&lt;&lt;2)^(val) is 10 bits, which is right shifted 8 bits each iteration break print(flag) #batpwn{Ch00se_y0uR_pR3fix_w1selY} I was not expecting it to give out the flag in first go since 00 were stripped out of the final hash. Turns out this step was redundant. If it were not, we could simply use all 4 values of initialize for the places where the flag seems to not make sense." />
+<meta property="og:description" content="Prefixes package main import ( &quot;fmt&quot; &quot;strings&quot; ) func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } func main() { fmt.Println(encrypt(&quot;[REDACTED FLAG]&quot;)) } //Hash: eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88 We are provided with this go file, and a hash which we have to reverse TBH I dont know go, but the code is comprehendible enough in my opinion. Lets analyse the code chunk by chunk func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } It should return the character value 0-255 for the character at position ni in string st func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } I should hexlify, i.e. return the hexadecimal representation the the string st func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } This should encrypt the hash obviously. Now looking at how it does stuff, it should be easy enough to reverse all steps. We shall begin from the last step which is strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) Which simply replaces all occurences of &quot;00&quot; with &quot;&quot; (nothing) throught (-1) from hexlified string of ot. Hence, we should be able to get ot (sans “00”) from the final hash by simply hex-decoding. Now, since we dont know the final value of initialize, we can reverse it from the start since we know its initial value to be 0. The character at position i is simply the val which produces initialize ^ (val&lt;&lt;2) ^ val with corresponding character at position i in ot Here is a quick script to do the same ct = &quot;eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88&quot; ct = bytes.fromhex(ct) flag = &quot;&quot; initialize = 0 for i in range(len(ct)): for val in range(256): if (initialize ^ (val&lt;&lt;2)^val)&amp;0xff == ct[i]: flag += chr(val) #the value val is found initialize ^= (val&lt;&lt;2)^val #to get the value of initialize for nex iteration of i initialize &gt;&gt;=8 # initialize is [0-3] since (val&lt;&lt;2)^(val) is 10 bits, which is right shifted 8 bits each iteration break print(flag) #batpwn{Ch00se_y0uR_pR3fix_w1selY} I was not expecting it to give out the flag in first go since 00 were stripped out of the final hash. Turns out this step was redundant. If it were not, we could simply use all 4 values of initialize for the places where the flag seems to not make sense." />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes" />
 <meta property="og:site_name" content="CTF Writeups" />
-<meta property="og:type" content="website" />
-<link rel="prev" href="https://deut-erium.github.io/WriteUps/WriteUps/" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-08T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="CTF Writeups" />
+<meta property="twitter:title" content="BATPWN 2020 Crypto - Prefixes" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","headline":"CTF Writeups","url":"https://deut-erium.github.io/WriteUps/WriteUps/page2/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-08T00:00:00+05:30","datePublished":"2020-06-08T00:00:00+05:30","description":"Prefixes package main import ( &quot;fmt&quot; &quot;strings&quot; ) func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } func main() { fmt.Println(encrypt(&quot;[REDACTED FLAG]&quot;)) } //Hash: eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88 We are provided with this go file, and a hash which we have to reverse TBH I dont know go, but the code is comprehendible enough in my opinion. Lets analyse the code chunk by chunk func charCodeAt(st string, ni int) rune { for i, j := range st { if i == ni { return j } } return 0 } It should return the character value 0-255 for the character at position ni in string st func hexify(st string) string { var ok string = &quot;&quot; ltr := []string{&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;} for cnt := 0; cnt &lt; len(st); cnt++ { ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15] } return ok } I should hexlify, i.e. return the hexadecimal representation the the string st func encrypt(st string) string { var initialize int = 0 var ot string = &quot;&quot; var val int for i := 0; i &lt; len(st); i++ { val = int(charCodeAt(st, i)) initialize ^= (val &lt;&lt; 2) ^ val ot += string(initialize &amp; 0xff) initialize &gt;&gt;= 8 } return strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) } This should encrypt the hash obviously. Now looking at how it does stuff, it should be easy enough to reverse all steps. We shall begin from the last step which is strings.Replace(hexify(ot), &quot;00&quot;, &quot;&quot;, -1) Which simply replaces all occurences of &quot;00&quot; with &quot;&quot; (nothing) throught (-1) from hexlified string of ot. Hence, we should be able to get ot (sans “00”) from the final hash by simply hex-decoding. Now, since we dont know the final value of initialize, we can reverse it from the start since we know its initial value to be 0. The character at position i is simply the val which produces initialize ^ (val&lt;&lt;2) ^ val with corresponding character at position i in ot Here is a quick script to do the same ct = &quot;eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88&quot; ct = bytes.fromhex(ct) flag = &quot;&quot; initialize = 0 for i in range(len(ct)): for val in range(256): if (initialize ^ (val&lt;&lt;2)^val)&amp;0xff == ct[i]: flag += chr(val) #the value val is found initialize ^= (val&lt;&lt;2)^val #to get the value of initialize for nex iteration of i initialize &gt;&gt;=8 # initialize is [0-3] since (val&lt;&lt;2)^(val) is 10 bits, which is right shifted 8 bits each iteration break print(flag) #batpwn{Ch00se_y0uR_pR3fix_w1selY} I was not expecting it to give out the flag in first go since 00 were stripped out of the final hash. Turns out this step was redundant. If it were not, we could simply use all 4 values of initialize for the places where the flag seems to not make sense.","headline":"BATPWN 2020 Crypto - Prefixes","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>About - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>BATPWN 2020 Crypto - Prefixes - CTF Writeups</title>
 
-<meta name="description" content="">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/page2/"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<meta name="description" content="Prefixespackage mainimport (    "fmt"    "strings")func charCodeAt(st string, ni int) rune {    for i, j := range st {        if i == ni {            return ...">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
@@ -282,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="/WriteUps/about.html">about</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/">CTFx</a></li></ul></div></div><div class="page__main js-page-main cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="/WriteUps/about.html">about</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/">CTFx</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1919,264 +1921,238 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
         <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>About</h1></header><meta itemprop="headline" content="About"><meta itemprop="author" content="deuterium"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Smol E</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Smol E
-
-
-
-N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923
-
-E = 3
-
-C1 = 1105245397...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>BATPWN 2020 Crypto - Prefixes</h1></header><span class="split-space">&nbsp;</span>
+          <a class="edit-on-github"
+            title="Edit on Github"
+            href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="BATPWN 2020 Crypto - Prefixes"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=BATPWN">BATPWN</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=Bsides">Bsides</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=franklinreiter">franklinreiter</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=coppersmith">coppersmith</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=smalle">smalle</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,RSA,franklinreiter,coppersmith,smalle"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 2</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Randomization 2
+                href="/WriteUps/archive.html?tag=golang">golang</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 08, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-08T00:00:00+05:30">
+    <meta itemprop="keywords" content="BATPWN,2020,Bsides,cryptography,golang"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="prefixes">Prefixes</h1>
 
+<p><img src="Capture.PNG" alt="" /></p>
 
-Again, we are provided a binary rand2 which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package main
 
-Going ahead, let’s use Ghidra to decompile this binary, and then work our ass off to understand the terrible decompiled code.
-Just kidding...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,LCG,reversing"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 1</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Randomization 1
+import (
+    "fmt"
+    "strings"
+)
 
+func charCodeAt(st string, ni int) rune {
+    for i, j := range st {
+        if i == ni {
+            return j
+        }
+    }
+    return 0
+}
 
+func hexify(st string) string {
+    var ok string = ""
+    ltr := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"}
 
-We are provided a binary rand1 which supposedly runs on the server. We have to figure out how would capture the flag
+    for cnt := 0; cnt &lt; len(st); cnt++ {
+        ok += ltr[charCodeAt(st, cnt)&gt;&gt;4] + ltr[charCodeAt(st, cnt)&amp;15]
+    }
 
-Lets decompile the binary quickly in Ghidra.
-Seeing the output of main function we get
-undefined8 main(void)
+    return ok
+}
 
-{
-  uint uVar1;
-  undefined8 uVar2;
-  long in_FS_OFFSET;
-  int local_1c;
-  int local_18;
-  int local...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptograpy">cryptograpy</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptograpy,reversing,LCG"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Morbid</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">aside:
-  toc: true
-sidebar:
-  nav: aboutnav
-author: deuterium
-full_width: true
-mathjax: false
-mathjax_autoNumber: false
-mermaid: false
-chart: false
-show_edit_on_github: true
-comment: false:
-show_author_profile: true
-excerpt_separator:</div><p><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=classical">classical</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=morse">morse</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,classical,morse"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Extremely Complex Challenge</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Extremely Complex Challenge
+func encrypt(st string) string {
 
+    var initialize int = 0
+    var ot string = ""
+    var val int
 
+    for i := 0; i &lt; len(st); i++ {
+        val = int(charCodeAt(st, i))
+        initialize ^= (val &lt;&lt; 2) ^ val
+        ot += string(initialize &amp; 0xff)
+        initialize &gt;&gt;= 8
+    }
 
-We are given two points on an Elliptic Curve, its order and parameter b.
-Using these quantities, we can recover parameter a.
+    return strings.Replace(hexify(ot), "00", "", -1)
+}
 
-y^2 = x^3 + ax + b (mod p)
-y^2 - x^3 - b = ax (mod p)
+func main() {
+    fmt.Println(encrypt("[REDACTED FLAG]"))
+}
 
-If we have two points on curve, (x1, y1) and (x2, y2), we can get
+//Hash: eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88
+</code></pre></div></div>
 
-(y1^2 - x1^3) - (y2^2 - x2^3) = a(x1 - x2)  (mod p)
-a = (x1 - x2)^-1...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECC">ECC</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECDLP">ECDLP</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,ECC,ECDLP"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Chonky E</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Chonky E
+<p>We are provided with this go file, and a hash which we have to reverse <br />
+TBH I dont know <a href="https://golang.org/">go</a>, but the code is comprehendible enough in my opinion.<br />
+Lets analyse the code chunk by chunk</p>
 
-Allen and Jason rely on two different cryptosystems to keep their information secure.
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">func</span> <span class="n">charCodeAt</span><span class="p">(</span><span class="n">st</span> <span class="kt">string</span><span class="p">,</span> <span class="n">ni</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">rune</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">st</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ni</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">j</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="m">0</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>It should return the character value <code class="language-plaintext highlighter-rouge">0-255</code> for the character at position <code class="language-plaintext highlighter-rouge">ni</code> in string <code class="language-plaintext highlighter-rouge">st</code></p>
 
-Allen uses the RSA cryptosystem, given by the following public key:
-e = 9104311840982855079677374551858598115118020610100513511756586560297872287847849444704878355757181398052564372532337748824983886089778468392702990618894700114963210151336725826732...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=schmidtsamoa">schmidtsamoa</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=bonehdurfee">bonehdurfee</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=bigE">bigE</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,RSA,schmidtsamoa,bonehdurfee,bigE"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Affina and the quadratics</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Affina and the Quadratics
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">hexify</span><span class="p">(</span><span class="n">st</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">ok</span> <span class="kt">string</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="n">ltr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">,</span> <span class="s">"4"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">,</span> <span class="s">"6"</span><span class="p">,</span> <span class="s">"7"</span><span class="p">,</span> <span class="s">"8"</span><span class="p">,</span> <span class="s">"9"</span><span class="p">,</span> <span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">,</span> <span class="s">"d"</span><span class="p">,</span> <span class="s">"e"</span><span class="p">,</span> <span class="s">"f"</span><span class="p">}</span>
 
+    <span class="k">for</span> <span class="n">cnt</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">);</span> <span class="n">cnt</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">ok</span> <span class="o">+=</span> <span class="n">ltr</span><span class="p">[</span><span class="n">charCodeAt</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="m">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">ltr</span><span class="p">[</span><span class="n">charCodeAt</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)</span><span class="o">&amp;</span><span class="m">15</span><span class="p">]</span>
+    <span class="p">}</span>
 
+    <span class="k">return</span> <span class="n">ok</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>I should hexlify, i.e. return the hexadecimal representation the the string <code class="language-plaintext highlighter-rouge">st</code></p>
 
-We are given this image, and hinted towards the name Affina.
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">st</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
 
+    <span class="k">var</span> <span class="n">initialize</span> <span class="kt">int</span> <span class="o">=</span> <span class="m">0</span>
+    <span class="k">var</span> <span class="n">ot</span> <span class="kt">string</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="k">var</span> <span class="n">val</span> <span class="kt">int</span>
 
-With a description reading
-Affina was struggling with her graphing quadratics homework. Bored, she decided to cheat by using Desmos to graph the given quadratic, and then realized that she could use it to send messages to her best friend without anyone no...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=affine">affine</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=classical">classical</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=substitution">substitution</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,affine,classical,substitution"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>15 post articles, 2 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/WriteUps/">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/WriteUps/"><span>1</span></a>
-            </li><li>
-              <div class="button button--primary button--circle focus"><span>2</span></div>
-            </li><li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-right"></i>
-          </div></li></ul>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">charCodeAt</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="n">initialize</span> <span class="o">^=</span> <span class="p">(</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="m">2</span><span class="p">)</span> <span class="o">^</span> <span class="n">val</span>
+        <span class="n">ot</span> <span class="o">+=</span> <span class="kt">string</span><span class="p">(</span><span class="n">initialize</span> <span class="o">&amp;</span> <span class="m">0xff</span><span class="p">)</span>
+        <span class="n">initialize</span> <span class="o">&gt;&gt;=</span> <span class="m">8</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">strings</span><span class="o">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">hexify</span><span class="p">(</span><span class="n">ot</span><span class="p">),</span> <span class="s">"00"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>This should encrypt the hash obviously.<br />
+Now looking at how it does stuff, it should be easy enough to reverse all steps. We shall begin from the last step which is<br />
+<code class="language-plaintext highlighter-rouge">strings.Replace(hexify(ot), "00", "", -1)</code><br />
+Which simply replaces all occurences of <code class="language-plaintext highlighter-rouge">"00"</code> with <code class="language-plaintext highlighter-rouge">""</code> (nothing) throught (-1) from hexlified string of <code class="language-plaintext highlighter-rouge">ot</code>. Hence, we should be able to get <code class="language-plaintext highlighter-rouge">ot</code> (sans “00”) from the final hash by simply hex-decoding.</p>
+
+<p>Now, since we dont know the final value of <code class="language-plaintext highlighter-rouge">initialize</code>, we can reverse it from the start since we know its initial value to be <code class="language-plaintext highlighter-rouge">0</code>.</p>
+
+<p>The character at position <code class="language-plaintext highlighter-rouge">i</code> is simply the <code class="language-plaintext highlighter-rouge">val</code> which produces <code class="language-plaintext highlighter-rouge">initialize ^ (val&lt;&lt;2) ^ val</code> with corresponding character at position <code class="language-plaintext highlighter-rouge">i</code> in <code class="language-plaintext highlighter-rouge">ot</code></p>
+
+<p>Here is a quick script to do the same</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct</span> <span class="o">=</span> <span class="s">"eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88"</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="n">initialize</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">initialize</span> <span class="o">^</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="n">val</span><span class="p">)</span><span class="o">&amp;</span><span class="mh">0xff</span> <span class="o">==</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1">#the value val is found
+</span>            <span class="n">initialize</span> <span class="o">^=</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="n">val</span>  <span class="c1">#to get the value of initialize for nex iteration of i
+</span>            <span class="n">initialize</span> <span class="o">&gt;&gt;=</span><span class="mi">8</span> <span class="c1"># initialize is [0-3] since (val&lt;&lt;2)^(val) is 10 bits, which is right shifted 8 bits each iteration
+</span>            <span class="k">break</span>
+<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="c1">#batpwn{Ch00se_y0uR_pR3fix_w1selY}
+</span></code></pre></div></div>
+
+<p>I was not expecting it to give out the flag in first <a href="https://golang.org/">go</a> since <code class="language-plaintext highlighter-rouge">00</code> were stripped out of the final hash.
+Turns out this step was redundant. If it were not, we could simply use all 4 values of <code class="language-plaintext highlighter-rouge">initialize</code> for the places where the flag seems to not make sense.</p>
+
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-06-08T00:00:00+05:30"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div itemscope itemtype="http://schema.org/Person" class="author-profile card card--flat item"><a href="https://deut-erium.github.io" class="item__image"><img class="author-profile__avatar" itemprop="image" src="https://deut-erium.github.io/Circle-limit-IV.jpg" /></a><div class="item__content"><meta itemprop="name" content="deuterium">
+        <p class="author-profile__name"><meta itemprop="url" content="https://deut-erium.github.io">
+            <a href="https://deut-erium.github.io">deuterium</a></p><p itemprop="description">Some words for the nerds</p><div class="author-profile__links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://deut-erium.github.io"><li title="Send me an Email.">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:farziemailid69@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Follow me on Twitter.">
+        <a class="button button--circle twitter-button" itemprop="sameAs" href="https://twitter.com/0xdeuterium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1024.032 194.432c-37.664 16.704-78.176 28-120.672 33.088 43.36-26.016 76.672-67.168 92.384-116.224-40.608 24.064-85.568 41.568-133.408 50.976-38.336-40.832-92.928-66.336-153.344-66.336-116.032 0-210.08 94.048-210.08 210.08 0 16.48 1.856 32.512 5.44 47.872-174.592-8.768-329.408-92.416-433.024-219.52-18.08 31.04-28.448 67.104-28.448 105.632 0 72.896 37.088 137.184 93.472 174.88-34.432-1.088-66.816-10.528-95.168-26.272-0.032 0.864-0.032 1.76-0.032 2.656 0 101.792 72.416 186.688 168.512 205.984-17.632 4.8-36.192 7.36-55.36 7.36-13.536 0-26.688-1.312-39.52-3.776 26.72 83.456 104.32 144.192 196.256 145.888-71.904 56.352-162.496 89.92-260.928 89.92-16.96 0-33.664-0.992-50.112-2.944 92.96 59.616 203.392 94.4 322.048 94.4 386.432 0 597.728-320.128 597.728-597.76 0-9.12-0.192-18.176-0.608-27.168 41.056-29.632 76.672-66.624 104.832-108.736z" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Linkedin.">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran-ab047b152" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Github.">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/deut-erium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
+
     </div>
-  </div></div>
-<script>/*(function () {
+</div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+</div><div class="article__license"></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/">CTFx</a></div></div></div>
 
-})();*/
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
   <div class="main"><div itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="deuterium"><meta itemprop="url" content="https://deut-erium.github.io/"><meta itemprop="description" content="Some words for the nerds"><div class="footer__author-links"><div class="author-links">
@@ -2761,6 +2737,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
     $sidebarHide.on('click', function() {
       stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
     });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
   });
 })();
 </script>

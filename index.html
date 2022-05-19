@@ -1997,6 +1997,165 @@ The end result is an encryption scheme that achieves both confusion and diffusio
     <meta itemprop="keywords" content="SDCTF,2022,cryptography,AES,z3,substitution,permutation">
 </div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes"><h2 itemprop="headline" class="item__header">BATPWN 2020 Crypto - Prefixes</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">Prefixes
+
+
+
+package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func charCodeAt(st string, ni int) rune {
+    for i, j := range st {
+        if i == ni {
+            return j
+        }
+    }
+    return 0
+}
+
+func hexify(st string) string {
+    var ok string = ""
+    ltr := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d...</div>
+<p><a href="/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes">Read more</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=BATPWN">BATPWN</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=Bsides">Bsides</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=golang">golang</a>
+            </li>
+</ul>
+<ul class="right-col menu">
+<li>
+<i class="fas fa-user"></i> <span>deuterium</span>
+</li>
+<li>
+<i class="far fa-calendar-alt"></i> <span>Jun 08, 2020</span>
+            </li>
+</ul>
+</div>
+<meta itemprop="author" content="deuterium">
+<meta itemprop="datePublished" content="2020-06-08T00:00:00+05:30">
+    <meta itemprop="keywords" content="BATPWN,2020,Bsides,cryptography,golang">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/2020-06-08-BATPWN-Mick-Maybe"><h2 itemprop="headline" class="item__header">BATPWN 2020 Crypto: M-ick Maybe</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">M-ick Maybe
+
+
+T khbtpdiv exiixlzu rbtw, fsu uzrpzsutsj tswx woz kfm-mxxn fppxrwzu woz jmtsstsj fifsuixmu gzmv cizfrfswiv. T pozmtrozu sx nfitpz wxlfmur otn, woxbjo oz ofu kzzs rdvifmdtsj ltwo nz sxw f itwwiz ts woz nfwwzm xe nv kzueziixl.
+
+Oxlzgzm, f jxxu ifbjo tr f ntjowv jxxu wotsj, fsu mfwozm wxx rpfmpz f jxxu wotsj; wwoz nxmz’r woz ctwv. Rx,...</div>
+<p><a href="/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/2020-06-08-BATPWN-Mick-Maybe">Read more</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=BATPWN">BATPWN</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=Bsides">Bsides</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=substitution">substitution</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=quipquip">quipquip</a>
+            </li>
+</ul>
+<ul class="right-col menu">
+<li>
+<i class="fas fa-user"></i> <span>deuterium</span>
+</li>
+<li>
+<i class="far fa-calendar-alt"></i> <span>Jun 08, 2020</span>
+            </li>
+</ul>
+</div>
+<meta itemprop="author" content="deuterium">
+<meta itemprop="datePublished" content="2020-06-08T00:00:00+05:30">
+    <meta itemprop="keywords" content="BATPWN,2020,Bsides,cryptography,substitution,quipquip">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/batpwn/crypto/Cryptographer/2020-06-08-BATPWN-2020-Cryptographer"><h2 itemprop="headline" class="item__header">BATPWN 2020 Crypto - Cryptographer</h2></a></header>
+          <div class="item__description">
+<div class="article__content" itemprop="description articleBody">Cryptographer
+
+
+
+We are provided with noob.txt which has it contents:-
+
+U1FEQEdeS1JDSEBEXlZDUEFYSG5ZQ29TVVBFRFlXRFxvUUJFTA==
+
+and noob.py which contents read
+#!/usr/bin/env python2
+# I AM NOOB :)
+import string
+from hashlib import md5
+from itertools import izip, cycle
+import base64
+import time
+
+def xor(data, key):
+    return bytearray(a^b for a, ...</div>
+<p><a href="/WriteUps/2020/batpwn/crypto/Cryptographer/2020-06-08-BATPWN-2020-Cryptographer">Read more</a></p>
+</div>
+<div class="article__info clearfix">
+<ul class="left-col menu">
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=BATPWN">BATPWN</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=xor">xor</a>
+            </li>
+<li>
+              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=timeseed">timeseed</a>
+            </li>
+</ul>
+<ul class="right-col menu">
+<li>
+<i class="fas fa-user"></i> <span>deuterium</span>
+</li>
+<li>
+<i class="far fa-calendar-alt"></i> <span>Jun 08, 2020</span>
+            </li>
+</ul>
+</div>
+<meta itemprop="author" content="deuterium">
+<meta itemprop="datePublished" content="2020-06-08T00:00:00+05:30">
+    <meta itemprop="keywords" content="2020,BATPWN,cryptography,xor,timeseed">
+</div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"><h2 itemprop="headline" class="item__header">HSCTF 2020 Misc - N95</h2></a></header>
           <div class="item__description">
 <div class="article__content" itemprop="description articleBody">N-95
@@ -2179,159 +2338,11 @@ i.e q is a common factor of N1 and N2, r i...</div>
 <meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
     <meta itemprop="keywords" content="cryptography,HSCTF,2020,RSA,GCD">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Smol E</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Smol E
-
-
-
-N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923
-
-E = 3
-
-C1 = 1105245397...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=franklinreiter">franklinreiter</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=coppersmith">coppersmith</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=smalle">smalle</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,RSA,franklinreiter,coppersmith,smalle">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 2</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Randomization 2
-
-
-
-Again, we are provided a binary rand2 which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times.
-
-Going ahead, let’s use Ghidra to decompile this binary, and then work our ass off to understand the terrible decompiled code.
-Just kidding...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,LCG,reversing">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 1</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Randomization 1
-
-
-
-We are provided a binary rand1 which supposedly runs on the server. We have to figure out how would capture the flag
-
-Lets decompile the binary quickly in Ghidra.
-Seeing the output of main function we get
-undefined8 main(void)
-
-{
-  uint uVar1;
-  undefined8 uVar2;
-  long in_FS_OFFSET;
-  int local_1c;
-  int local_18;
-  int local...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptograpy">cryptograpy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptograpy,reversing,LCG">
-</div>
       </article>
 </div>
 </div>
 <div class="layout--home"><div class="pagination">
-<p>12 post articles, 2 pages.</p>
+<p>15 post articles, 2 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap">
 <li><div class="button button--secondary button--circle disabled">
