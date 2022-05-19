@@ -1959,6 +1959,156 @@ The end result is an encryption scheme that achieves both confusion and diffusio
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2022-05-10T00:00:00+05:30">
     <meta itemprop="keywords" content="SDCTF,2022,cryptography,AES,z3,substitution,permutation"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/rgbctf/crypto/N-AES/2020-07-13-rgbCTF-2020-N-AES"><h2 itemprop="headline" class="item__header">rgbCTF 2020 Crypto - N-AES</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">N-AES
+
+Description
+What if I encrypt something with AES multiple times? nc challenge.rgbsec.xyz 34567
+
+
+~qpwoeirut#5057
+
+
+Files
+
+  n_aes.py
+
+
+import binascii
+from base64 import b64encode, b64decode
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from os import urandom
+from random import seed, randint
+
+BLOCK_SIZE = 16
+
+
+d...</div><p><a href="/WriteUps/2020/rgbctf/crypto/N-AES/2020-07-13-rgbCTF-2020-N-AES">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=rgbCTF">rgbCTF</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=AES">AES</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=netcat">netcat</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=python_bytes">python_bytes</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jul 13, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-07-13T00:00:00+05:30">
+    <meta itemprop="keywords" content="rgbCTF,2020,cryptography,AES,netcat,python_bytes"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"><h2 itemprop="headline" class="item__header">rgbCTF 2020 Crypto - Adequate Encryption Standard</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">Aedquate Encryption Standard
+
+Description
+I wrote my own AES! Can you break it?
+
+hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==
+
+
+~qpwoeirut#5057
+
+
+Files
+
+  adequate_encryption_standard.py
+
+
+from base64 import b64encode
+
+BLOCK_SIZE = 8
+ROUNDS = 8
+
+sbox = [111, 161, 71, 136, 68, 69, 31, 0, 145, 237, 169, ...</div><p><a href="/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=rgbCTF">rgbCTF</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=AES">AES</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=substitution">substitution</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=permutation">permutation</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=bruteforce">bruteforce</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jul 13, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-07-13T00:00:00+05:30">
+    <meta itemprop="keywords" content="rgbCTF,2020,cryptography,AES,substitution,permutation,bruteforce"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/tctf/crypto/babyring/2020-06-30-TCTF-2020-Quals-babyring"><h2 itemprop="headline" class="item__header">0CTF/TCTF 2020 Crypto - babyring</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">Babyring
+
+Description
+nc pwnable.org 10001
+
+Files
+
+  ring.tar.gz
+    
+      release/task.py
+    
+  
+
+
+task.py reads (trimming most part)
+#!/usr/bin/python2
+import os,random,sys,string
+from hashlib import sha256
+from struct import pack, unpack
+import SocketServer
+from Crypto.Cipher import ARC4
+
+from flag import flag
+
+K = 64
+
+def gen():
+    from C...</div><p><a href="/WriteUps/2020/tctf/crypto/babyring/2020-06-30-TCTF-2020-Quals-babyring">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=0CTF">0CTF</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=sagemath">sagemath</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=rc4">rc4</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=PoW">PoW</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=gaussian_elimination">gaussian_elimination</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=GF2">GF2</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 30, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-30T00:00:00+05:30">
+    <meta itemprop="keywords" content="0CTF,2020,cryptography,sagemath,rc4,PoW,gaussian_elimination,GF2"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/WriteUps/2020/redpwn/crypto/worst-pw-manager/2020-06-27-redpwn-2020-worst-pw-manager"><h2 itemprop="headline" class="item__header">Redpwn 2020 Crypto - worst_pw_manager</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">worst-pw-manager
 
@@ -2108,115 +2258,22 @@ Ciphertext: 0010001001011101111000001100000010000011...</div><p><a href="/WriteU
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
     <meta itemprop="keywords" content="redpwn,2020,cryptography,leakage,xor"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464"><h2 itemprop="headline" class="item__header">Redpwn 2020 Crypto - base646464</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">base646464
-
-Description
-Encoding something multiple times makes it exponentially more secure!
-
-
-Files
-
-  cipher.txt
-  generate.js
-
-
-Lets take a look at generate.js, which reads
-const btoa = str =&gt; Buffer.from(str).toString('base64');
-
-const fs = require("fs");
-const flag = fs.readFileSync("flag.txt", "utf8").trim();
-
-let ret = flag;
-for(let i...</div><p><a href="/WriteUps/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=javascript">javascript</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
-    <meta itemprop="keywords" content="redpwn,2020,cryptography,javascript,base64"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"><h2 itemprop="headline" class="item__header">Redpwn 2020 Crypto - Alien Transmissions v2</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Alien-transmissions-v2
-
-Description
-The aliens are at it again! We've discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information:
-  *  This alien language consists of words delimitated by the character repres...</div><p><a href="/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=z3">z3</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
-    <meta itemprop="keywords" content="redpwn,2020,cryptography,xor,z3"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa"><h2 itemprop="headline" class="item__header">Redpwn 2020 Crypto - 4k-rsa</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">4k-rsa
-
-Description
-Only n00bz use 2048-bit RSA. True gamers use keys that are at least 4k bits long, no matter how many primes it takes...
-
-
-Files
-4k-rsa-public-key.txt which contains a n, e, c triple
-
-Seems like there are a lot of primes in the factorization of n, since the factorization process is influenced directly by the size of prime fact...</div><p><a href="/WriteUps/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=alpertron">alpertron</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECM">ECM</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
-    <meta itemprop="keywords" content="redpwn,2020,cryptography,alpertron,ECM,RSA"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>31 post articles, 4 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>42 post articles, 6 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
           </div></li><li>
               <div class="button button--primary button--circle focus"><span>1</span></div>
             </li><li>
-                <a class="button button--secondary button--circle" href="/WriteUps/page2"><span>2</span></a>
-              </li><li>
-                <a class="button button--secondary button--circle" href="/WriteUps/page3"><span>3</span></a>
-              </li><li>
-                <a class="button button--secondary button--circle" href="/WriteUps/page4"><span>4</span></a>
-              </li><li><a class="button button--secondary button--circle" href="/WriteUps/page2">
+                  <a class="button button--secondary button--circle" href="/WriteUps/page2"><span>2</span></a>
+                </li><li>
+                  <a class="button button--secondary button--circle" href="/WriteUps/page3"><span>3</span></a>
+                </li><li>
+                  <a class="button button--secondary button--circle" href="/WriteUps/page4"><span>4</span></a>
+                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
+                  <a class="button button--secondary button--circle" href="/WriteUps/page6"><span>6</span></a>
+                </li><li><a class="button button--secondary button--circle" href="/WriteUps/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
     </div>

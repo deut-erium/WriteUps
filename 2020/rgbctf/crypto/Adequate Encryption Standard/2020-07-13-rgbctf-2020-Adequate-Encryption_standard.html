@@ -1,28 +1,29 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Page 3 of 6 for CTF Writeups</title>
+<title>rgbCTF 2020 Crypto - Adequate Encryption Standard | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
-<meta property="og:title" content="CTF Writeups" />
+<meta property="og:title" content="rgbCTF 2020 Crypto - Adequate Encryption Standard" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/page3/" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/page3/" />
+<meta name="description" content="Aedquate Encryption Standard Description I wrote my own AES! Can you break it? hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg== ~qpwoeirut#5057 Files adequate_encryption_standard.py from base64 import b64encode BLOCK_SIZE = 8 ROUNDS = 8 sbox = [111, 161, 71, 136, 68, 69, 31, 0, 145, 237, 169, 115, 16, 20, 22, 82, 138, 183, 232, 95, 244, 163, 64, 229, 224, 104, 231, 61, 121, 152, 97, 50, 74, 96, 247, 144, 194, 86, 186, 234, 99, 122, 46, 18, 215, 168, 173, 188, 41, 243, 219, 203, 141, 21, 171, 57, 116, 178, 233, 210, 184, 253, 151, 48, 206, 250, 133, 44, 59, 147, 137, 66, 52, 75, 187, 129, 225, 209, 191, 92, 238, 127, 241, 25, 160, 9, 170, 13, 157, 45, 205, 196, 28, 146, 142, 150, 17, 39, 24, 80, 118, 6, 32, 93, 11, 216, 220, 100, 85, 112, 222, 226, 126, 197, 180, 34, 182, 37, 148, 70, 78, 201, 236, 81, 62, 42, 193, 67, 8, 164, 43, 252, 166, 221, 208, 176, 235, 149, 109, 63, 103, 223, 65, 56, 140, 255, 218, 54, 153, 2, 228, 1, 240, 248, 246, 110, 156, 60, 227, 207, 254, 51, 174, 79, 128, 155, 251, 242, 177, 135, 230, 154, 179, 15, 189, 143, 130, 27, 107, 211, 30, 105, 19, 134, 124, 125, 245, 76, 204, 12, 26, 38, 40, 131, 117, 87, 114, 213, 212, 102, 195, 101, 55, 10, 47, 120, 200, 217, 88, 83, 36, 198, 249, 192, 23, 94, 181, 73, 185, 172, 165, 58, 53, 202, 106, 5, 7, 175, 89, 72, 90, 14, 162, 158, 119, 139, 77, 108, 190, 91, 29, 49, 159, 33, 113, 214, 4, 123, 199, 167, 35, 239, 84, 3, 132, 98] pbox = [39, 20, 18, 62, 4, 60, 19, 43, 33, 6, 51, 61, 40, 35, 47, 16, 23, 58, 31, 53, 28, 55, 54, 30, 17, 42, 34, 45, 49, 13, 46, 0, 26, 2, 8, 3, 11, 48, 63, 36, 37, 7, 32, 5, 27, 59, 29, 44, 14, 56, 21, 22, 12, 52, 57, 41, 10, 1, 24, 38, 50, 15, 9, 25] def pad(block): return block + chr(BLOCK_SIZE - len(block)).encode() * (BLOCK_SIZE - len(block)) def to_blocks(in_bytes: bytes) -&gt; list: return [in_bytes[i:i + BLOCK_SIZE] for i in range(0, len(in_bytes), BLOCK_SIZE)] def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def expand_key(key: bytes, key_len: int) -&gt; bytes: expanded = bytearray() cur = 0 for byte in key: cur = (cur + byte) &amp; ((1 &lt;&lt; 8) - 1) expanded.append(cur) for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) return bytes(expanded) def encrypt(plain: bytes, key: bytes) -&gt; bytes: blocks = to_blocks(plain) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): block = pad(block) assert len(block) == BLOCK_SIZE for _ in range(ROUNDS): block = enc_sub(block) block = enc_perm(block) block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] out.extend(block) return bytes(out) if __name__ == &#39;__main__&#39;: with open(&quot;flag&quot;, &#39;rb&#39;) as flag_file: flag = flag_file.read() with open(&quot;key&quot;, &#39;rb&#39;) as key_file: key = key_file.read() print(b64encode(encrypt(flag, key)).decode()) This seems like a custom AES implementation. Note that we are not provided a decryption routine, so lets simply write one. Implementing one is not too complicated, one just need to reverse the encrypt function step by step. def decrypt(cipher: bytes, key:bytes) -&gt; bytes: blocks = to_blocks(cipher) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): for _ in range(ROUNDS): block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] block = dec_perm(block) block = dec_sub(block) out.extend(block) return bytes(out) Its essentially the encrypt function in reverse, in encrypt, key is xored at last in the for loop, we do it first. Then we do reverse of permutation dec_perm and reverse of substitution dec_sub in the following functions. For reversing enc_sub, we just need to find the index of corresponding byte in the sbox def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def dec_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox.index(b) for b in in_bytes ]) To reverse the permutation, def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def dec_perm(in_bytes: bytes) -&gt; bytes: out = bytearray(64) permuted = bin(int.from_bytes(in_bytes, &#39;big&#39;))[2:].zfill(64) #just converting to binary for i in range(64): out[pbox[i]] = ord(permuted[i]) # should be ones and zeros but using ord as bytearrays are directly convertible to int out_bytes = int.to_bytes(int(out,2),8,byteorder=&#39;big&#39;) #converting to bytes again return out_bytes Once we have decryption function set up, we can start exploring the challenge :) The devil at work here is the expand_key function. One could easily verify that without using much brain :) for i in range(20): print(expand_key(bytes([i]),8)) # 8 since we know the flag is 8*BLOCK_LENGTH bytes #b&#39;\x00\x01\x01\x01\x01\x01\x01\x01\x01&#39; #b&#39;\x01\x01\x01\x01\x01\x01\x01\x01\x01&#39; #b&#39;\x02\x10\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x03\xd9\xd1\xe1A\x81\x01\x01\x01&#39; #b&#39;\x04\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x05\xf9\xf1a\xc1\x81\x01\x01\x01&#39; #b&#39;\x06\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x07QaA\x81\x01\x01\x01\x01&#39; #b&#39;\x08\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\t\xd1\xa1A\x81\x01\x01\x01\x01&#39; #b&#39;\n\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x0b\xe9\xb1!\xc1\x81\x01\x01\x01&#39; #b&#39;\x0c\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\r\t\x11\xa1A\x81\x01\x01\x01&#39; #b&#39;\x0e\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x0f!\xc1\x81\x01\x01\x01\x01\x01&#39; #b&#39;\x10\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x11!A\x81\x01\x01\x01\x01\x01&#39; #b&#39;\x12\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x13y\x91aA\x81\x01\x01\x01&#39; Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive. Voila, lets try randomly decrypting with a key. flag_enc = b64decode(b&#39;hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==&#39;) print(decyrpt(flag_enc, b&#39;\x00&#39;)) print(decyrpt(flag_enc, b&#39;\x01&#39;)) #b&#39;\xe2\xaa/\xb8}\xb2\xe1\x9d\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; #b&#39;\x15\xa84N\xff\x83\x00{\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; One could aready read a lot of the flag! We only lack the first two blocks of the flag. Why can we read the rest of the flag by decrypting with some non-sense key? Since in encrypt function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte b&#39;\x01&#39; for the last 6 bytes. And xoring with b&#39;\x01&#39; would be the same byte again hehe. But wouldnt it be lost amidst all the permutation and substitution?? No, since we are exactly reversing the permutation and substitution since the xor part dies out! Why do we have so many 0’s and 1’s in the expanded key? It is evident from this part for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) As cur is repeteadly raised to the power num, once cur hits 0 or 1, it will stay 0 or 1 out of its misery. So all we need to figure out is the first two bytes, which should be quite easy! for i in range(65536): key = long_to_bytes(i) if (a := decrypt(flag_enc, key)).startswith(b&#39;rgbCTF&#39;): print(a,key) Ugly solution in solve.py And boom! we have our flag rgbCTF{brut3_f0rc3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}" />
+<meta property="og:description" content="Aedquate Encryption Standard Description I wrote my own AES! Can you break it? hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg== ~qpwoeirut#5057 Files adequate_encryption_standard.py from base64 import b64encode BLOCK_SIZE = 8 ROUNDS = 8 sbox = [111, 161, 71, 136, 68, 69, 31, 0, 145, 237, 169, 115, 16, 20, 22, 82, 138, 183, 232, 95, 244, 163, 64, 229, 224, 104, 231, 61, 121, 152, 97, 50, 74, 96, 247, 144, 194, 86, 186, 234, 99, 122, 46, 18, 215, 168, 173, 188, 41, 243, 219, 203, 141, 21, 171, 57, 116, 178, 233, 210, 184, 253, 151, 48, 206, 250, 133, 44, 59, 147, 137, 66, 52, 75, 187, 129, 225, 209, 191, 92, 238, 127, 241, 25, 160, 9, 170, 13, 157, 45, 205, 196, 28, 146, 142, 150, 17, 39, 24, 80, 118, 6, 32, 93, 11, 216, 220, 100, 85, 112, 222, 226, 126, 197, 180, 34, 182, 37, 148, 70, 78, 201, 236, 81, 62, 42, 193, 67, 8, 164, 43, 252, 166, 221, 208, 176, 235, 149, 109, 63, 103, 223, 65, 56, 140, 255, 218, 54, 153, 2, 228, 1, 240, 248, 246, 110, 156, 60, 227, 207, 254, 51, 174, 79, 128, 155, 251, 242, 177, 135, 230, 154, 179, 15, 189, 143, 130, 27, 107, 211, 30, 105, 19, 134, 124, 125, 245, 76, 204, 12, 26, 38, 40, 131, 117, 87, 114, 213, 212, 102, 195, 101, 55, 10, 47, 120, 200, 217, 88, 83, 36, 198, 249, 192, 23, 94, 181, 73, 185, 172, 165, 58, 53, 202, 106, 5, 7, 175, 89, 72, 90, 14, 162, 158, 119, 139, 77, 108, 190, 91, 29, 49, 159, 33, 113, 214, 4, 123, 199, 167, 35, 239, 84, 3, 132, 98] pbox = [39, 20, 18, 62, 4, 60, 19, 43, 33, 6, 51, 61, 40, 35, 47, 16, 23, 58, 31, 53, 28, 55, 54, 30, 17, 42, 34, 45, 49, 13, 46, 0, 26, 2, 8, 3, 11, 48, 63, 36, 37, 7, 32, 5, 27, 59, 29, 44, 14, 56, 21, 22, 12, 52, 57, 41, 10, 1, 24, 38, 50, 15, 9, 25] def pad(block): return block + chr(BLOCK_SIZE - len(block)).encode() * (BLOCK_SIZE - len(block)) def to_blocks(in_bytes: bytes) -&gt; list: return [in_bytes[i:i + BLOCK_SIZE] for i in range(0, len(in_bytes), BLOCK_SIZE)] def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def expand_key(key: bytes, key_len: int) -&gt; bytes: expanded = bytearray() cur = 0 for byte in key: cur = (cur + byte) &amp; ((1 &lt;&lt; 8) - 1) expanded.append(cur) for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) return bytes(expanded) def encrypt(plain: bytes, key: bytes) -&gt; bytes: blocks = to_blocks(plain) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): block = pad(block) assert len(block) == BLOCK_SIZE for _ in range(ROUNDS): block = enc_sub(block) block = enc_perm(block) block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] out.extend(block) return bytes(out) if __name__ == &#39;__main__&#39;: with open(&quot;flag&quot;, &#39;rb&#39;) as flag_file: flag = flag_file.read() with open(&quot;key&quot;, &#39;rb&#39;) as key_file: key = key_file.read() print(b64encode(encrypt(flag, key)).decode()) This seems like a custom AES implementation. Note that we are not provided a decryption routine, so lets simply write one. Implementing one is not too complicated, one just need to reverse the encrypt function step by step. def decrypt(cipher: bytes, key:bytes) -&gt; bytes: blocks = to_blocks(cipher) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): for _ in range(ROUNDS): block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] block = dec_perm(block) block = dec_sub(block) out.extend(block) return bytes(out) Its essentially the encrypt function in reverse, in encrypt, key is xored at last in the for loop, we do it first. Then we do reverse of permutation dec_perm and reverse of substitution dec_sub in the following functions. For reversing enc_sub, we just need to find the index of corresponding byte in the sbox def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def dec_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox.index(b) for b in in_bytes ]) To reverse the permutation, def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def dec_perm(in_bytes: bytes) -&gt; bytes: out = bytearray(64) permuted = bin(int.from_bytes(in_bytes, &#39;big&#39;))[2:].zfill(64) #just converting to binary for i in range(64): out[pbox[i]] = ord(permuted[i]) # should be ones and zeros but using ord as bytearrays are directly convertible to int out_bytes = int.to_bytes(int(out,2),8,byteorder=&#39;big&#39;) #converting to bytes again return out_bytes Once we have decryption function set up, we can start exploring the challenge :) The devil at work here is the expand_key function. One could easily verify that without using much brain :) for i in range(20): print(expand_key(bytes([i]),8)) # 8 since we know the flag is 8*BLOCK_LENGTH bytes #b&#39;\x00\x01\x01\x01\x01\x01\x01\x01\x01&#39; #b&#39;\x01\x01\x01\x01\x01\x01\x01\x01\x01&#39; #b&#39;\x02\x10\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x03\xd9\xd1\xe1A\x81\x01\x01\x01&#39; #b&#39;\x04\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x05\xf9\xf1a\xc1\x81\x01\x01\x01&#39; #b&#39;\x06\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x07QaA\x81\x01\x01\x01\x01&#39; #b&#39;\x08\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\t\xd1\xa1A\x81\x01\x01\x01\x01&#39; #b&#39;\n\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x0b\xe9\xb1!\xc1\x81\x01\x01\x01&#39; #b&#39;\x0c\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\r\t\x11\xa1A\x81\x01\x01\x01&#39; #b&#39;\x0e\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x0f!\xc1\x81\x01\x01\x01\x01\x01&#39; #b&#39;\x10\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x11!A\x81\x01\x01\x01\x01\x01&#39; #b&#39;\x12\x00\x00\x00\x00\x00\x00\x00\x00&#39; #b&#39;\x13y\x91aA\x81\x01\x01\x01&#39; Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive. Voila, lets try randomly decrypting with a key. flag_enc = b64decode(b&#39;hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==&#39;) print(decyrpt(flag_enc, b&#39;\x00&#39;)) print(decyrpt(flag_enc, b&#39;\x01&#39;)) #b&#39;\xe2\xaa/\xb8}\xb2\xe1\x9d\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; #b&#39;\x15\xa84N\xff\x83\x00{\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; One could aready read a lot of the flag! We only lack the first two blocks of the flag. Why can we read the rest of the flag by decrypting with some non-sense key? Since in encrypt function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte b&#39;\x01&#39; for the last 6 bytes. And xoring with b&#39;\x01&#39; would be the same byte again hehe. But wouldnt it be lost amidst all the permutation and substitution?? No, since we are exactly reversing the permutation and substitution since the xor part dies out! Why do we have so many 0’s and 1’s in the expanded key? It is evident from this part for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) As cur is repeteadly raised to the power num, once cur hits 0 or 1, it will stay 0 or 1 out of its misery. So all we need to figure out is the first two bytes, which should be quite easy! for i in range(65536): key = long_to_bytes(i) if (a := decrypt(flag_enc, key)).startswith(b&#39;rgbCTF&#39;): print(a,key) Ugly solution in solve.py And boom! we have our flag rgbCTF{brut3_f0rc3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}" />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard" />
 <meta property="og:site_name" content="CTF Writeups" />
-<meta property="og:type" content="website" />
-<link rel="prev" href="https://deut-erium.github.io/WriteUps/WriteUps/page2" />
-<link rel="next" href="https://deut-erium.github.io/WriteUps/WriteUps/page4" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-13T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="CTF Writeups" />
+<meta property="twitter:title" content="rgbCTF 2020 Crypto - Adequate Encryption Standard" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","headline":"CTF Writeups","url":"https://deut-erium.github.io/WriteUps/WriteUps/page3/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-07-13T00:00:00+05:30","datePublished":"2020-07-13T00:00:00+05:30","description":"Aedquate Encryption Standard Description I wrote my own AES! Can you break it? hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg== ~qpwoeirut#5057 Files adequate_encryption_standard.py from base64 import b64encode BLOCK_SIZE = 8 ROUNDS = 8 sbox = [111, 161, 71, 136, 68, 69, 31, 0, 145, 237, 169, 115, 16, 20, 22, 82, 138, 183, 232, 95, 244, 163, 64, 229, 224, 104, 231, 61, 121, 152, 97, 50, 74, 96, 247, 144, 194, 86, 186, 234, 99, 122, 46, 18, 215, 168, 173, 188, 41, 243, 219, 203, 141, 21, 171, 57, 116, 178, 233, 210, 184, 253, 151, 48, 206, 250, 133, 44, 59, 147, 137, 66, 52, 75, 187, 129, 225, 209, 191, 92, 238, 127, 241, 25, 160, 9, 170, 13, 157, 45, 205, 196, 28, 146, 142, 150, 17, 39, 24, 80, 118, 6, 32, 93, 11, 216, 220, 100, 85, 112, 222, 226, 126, 197, 180, 34, 182, 37, 148, 70, 78, 201, 236, 81, 62, 42, 193, 67, 8, 164, 43, 252, 166, 221, 208, 176, 235, 149, 109, 63, 103, 223, 65, 56, 140, 255, 218, 54, 153, 2, 228, 1, 240, 248, 246, 110, 156, 60, 227, 207, 254, 51, 174, 79, 128, 155, 251, 242, 177, 135, 230, 154, 179, 15, 189, 143, 130, 27, 107, 211, 30, 105, 19, 134, 124, 125, 245, 76, 204, 12, 26, 38, 40, 131, 117, 87, 114, 213, 212, 102, 195, 101, 55, 10, 47, 120, 200, 217, 88, 83, 36, 198, 249, 192, 23, 94, 181, 73, 185, 172, 165, 58, 53, 202, 106, 5, 7, 175, 89, 72, 90, 14, 162, 158, 119, 139, 77, 108, 190, 91, 29, 49, 159, 33, 113, 214, 4, 123, 199, 167, 35, 239, 84, 3, 132, 98] pbox = [39, 20, 18, 62, 4, 60, 19, 43, 33, 6, 51, 61, 40, 35, 47, 16, 23, 58, 31, 53, 28, 55, 54, 30, 17, 42, 34, 45, 49, 13, 46, 0, 26, 2, 8, 3, 11, 48, 63, 36, 37, 7, 32, 5, 27, 59, 29, 44, 14, 56, 21, 22, 12, 52, 57, 41, 10, 1, 24, 38, 50, 15, 9, 25] def pad(block): return block + chr(BLOCK_SIZE - len(block)).encode() * (BLOCK_SIZE - len(block)) def to_blocks(in_bytes: bytes) -&gt; list: return [in_bytes[i:i + BLOCK_SIZE] for i in range(0, len(in_bytes), BLOCK_SIZE)] def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def expand_key(key: bytes, key_len: int) -&gt; bytes: expanded = bytearray() cur = 0 for byte in key: cur = (cur + byte) &amp; ((1 &lt;&lt; 8) - 1) expanded.append(cur) for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) return bytes(expanded) def encrypt(plain: bytes, key: bytes) -&gt; bytes: blocks = to_blocks(plain) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): block = pad(block) assert len(block) == BLOCK_SIZE for _ in range(ROUNDS): block = enc_sub(block) block = enc_perm(block) block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] out.extend(block) return bytes(out) if __name__ == &#39;__main__&#39;: with open(&quot;flag&quot;, &#39;rb&#39;) as flag_file: flag = flag_file.read() with open(&quot;key&quot;, &#39;rb&#39;) as key_file: key = key_file.read() print(b64encode(encrypt(flag, key)).decode()) This seems like a custom AES implementation. Note that we are not provided a decryption routine, so lets simply write one. Implementing one is not too complicated, one just need to reverse the encrypt function step by step. def decrypt(cipher: bytes, key:bytes) -&gt; bytes: blocks = to_blocks(cipher) out = bytearray() key = expand_key(key, len(blocks)) for idx, block in enumerate(blocks): for _ in range(ROUNDS): block = bytearray(block) for i in range(len(block)): block[i] ^= key[idx] block = dec_perm(block) block = dec_sub(block) out.extend(block) return bytes(out) Its essentially the encrypt function in reverse, in encrypt, key is xored at last in the for loop, we do it first. Then we do reverse of permutation dec_perm and reverse of substitution dec_sub in the following functions. For reversing enc_sub, we just need to find the index of corresponding byte in the sbox def enc_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox[b] for b in in_bytes]) def dec_sub(in_bytes: bytes) -&gt; bytes: return bytes([sbox.index(b) for b in in_bytes ]) To reverse the permutation, def enc_perm(in_bytes: bytes) -&gt; bytes: num = int.from_bytes(in_bytes, &#39;big&#39;) binary = bin(num)[2:].rjust(BLOCK_SIZE * 8, &#39;0&#39;) permuted = &#39;&#39;.join([binary[pbox[i]] for i in range(BLOCK_SIZE * 8)]) out = bytes([int(permuted[i:i + 8], 2) for i in range(0, BLOCK_SIZE * 8, 8)]) return out def dec_perm(in_bytes: bytes) -&gt; bytes: out = bytearray(64) permuted = bin(int.from_bytes(in_bytes, &#39;big&#39;))[2:].zfill(64) #just converting to binary for i in range(64): out[pbox[i]] = ord(permuted[i]) # should be ones and zeros but using ord as bytearrays are directly convertible to int out_bytes = int.to_bytes(int(out,2),8,byteorder=&#39;big&#39;) #converting to bytes again return out_bytes Once we have decryption function set up, we can start exploring the challenge :) The devil at work here is the expand_key function. One could easily verify that without using much brain :) for i in range(20): print(expand_key(bytes([i]),8)) # 8 since we know the flag is 8*BLOCK_LENGTH bytes #b&#39;\\x00\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01&#39; #b&#39;\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01&#39; #b&#39;\\x02\\x10\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x03\\xd9\\xd1\\xe1A\\x81\\x01\\x01\\x01&#39; #b&#39;\\x04\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x05\\xf9\\xf1a\\xc1\\x81\\x01\\x01\\x01&#39; #b&#39;\\x06\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x07QaA\\x81\\x01\\x01\\x01\\x01&#39; #b&#39;\\x08\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\t\\xd1\\xa1A\\x81\\x01\\x01\\x01\\x01&#39; #b&#39;\\n\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x0b\\xe9\\xb1!\\xc1\\x81\\x01\\x01\\x01&#39; #b&#39;\\x0c\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\r\\t\\x11\\xa1A\\x81\\x01\\x01\\x01&#39; #b&#39;\\x0e\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x0f!\\xc1\\x81\\x01\\x01\\x01\\x01\\x01&#39; #b&#39;\\x10\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x11!A\\x81\\x01\\x01\\x01\\x01\\x01&#39; #b&#39;\\x12\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00&#39; #b&#39;\\x13y\\x91aA\\x81\\x01\\x01\\x01&#39; Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive. Voila, lets try randomly decrypting with a key. flag_enc = b64decode(b&#39;hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==&#39;) print(decyrpt(flag_enc, b&#39;\\x00&#39;)) print(decyrpt(flag_enc, b&#39;\\x01&#39;)) #b&#39;\\xe2\\xaa/\\xb8}\\xb2\\xe1\\x9d\\xbe\\xf0\\xad\\x1c\\xe4)\\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; #b&#39;\\x15\\xa84N\\xff\\x83\\x00{\\xbe\\xf0\\xad\\x1c\\xe4)\\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}&#39; One could aready read a lot of the flag! We only lack the first two blocks of the flag. Why can we read the rest of the flag by decrypting with some non-sense key? Since in encrypt function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte b&#39;\\x01&#39; for the last 6 bytes. And xoring with b&#39;\\x01&#39; would be the same byte again hehe. But wouldnt it be lost amidst all the permutation and substitution?? No, since we are exactly reversing the permutation and substitution since the xor part dies out! Why do we have so many 0’s and 1’s in the expanded key? It is evident from this part for num in [key[i % len(key)] * 2 for i in range(key_len)]: cur = pow(cur, num, 256) expanded.append(cur) As cur is repeteadly raised to the power num, once cur hits 0 or 1, it will stay 0 or 1 out of its misery. So all we need to figure out is the first two bytes, which should be quite easy! for i in range(65536): key = long_to_bytes(i) if (a := decrypt(flag_enc, key)).startswith(b&#39;rgbCTF&#39;): print(a,key) Ugly solution in solve.py And boom! we have our flag rgbCTF{brut3_f0rc3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}","headline":"rgbCTF 2020 Crypto - Adequate Encryption Standard","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>About - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>rgbCTF 2020 Crypto - Adequate Encryption Standard - CTF Writeups</title>
 
-<meta name="description" content="">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/page3/"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<meta name="description" content="Aedquate Encryption StandardDescriptionI wrote my own AES! Can you break it?hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0...">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
@@ -283,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="/WriteUps/about.html">about</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/">CTFx</a></li></ul></div></div><div class="page__main js-page-main cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="/WriteUps/about.html">about</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/">CTFx</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1920,39 +1921,21 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
         <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>About</h1></header><meta itemprop="headline" content="About"><meta itemprop="author" content="deuterium"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Mix</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Mix
-
-Description
-At the BASEment no. 65536, A man is irritated with SHIFT key in his KEYBOARD as it's a sticky key, A kid is having chocolate icecream with a SPOON.
-
-Author : Whit3_D3vi1
-
-
-Challenge Files
-
-  Mix.zip
-    
-      Mix/chall_encrypted.txt
-      Mix/flag.txt
-    
-  
-
-
-flag.txt reads
-If you opened this then you are a n00b
-
-HAHA VERY FU...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>rgbCTF 2020 Crypto - Adequate Encryption Standard</h1></header><span class="split-space">&nbsp;</span>
+          <a class="edit-on-github"
+            title="Edit on Github"
+            href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/rgbctf/crypto/Adequate Encryption Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="rgbCTF 2020 Crypto - Adequate Encryption Standard"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
+                href="/WriteUps/archive.html?tag=rgbCTF">rgbCTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -1961,290 +1944,281 @@ HAHA VERY FU...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=encoding">encoding</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=guess">guess</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,encoding,guess"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Hastad's%20message/2020-06-18-zh3r0-2020-Hastads-Message"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Hastads Message</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Hastad’s message
-
-Description
-My friend Hastad send me a message but I am not able to read it. Only thing I know is its different each time.
-
-nc crypto.zh3r0.ml 7419
-
-Author : Finch
-
-Lets see what happens on netcatting the server
-nc crypto.zh3r0.ml 7419
-N: 239609496311365490105807093714474593207717229906416564692897157101422954951249486211586878...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Hastad's%20message/2020-06-18-zh3r0-2020-Hastads-Message">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=hastad_broadcast">hastad_broadcast</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,RSA,netcat,hastad_broadcast"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Double%20Fish/2020-06-18-zh3r0-2020-Double-Fish"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Double Fish</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Double Fish
-
-Description
-There two fishes in the Xander's Operative Register
-A flag is waiting for you when you catch both.
-
-_0m\K2!2%\ggrdups\vd~gq
-
-
-Author : Finch
-
-
-Challenge Files
-
-  chall.txt
-
-
-cat chall.txt
-xxkxxxxkxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxcddddddddddddddddddddddddddddddddddddddddddcxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Double%20Fish/2020-06-18-zh3r0-2020-Double-Fish">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=guess">guess</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=BlowFish">BlowFish</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,guess,BlowFish,xor"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Analyse%20Me/2020-06-18-zh3r0-2020-Analyze-Me"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Analyze Me</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Analyse Me
-
-Description
-i have a server's ip which gives us the flag, 
-but i'm not so good in cracking it. Can you decode the flag for me?
-nc crypto.zh3r0.ml 3871
-
-Author : Whit3_D3vi1
-
-
-Challenge files
-
-  server.py earlier analyse.py which is quite unsolvable according to me
-
-
-Lets take a look at contents of server.py
-from Crypto.Util.number im...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Analyse%20Me/2020-06-18-zh3r0-2020-Analyze-Me">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=encoding">encoding</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
+                href="/WriteUps/archive.html?tag=AES">AES</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=substitution">substitution</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,encoding,base64,netcat,xor,substitution"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - elsa4</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Elsa4
-
-
-
-Apparently, its an instance of LC4 cipher.
-We are provided with a subtle hint Frozen in time which could mean random is seeded with the present time, confirmed by the fact that time is provided at the start of the challenge.
-
-Now, all we need to figure out is the length of nonce, however it is implemented.
-
-I also wrote encrypt, decrypt...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/WriteUps/archive.html?tag=permutation">permutation</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LC4">LC4</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,cryptography,netcat,LC4"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/Unvreakable%20Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - Unvreakable Vase</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Unvreakable Vase
+                href="/WriteUps/archive.html?tag=bruteforce">bruteforce</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jul 13, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-07-13T00:00:00+05:30">
+    <meta itemprop="keywords" content="rgbCTF,2020,cryptography,AES,substitution,permutation,bruteforce"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="aedquate-encryption-standard">Aedquate Encryption Standard</h1>
+
+<h2 id="description">Description</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I wrote my own AES! Can you break it?
+
+hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg==
 
 
+~qpwoeirut#5057
+</code></pre></div></div>
 
-We are provided with prompt.txt, which reads
-zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30=
+<h2 id="files">Files</h2>
+<ul>
+  <li><a href="adequate_encryption_standard.py">adequate_encryption_standard.py</a></li>
+</ul>
 
-This seems to be base64 encoded but I think all the letters are converted to lowercase as hinted by squished and flat
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
 
-import base64
-data = 'zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30='
-m1 = base64.b64decode(data)
-print...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/Unvreakable%20Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,cryptography,base64"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - Twinning</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Twinning
+<span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">ROUNDS</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">sbox</span> <span class="o">=</span> <span class="p">[</span><span class="mi">111</span><span class="p">,</span> <span class="mi">161</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">145</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">138</span><span class="p">,</span> <span class="mi">183</span><span class="p">,</span> <span class="mi">232</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">244</span><span class="p">,</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">231</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">152</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">247</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">186</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">215</span><span class="p">,</span> <span class="mi">168</span><span class="p">,</span> <span class="mi">173</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">203</span><span class="p">,</span> <span class="mi">141</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">253</span><span class="p">,</span> <span class="mi">151</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">206</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">133</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">137</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">187</span><span class="p">,</span> <span class="mi">129</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">238</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">142</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">226</span><span class="p">,</span> <span class="mi">126</span><span class="p">,</span> <span class="mi">197</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">148</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">236</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">193</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">164</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">252</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">221</span><span class="p">,</span> <span class="mi">208</span><span class="p">,</span> <span class="mi">176</span><span class="p">,</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">218</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">153</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">248</span><span class="p">,</span> <span class="mi">246</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">254</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">155</span><span class="p">,</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">177</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">154</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">143</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">134</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">245</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">213</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">217</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">249</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">202</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">162</span><span class="p">,</span> <span class="mi">158</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">159</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">214</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">167</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">98</span><span class="p">]</span>
+<span class="n">pbox</span> <span class="o">=</span> <span class="p">[</span><span class="mi">39</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
 
 
-
-The name of the challenge is a subtle hint towards Twin primes, i.e. the RSA primes p and q being twin primes, at a difference of two.
-
-How does that help?
-We can now easily factor n since we have another relation, namely
-q = p + 2 and  
-p*q = N  
-q^2 - q*p = N
-( q - 1 )^2 = N + 1
-q = sqrt( N + 1 ) + 1
-p = sqrt( N + 1 ) - 1  
+<span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="n">block</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">block</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">)).</span><span class="n">encode</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">))</span>
 
 
-One c...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=twin_prime">twin_prime</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,netcat,twin_prime,RSA"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/Raspberry/2020-06-14-Nahamcon-2020-Raspberry"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - Raspberry</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Raspberry
+<span class="k">def</span> <span class="nf">to_blocks</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">in_bytes</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">BLOCK_SIZE</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">),</span> <span class="n">BLOCK_SIZE</span><span class="p">)]</span>
 
 
+<span class="k">def</span> <span class="nf">enc_sub</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">sbox</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">in_bytes</span><span class="p">])</span>
 
-We are provided with prompt.txt, the contents of which read
-n = 773520893984898507968061463358178227437114815729335290490531331540941846732272670284818953272149012170851769784825594825465619279367942479695474364981087829268850738595292022948377638992265038873997507258766086698660308098698035921952511158965919117293704786900833198238...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/Raspberry/2020-06-14-Nahamcon-2020-Raspberry">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=alpertron">alpertron</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=small_factors">small_factors</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECM">ECM</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,cryptography,RSA,alpertron,small_factors,ECM"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>42 post articles, 6 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/WriteUps/page2">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/WriteUps/"><span>1</span></a>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page2"><span>2</span></a>
-                </li><li>
-              <div class="button button--primary button--circle focus"><span>3</span></div>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page4"><span>4</span></a>
-                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page6"><span>6</span></a>
-                </li><li><a class="button button--secondary button--circle" href="/WriteUps/page4">
-            <i class="fas fa-angle-right"></i>
-          </a></li></ul>
+
+<span class="k">def</span> <span class="nf">enc_perm</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
+    <span class="n">binary</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">num</span><span class="p">)[</span><span class="mi">2</span><span class="p">:].</span><span class="n">rjust</span><span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="s">'0'</span><span class="p">)</span>
+    <span class="n">permuted</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">binary</span><span class="p">[</span><span class="n">pbox</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">permuted</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span> <span class="nf">expand_key</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">key_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">expanded</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="p">(</span><span class="n">cur</span> <span class="o">+</span> <span class="n">byte</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">expanded</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">key_len</span><span class="p">)]:</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="n">expanded</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">expanded</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">plain</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="n">to_blocks</span><span class="p">(</span><span class="n">plain</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">expand_key</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blocks</span><span class="p">):</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="o">==</span> <span class="n">BLOCK_SIZE</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ROUNDS</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">enc_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">enc_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">)):</span>
+                <span class="n">block</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">key</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">out</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"flag"</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">flag_file</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="n">flag_file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"key"</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">key_file</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key_file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">encrypt</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">key</span><span class="p">)).</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>This seems like a custom AES implementation. Note that we are not provided a decryption routine, so lets simply write one.<br />
+Implementing one is not too complicated, one just need to reverse the <code class="language-plaintext highlighter-rouge">encrypt</code> function step by step.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">cipher</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span><span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="n">to_blocks</span><span class="p">(</span><span class="n">cipher</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">expand_key</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blocks</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ROUNDS</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">)):</span>
+                <span class="n">block</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">key</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">dec_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">dec_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Its essentially the encrypt function in reverse, in <code class="language-plaintext highlighter-rouge">encrypt</code>, key is xored at last in the for loop, we do it first.<br />
+Then we do reverse of permutation <code class="language-plaintext highlighter-rouge">dec_perm</code> and reverse of substitution <code class="language-plaintext highlighter-rouge">dec_sub</code> in the following functions.</p>
+
+<p>For reversing <code class="language-plaintext highlighter-rouge">enc_sub</code>, we just need to find the index of corresponding byte in the <code class="language-plaintext highlighter-rouge">sbox</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">enc_sub</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">sbox</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">in_bytes</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">dec_sub</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">sbox</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">in_bytes</span> <span class="p">])</span>
+</code></pre></div></div>
+
+<p>To reverse the permutation,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">enc_perm</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
+    <span class="n">binary</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">num</span><span class="p">)[</span><span class="mi">2</span><span class="p">:].</span><span class="n">rjust</span><span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="s">'0'</span><span class="p">)</span>
+    <span class="n">permuted</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">binary</span><span class="p">[</span><span class="n">pbox</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)])</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">permuted</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="mi">8</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">dec_perm</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">permuted</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="nb">int</span><span class="p">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">in_bytes</span><span class="p">,</span> <span class="s">'big'</span><span class="p">))[</span><span class="mi">2</span><span class="p">:].</span><span class="n">zfill</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span> <span class="c1">#just converting to binary
+</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">):</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">pbox</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">permuted</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1"># should be ones and zeros but using ord as bytearrays are directly convertible to int
+</span>    <span class="n">out_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">8</span><span class="p">,</span><span class="n">byteorder</span><span class="o">=</span><span class="s">'big'</span><span class="p">)</span> <span class="c1">#converting to bytes again
+</span>    <span class="k">return</span> <span class="n">out_bytes</span>
+</code></pre></div></div>
+
+<p>Once we have decryption function set up, we can start exploring the challenge :)</p>
+
+<p>The devil at work here is the <code class="language-plaintext highlighter-rouge">expand_key</code> function. One could easily verify that without using much brain  :)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">expand_key</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">]),</span><span class="mi">8</span><span class="p">))</span>
+<span class="c1"># 8 since we know the flag is 8*BLOCK_LENGTH bytes
+#b'\x00\x01\x01\x01\x01\x01\x01\x01\x01'
+#b'\x01\x01\x01\x01\x01\x01\x01\x01\x01'
+#b'\x02\x10\x00\x00\x00\x00\x00\x00\x00'
+#b'\x03\xd9\xd1\xe1A\x81\x01\x01\x01'
+#b'\x04\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x05\xf9\xf1a\xc1\x81\x01\x01\x01'
+#b'\x06\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x07QaA\x81\x01\x01\x01\x01'
+#b'\x08\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\t\xd1\xa1A\x81\x01\x01\x01\x01'
+#b'\n\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x0b\xe9\xb1!\xc1\x81\x01\x01\x01'
+#b'\x0c\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\r\t\x11\xa1A\x81\x01\x01\x01'
+#b'\x0e\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x0f!\xc1\x81\x01\x01\x01\x01\x01'
+#b'\x10\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x11!A\x81\x01\x01\x01\x01\x01'
+#b'\x12\x00\x00\x00\x00\x00\x00\x00\x00'
+#b'\x13y\x91aA\x81\x01\x01\x01'
+</span></code></pre></div></div>
+<p>Without even looking at the key_expansion, one could say the keys it expands to are quite bad and possibly quite repetitive.<br />
+Voila, lets try randomly decrypting with a key.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">flag_enc</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="sa">b</span><span class="s">'hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR0/J9gg=='</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">decyrpt</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">,</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">decyrpt</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">,</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x01</span><span class="s">'</span><span class="p">))</span>
+<span class="c1">#b'\xe2\xaa/\xb8}\xb2\xe1\x9d\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}'
+#b'\x15\xa84N\xff\x83\x00{\xbe\xf0\xad\x1c\xe4)\xa77c3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}'
+</span></code></pre></div></div>
+<p>One could aready read a lot of the flag! We only lack the first two blocks of the flag.<br />
+Why can we read the rest of the flag by decrypting with some non-sense key?<br />
+Since in <code class="language-plaintext highlighter-rouge">encrypt</code> function each block is xored with the key byte at the corresponding position, we luckily end up encrypting it with byte <code class="language-plaintext highlighter-rouge">b'\x01'</code> for the last 6 bytes.<br />
+And xoring with <code class="language-plaintext highlighter-rouge">b'\x01'</code> would be the same byte again hehe.<br />
+But wouldnt it be lost amidst all the permutation and substitution??<br />
+No, since we are exactly reversing the permutation and substitution since the xor part dies out!</p>
+
+<p>Why do we have so many 0’s and 1’s in the expanded key?<br />
+It is evident from this part</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">key_len</span><span class="p">)]:</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+    <span class="n">expanded</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+</code></pre></div></div>
+<p>As <code class="language-plaintext highlighter-rouge">cur</code> is repeteadly raised to the power <code class="language-plaintext highlighter-rouge">num</code>, once <code class="language-plaintext highlighter-rouge">cur</code> hits 0 or 1, it will stay 0 or 1 out of its misery.<br />
+So all we need to figure out is the first two bytes, which should be quite easy!</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">65536</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">long_to_bytes</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">:</span><span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">,</span> <span class="n">key</span><span class="p">)).</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s">'rgbCTF'</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Ugly solution in <a href="solve.py">solve.py</a></p>
+
+<p>And boom! we have our flag</p>
+<h3 id="rgbctfbrut3_f0rc3_is_4lw4ys_th3_4nsw3rbut_with_0ptimiz4ti0ns">rgbCTF{brut3_f0rc3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}</h3>
+
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-07-13T00:00:00+05:30"><!-- start custom article footer snippet -->
+
+<!-- end custom article footer snippet -->
+<div itemscope itemtype="http://schema.org/Person" class="author-profile card card--flat item"><a href="https://deut-erium.github.io" class="item__image"><img class="author-profile__avatar" itemprop="image" src="https://deut-erium.github.io/Circle-limit-IV.jpg" /></a><div class="item__content"><meta itemprop="name" content="deuterium">
+        <p class="author-profile__name"><meta itemprop="url" content="https://deut-erium.github.io">
+            <a href="https://deut-erium.github.io">deuterium</a></p><p itemprop="description">Some words for the nerds</p><div class="author-profile__links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://deut-erium.github.io"><li title="Send me an Email.">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:farziemailid69@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Follow me on Twitter.">
+        <a class="button button--circle twitter-button" itemprop="sameAs" href="https://twitter.com/0xdeuterium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1024.032 194.432c-37.664 16.704-78.176 28-120.672 33.088 43.36-26.016 76.672-67.168 92.384-116.224-40.608 24.064-85.568 41.568-133.408 50.976-38.336-40.832-92.928-66.336-153.344-66.336-116.032 0-210.08 94.048-210.08 210.08 0 16.48 1.856 32.512 5.44 47.872-174.592-8.768-329.408-92.416-433.024-219.52-18.08 31.04-28.448 67.104-28.448 105.632 0 72.896 37.088 137.184 93.472 174.88-34.432-1.088-66.816-10.528-95.168-26.272-0.032 0.864-0.032 1.76-0.032 2.656 0 101.792 72.416 186.688 168.512 205.984-17.632 4.8-36.192 7.36-55.36 7.36-13.536 0-26.688-1.312-39.52-3.776 26.72 83.456 104.32 144.192 196.256 145.888-71.904 56.352-162.496 89.92-260.928 89.92-16.96 0-33.664-0.992-50.112-2.944 92.96 59.616 203.392 94.4 322.048 94.4 386.432 0 597.728-320.128 597.728-597.76 0-9.12-0.192-18.176-0.608-27.168 41.056-29.632 76.672-66.624 104.832-108.736z" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Linkedin.">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran-ab047b152" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Github.">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/deut-erium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
+
     </div>
-  </div></div>
-<script>/*(function () {
+</div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+</div><div class="article__license"></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/">CTFx</a></div></div></div>
 
-})();*/
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
   <div class="main"><div itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="deuterium"><meta itemprop="url" content="https://deut-erium.github.io/"><meta itemprop="description" content="Some words for the nerds"><div class="footer__author-links"><div class="author-links">
@@ -2829,6 +2803,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
     $sidebarHide.on('click', function() {
       stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
     });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
   });
 })();
 </script>
