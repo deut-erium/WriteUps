@@ -1,3 +1,23 @@
+---
+title: "RACTF 2020 Crypto - Really Small Algorithm"
+tags: RACTF 2020 cryptography RSA small_prime alpertron ECM
+key: ractf2020reallysmall
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # Really Small Algorithm
 
 This is a follow up to [Really Simple Algorithm](https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/Really%20Simple%20Algorithm), If you dont understand RSA, reading my writeup may be helpful.

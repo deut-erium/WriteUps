@@ -1,3 +1,23 @@
+---
+title: "RACTF 2020 Crypto - Mysterious Masquerading Message"
+tags: RACTF 2020 cryptography base64 guess
+key: ractf2020mysterious
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # Mysteriuos Masquerading Message
 
 `We found a file that looks to be like an ssh private key... but it doesn't seem quite right. Maybe you can shed some light on it?`

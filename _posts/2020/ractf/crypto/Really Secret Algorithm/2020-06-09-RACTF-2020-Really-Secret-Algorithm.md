@@ -1,3 +1,23 @@
+---
+title: "RACTF 2020 Crypto - Really Secret Algorithm"
+tags: RACTF 2020 cryptography RSA python_walrus
+key: ractf2020reallysecret
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # Really Secret Algorithm
 
 Challenge description reads as follows
