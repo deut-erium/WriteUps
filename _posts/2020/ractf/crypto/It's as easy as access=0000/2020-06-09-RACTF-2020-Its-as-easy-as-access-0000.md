@@ -1,3 +1,23 @@
+---
+title: "RACTF 2020 Crypto - Its as easy as access=0000"
+tags: RACTF 2020 cryptography netcat AES CBC bit_flipping
+key: ractf2020access0000
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # It's as easy as access=0000
 
 The challenge description reads
