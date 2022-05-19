@@ -53,9 +53,9 @@ aboutnav:
   - title:      About
     children:
       - title:  About Me
-        url:    /about.html
+        url:    https://deut-erium.github.io/about.html 
       - title: Blog Home
-        url:  https://deut-erium.github.io/
+        url:   https://deut-erium.github.io/
   - title:      CTFs
     children:
       - title:   CTFs-2022
