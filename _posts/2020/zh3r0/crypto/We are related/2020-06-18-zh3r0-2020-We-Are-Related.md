@@ -1,3 +1,23 @@
+---
+title: "zh3r0 2020 Crypto - We are related"
+tags: zh3r0 2020 cryptography netcat RSA sagemath small_e
+key: zh3r02020wearerelated
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # We are related
 
 ## Description
