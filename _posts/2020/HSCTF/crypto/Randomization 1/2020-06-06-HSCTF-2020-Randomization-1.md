@@ -1,6 +1,6 @@
 ---
 title: "HSCTF 2020 Crypto - Randomization 1"
-tags: HSCTF 2020 cryptograpy reversing LCG 
+tags: HSCTF 2020 cryptography reversing LCG 
 key: keys
 aside:
   toc: true
