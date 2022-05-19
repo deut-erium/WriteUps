@@ -1,6 +1,6 @@
 ---
 title: "BATPWN 2020 Crypto - Cryptographer"
-tags: 2020 BATPWN cryptography xor timeseed
+tags: 2020 BATPWN cryptography xor timeseed Bsides
 key: batpwn2020cryptographer
 aside:
   toc: true
