@@ -1,1 +1,0 @@
-As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user's desktop. Solving this may be the last step to gaining full access to the company's network
