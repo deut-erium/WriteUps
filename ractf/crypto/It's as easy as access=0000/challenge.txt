@@ -1,3 +1,0 @@
-Challenge instance ready at 95.216.233.106:57735.
-
-We found a strange service, it looks like you can generate an access token for the network service, but you shouldn't be able to read the flag... We think.

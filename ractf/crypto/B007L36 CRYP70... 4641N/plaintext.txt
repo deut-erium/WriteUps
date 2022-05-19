@@ -1,1 +1,0 @@
-To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file.
