@@ -1,4 +1,24 @@
-﻿# Babyring
+﻿---
+title: "0CTF/TCTF 2020 Crypto - babyring"
+tags: 0CTF 2020 cryptography sagemath rc4 PoW gaussian_elimination GF2
+key: keys
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
+# Babyring
 
 ## Description
 ```
@@ -177,4 +197,3 @@ Unorganized code in files [solve.py](solve.py), [part2.py](part2.py) and [test.p
 
 ### flag{babbbcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxby}
 
-{% include disqus.html %}
