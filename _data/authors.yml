@@ -1,0 +1,18 @@
+deuterium: 
+  type      : "person"
+  name      : deuterium
+  url       : https://deut-erium.github.io
+  avatar    : https://deut-erium.github.io/Circle-limit-IV.jpg
+  bio       : Some words for the nerds
+  email     : farziemailid69@gmail.com
+  facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
+  twitter   : 0xdeuterium # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
+  weibo     : # "user_id"   the last part of your profile url, e.g. https://www.weibo.com/user_id/profile?...
+  googleplus: # "user_id"   the last part of your profile url, e.g. https://plus.google.com/u/0/user_id
+  telegram  : # "user_name" the last part of your profile url, e.g. https://t.me/user_name
+  medium    : # "user_name" the last part of your profile url, e.g. https://medium.com/user_name
+  zhihu     : # "user_name" the last part of your profile url, e.g. https://www.zhihu.com/people/user_name
+  douban    : # "user_name" the last part of your profile url, e.g. https://www.douban.com/people/user_name
+  linkedin  : himanshu-sheoran-ab047b152 # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
+  github    : deut-erium # "user_name" the last part of your profile url, e.g. https://github.com/user_name
+  npm       : # "user_name" the last part of your profile url, e.g. https://www.npmjs.com/~user_name
