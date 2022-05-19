@@ -1,3 +1,23 @@
+---
+title: "BATPWN 2020 Crypto: M-ick Maybe"
+tags: BATPWN 2020 Bsides cryptography substitution quipquip 
+key: BATPWN2020mickmaybe
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # M-ick Maybe
 
 ![](Capture.PNG)

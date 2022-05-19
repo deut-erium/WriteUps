@@ -1,3 +1,23 @@
+---
+title: "BATPWN 2020 Crypto - Cryptographer"
+tags: 2020 BATPWN cryptography xor timeseed
+key: batpwn2020cryptographer
+aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
+---
+
 # Cryptographer
 
 ![](Capture.PNG)
