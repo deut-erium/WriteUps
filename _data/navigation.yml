@@ -52,9 +52,15 @@ header:
 aboutnav:
   - title:      About
     children:
-      - title:  about
+      - title:  About Me
         url:    /about.html
+      - title: Blog Home
+        url:  https://deut-erium.github.io/
   - title:      CTFs
     children:
-      - title:   CTFx
-        url:     /
+      - title:   CTFs-2022
+        url:     /archive.html?tag=2022
+      - title:   CTFs-2021
+        url:     /archive.html?tag=2021
+      - title:   CTFs-2020
+        url:     /archive.html?tag=2020
