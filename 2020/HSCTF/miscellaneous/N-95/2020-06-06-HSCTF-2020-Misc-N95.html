@@ -1,27 +1,29 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>CTF Writeups</title>
+<title>HSCTF 2020 Misc - N95 | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
-<meta property="og:title" content="CTF Writeups" />
+<meta property="og:title" content="HSCTF 2020 Misc - N95" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/" />
+<meta name="description" content="N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:" />
+<meta property="og:description" content="N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:" />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
 <meta property="og:site_name" content="CTF Writeups" />
-<meta property="og:type" content="website" />
-<link rel="next" href="https://deut-erium.github.io/WriteUps/WriteUps/page2" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-06T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="CTF Writeups" />
+<meta property="twitter:title" content="HSCTF 2020 Misc - N95" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","headline":"CTF Writeups","name":"CTF Writeups","url":"https://deut-erium.github.io/WriteUps/WriteUps/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-06T00:00:00+05:30","datePublished":"2020-06-06T00:00:00+05:30","description":"N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:","headline":"HSCTF 2020 Misc - N95","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>About - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HSCTF 2020 Misc - N95 - CTF Writeups</title>
 
-<meta name="description" content="">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<meta name="description" content="N-95Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF!This is one of my favorite challs from the CTF :wink:So it appears that the QR c...">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
@@ -286,9 +288,9 @@
 <li class="toc-h1">About</li>
 <li class="toc-h2"><a href="/WriteUps/about.html">about</a></li>
 <li class="toc-h1">CTFs</li>
-<li class="toc-h2 active"><a href="/WriteUps/">CTFx</a></li>
+<li class="toc-h2"><a href="/WriteUps/">CTFx</a></li>
 </ul></div></div>
-<div class="page__main js-page-main cell cell--auto">
+<div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner">
 <div class="page__header d-print-none">
@@ -1934,34 +1936,21 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 </div>
   </header>
 </div>
-<div class="page__content"><div class="main"><div class="grid grid--reverse">
+<div class="page__content"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto">
 <!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>About</h1></header><meta itemprop="headline" content="About">
-<meta itemprop="author" content="deuterium">
-<div class="js-article-content">
-<div class="layout--articles">
-<div class="article-list items items--divided">
-<article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"><h2 itemprop="headline" class="item__header">HSCTF 2020 Misc - N95</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">N-95
-
-
-
-Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF!
-This is one of my favorite challs from the CTF <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20">
-
-
-
-So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decod...</div>
-<p><a href="/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95">Read more</a></p>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header">
+<header><h1>HSCTF 2020 Misc - N95</h1></header><span class="split-space"> </span>
+          <a class="edit-on-github" title="Edit on Github" href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95.md">
+            <i class="far fa-edit"></i></a>
 </div>
+<meta itemprop="headline" content="HSCTF 2020 Misc - N95">
 <div class="article__info clearfix">
 <ul class="left-col menu">
 <li>
@@ -1992,377 +1981,181 @@ So it appears that the QR code has been nicely painted upon. Using stegsolve, we
 <meta itemprop="author" content="deuterium">
 <meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
     <meta itemprop="keywords" content="HSCTF,2020,miscellaneous,QR,errorcorrection">
+<div class="js-article-content">
+<div class="layout--article">
+<!-- start custom article top snippet -->
+
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody">
+<h1 id="n-95">N-95</h1>
+
+<p><img src="Capture.png" alt="Screenshot"></p>
+
+<p>Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF!
+This is one of my favorite challs from the CTF <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+
+<p><img src="N-95.png" alt=""></p>
+
+<p>So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work.</p>
+
+<p>Searching for how to decode partial QRs, we stumble upon a few links -
+<a href="https://www.robertxiao.ca/hacking/ctf-writeup/mma2015-qrcode/">1</a>, 
+<a href="http://blog.qartis.com/decoding-small-qr-codes-by-hand/">2</a>, 
+<a href="https://aioo.be/2015/07/28/Decoding-a-partial-QR-code.html">3</a></p>
+
+<p>And most importantly this - <a href="https://www.thonky.com/qr-code-tutorial/">QR Code Tutorial</a></p>
+
+<p>Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz
+<img src="step1.jpeg" alt="Step 1">
+ Reading up and checking the size of our QR code, we realize it is 25x25(version 2).</p>
+
+<p><img src="QR_info.png" alt="QR info"></p>
+
+<p>Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below.</p>
+
+<p><img src="alignment-exclusion.png" alt="alignment"></p>
+
+<p>Since the alignment pattern is already there, we only need to add the position patterns, which is the next step.</p>
+
+<p><img src="step2.jpeg" alt="Step 2"></p>
+
+<p>Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step.</p>
+
+<p><img src="step3.jpeg" alt="Step 3">
+Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the <a href="https://www.thonky.com/qr-code-tutorial/format-version-information">tutorial</a> to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see!</p>
+
+<p>Heading over to <a href="https://merricx.github.io/qrazybox/">qrazybox</a> next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end.</p>
+
+<p><img src="step4.jpeg" alt="Step 4"></p>
+
+<p>In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long).
+<img src="format-layout.png" alt="format_info"></p>
+
+<p>Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+
+<p>Let’s try reading the format information and inserting <code class="language-plaintext highlighter-rouge">?</code> wherever the bit is not known. We obtain <code class="language-plaintext highlighter-rouge">??????01??101?</code>. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO</p>
+
+<p>Let’s compare this partial string with all the format information strings in the table <a href="https://www.thonky.com/qr-code-tutorial/format-version-tables">here</a>. Only match is <code class="language-plaintext highlighter-rouge">101101101001011</code> <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">. This gives us ECC level as <code class="language-plaintext highlighter-rouge">M</code> and mask pattern as <code class="language-plaintext highlighter-rouge">3</code>. Setting this in <a href="https://merricx.github.io/qrazybox/">qrazybox</a>, we get</p>
+
+<p><img src="step5.jpeg" alt="Step 5"></p>
+
+<p>Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long.
+Trying force decode, we obtain
+<code class="language-plaintext highlighter-rouge">flag{60_dozen_quartz_japÓ}</code></p>
+
+<p>Doesn’t look quite right <img class="emoji" title=":disappointed:" alt=":disappointed:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61e.png" height="20" width="20">.
+The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless)</p>
+
+<p><img src="step6.jpeg" alt="Step 6"></p>
+
+<p>The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :).</p>
+
+<p><img src="step7.jpeg" alt="Step 7"></p>
+
+<p>The purple block in the above image denote the second last block, which decodes to <code class="language-plaintext highlighter-rouge">p</code> and the yellow block is the last block, which decodes to <code class="language-plaintext highlighter-rouge">Ó</code>. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to <code class="language-plaintext highlighter-rouge">r</code> and <code class="language-plaintext highlighter-rouge">s</code> respectively.
+Thus, our flag can now be read off as <code class="language-plaintext highlighter-rouge">flag{60_dozen_quartz_jars}</code></p>
+
+<p>Our final QR here:</p>
+
+<p><img src="final.jpeg" alt="Final QR">
+<img src="final_2.png" alt="Final QR"></p>
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - XKCD 2247 v2</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">XKCD.com/2247 v2
+<div class="d-print-none">
+<footer class="article__footer"><meta itemprop="dateModified" content="2020-06-06T00:00:00+05:30">
+<!-- start custom article footer snippet -->
 
-
-
-Why v2? because organizers messed up in v1 by providing plaintext in the challenge and the flag read wrapmeintheflagformatandputunderscoresaroundmywords weird flag but ok.
-
-As the name suggests it is Hill Cipher
-We are provided with the ciphertext and key, we just have to decrypt the ciphertext using the key. The ciphertext s...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=sagemath">sagemath</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=hillcipher">hillcipher</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=matrixinverse">matrixinverse</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
+<!-- end custom article footer snippet -->
+<div itemscope itemtype="http://schema.org/Person" class="author-profile card card--flat item">
+<a href="https://deut-erium.github.io" class="item__image"><img class="author-profile__avatar" itemprop="image" src="https://deut-erium.github.io/Circle-limit-IV.jpg"></a><div class="item__content">
+<meta itemprop="name" content="deuterium">
+        <p class="author-profile__name"><meta itemprop="url" content="https://deut-erium.github.io">
+            <a href="https://deut-erium.github.io">deuterium</a></p>
+<p itemprop="description">Some words for the nerds</p>
+<div class="author-profile__links">
+<div class="author-links">
+  <ul class="menu menu--nowrap menu--inline">
+<link itemprop="url" href="https://deut-erium.github.io">
+<li title="Send me an Email.">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:farziemailid69@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
 </li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
+<li title="Follow me on Twitter.">
+        <a class="button button--circle twitter-button" itemprop="sameAs" href="https://twitter.com/0xdeuterium" target="_blank">
+          <div class="icon">
+<svg fill="#000000" width="24px" height="24px" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1024.032 194.432c-37.664 16.704-78.176 28-120.672 33.088 43.36-26.016 76.672-67.168 92.384-116.224-40.608 24.064-85.568 41.568-133.408 50.976-38.336-40.832-92.928-66.336-153.344-66.336-116.032 0-210.08 94.048-210.08 210.08 0 16.48 1.856 32.512 5.44 47.872-174.592-8.768-329.408-92.416-433.024-219.52-18.08 31.04-28.448 67.104-28.448 105.632 0 72.896 37.088 137.184 93.472 174.88-34.432-1.088-66.816-10.528-95.168-26.272-0.032 0.864-0.032 1.76-0.032 2.656 0 101.792 72.416 186.688 168.512 205.984-17.632 4.8-36.192 7.36-55.36 7.36-13.536 0-26.688-1.312-39.52-3.776 26.72 83.456 104.32 144.192 196.256 145.888-71.904 56.352-162.496 89.92-260.928 89.92-16.96 0-33.664-0.992-50.112-2.944 92.96 59.616 203.392 94.4 322.048 94.4 386.432 0 597.728-320.128 597.728-597.76 0-9.12-0.192-18.176-0.608-27.168 41.056-29.632 76.672-66.624 104.832-108.736z"></path>
+</svg>
+</div>
+        </a>
+      </li>
+<li title="Follow me on Linkedin.">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran-ab047b152" target="_blank">
+          <div class="icon">
+<svg fill="#000000" width="24px" height="24px" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0"></path>
+</svg>
+</div>
+        </a>
+      </li>
+<li title="Follow me on Github.">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/deut-erium" target="_blank">
+          <div class="icon">
+<svg fill="#000000" width="24px" height="24px" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z"></path>
+</svg>
+</div>
+        </a>
+      </li>
 </ul>
 </div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,sagemath,hillcipher,matrixinverse">
 </div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - XORed</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">XORed
 
-
-I was given the following equations. Can you help me decode the flag?
-Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533
-Key 1 ^ Key 3 = 9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b
-Key 2 ^ Key 3 ^ Key 5 = 557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05
-Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acae...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,xor">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Unexpected</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Unexpected
-
-
-
-We are given 3 N’s and 3 C’s and given that all three share primes
-i.e
-N1 = p*q
-N2 = q*r
-N3 = r*p
-
-This is a problem of classic RSA with a small twist.
-Now, we know factoring N into their factors is hard. However this can be don easily considering we have a common factor between pairs of N
-i.e q is a common factor of N1 and N2, r i...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=GCD">GCD</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="cryptography,HSCTF,2020,RSA,GCD">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Smol E</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Smol E
-
-
-
-N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923
-
-E = 3
-
-C1 = 1105245397...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=franklinreiter">franklinreiter</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=coppersmith">coppersmith</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=smalle">smalle</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,RSA,franklinreiter,coppersmith,smalle">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 2</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Randomization 2
-
-
-
-Again, we are provided a binary rand2 which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times.
-
-Going ahead, let’s use Ghidra to decompile this binary, and then work our ass off to understand the terrible decompiled code.
-Just kidding...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,LCG,reversing">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 1</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">Randomization 1
-
-
-
-We are provided a binary rand1 which supposedly runs on the server. We have to figure out how would capture the flag
-
-Lets decompile the binary quickly in Ghidra.
-Seeing the output of main function we get
-undefined8 main(void)
-
-{
-  uint uVar1;
-  undefined8 uVar2;
-  long in_FS_OFFSET;
-  int local_1c;
-  int local_18;
-  int local...</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptograpy">cryptograpy</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptograpy,reversing,LCG">
-</div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Morbid</h2></a></header>
-          <div class="item__description">
-<div class="article__content" itemprop="description articleBody">aside:
-  toc: true
-sidebar:
-  nav: aboutnav
-author: deuterium
-full_width: true
-mathjax: false
-mathjax_autoNumber: false
-mermaid: false
-chart: false
-show_edit_on_github: true
-comment: false:
-show_author_profile: true
-excerpt_separator:</div>
-<p><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid">Read more</a></p>
-</div>
-<div class="article__info clearfix">
-<ul class="left-col menu">
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=classical">classical</a>
-            </li>
-<li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=morse">morse</a>
-            </li>
-</ul>
-<ul class="right-col menu">
-<li>
-<i class="fas fa-user"></i> <span>deuterium</span>
-</li>
-<li>
-<i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li>
-</ul>
-</div>
-<meta itemprop="author" content="deuterium">
-<meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,classical,morse">
-</div>
-      </article>
-</div>
-</div>
-<div class="layout--home"><div class="pagination">
-<p>11 post articles, 2 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap">
-<li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-left"></i>
-          </div></li>
-<li>
-              <div class="button button--primary button--circle focus"><span>1</span></div>
-            </li>
-<li>
-                <a class="button button--secondary button--circle" href="/WriteUps/page2"><span>2</span></a>
-              </li>
-<li><a class="button button--secondary button--circle" href="/WriteUps/page2">
-            <i class="fas fa-angle-right"></i>
-          </a></li>
-</ul>
     </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
-</script>
-
-
+</div>
+<div class="article__subscribe">
+<div class="subscribe">
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a>
+</div>
+</div>
+<div class="article__license"></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous">
+<span>PREVIOUS</span><a href="/WriteUps/">CTFx</a>
+</div></div>
+</div>
 
 </div>
-<section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
+</script>
+</div></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div>
+            </div></div>
 <div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
   <div class="main">
@@ -2969,6 +2762,68 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
     $sidebarHide.on('click', function() {
       stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
     });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
   });
 })();
 </script>

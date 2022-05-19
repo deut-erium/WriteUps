@@ -1,9 +1,0 @@
-theme: jekyll-theme-hacker
-title: My crypto-mostly writeups
-google_analytics: "UA-161905683-2"
-markdown: kramdown
-description: | 
-  I wish to provide good writeups for crypto challenges
-  Feel free to suggest changes for better flow of information/understanding
-  Watch out incoming CTFs! 
-  Star to show your love!

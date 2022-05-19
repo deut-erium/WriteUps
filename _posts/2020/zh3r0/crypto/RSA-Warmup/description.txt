@@ -1,7 +1,0 @@
-RSA is one of the first public-key cryptosystems and is widely used for secure data transmission. In such a cryptosystem, the encryption key is public and distinct from the decryption key which is kept secret.
-You all know this :p
-here is a warmup question.
-
-nc crypto.zh3r0.ml 8451
-
-Author : Finch

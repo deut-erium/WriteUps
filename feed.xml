@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://deut-erium.github.io/WriteUps/WriteUps/feed.xml" rel="self" type="application/atom+xml" /><link href="https://deut-erium.github.io/WriteUps/WriteUps/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-05-19T16:11:35+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/feed.xml</id><title type="html">CTF Writeups</title><subtitle></subtitle><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><entry><title type="html">HSCTF 2020 Crypto - Affina and the quadratics</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Affina and the quadratics" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/HSCTF-2020-Affina-and-the-quadratics</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics"><![CDATA[<h1 id="affina-and-the-quadratics">Affina and the Quadratics</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<p>We are given this image, and hinted towards the name <a href="https://en.wikipedia.org/wiki/Affine_cipher">Affina</a>.</p>
+
+<p><img src="affffinaaaa-page-001.jpg" alt="" />
+With a description reading</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Affina was struggling with her graphing quadratics homework. Bored, she decided to cheat by using Desmos to graph the given quadratic, and then realized that she could use it to send messages to her best friend without anyone noticing!
+
+She sent the following message to her friend: 7rr4p6_4e_4ph6bo8hap2?
+
+Can you decrypt it using the image of the quadratic Affina used? Note: the flag should make relative sense.
+</code></pre></div></div>
+
+<p>The task is to GUESS how Affine cipher is used with respect to the quadratic <code class="language-plaintext highlighter-rouge">(x+1)*(x+2) = 0</code></p>
+
+<p>After having many GUESSES, I GUESSED that it could be simple affine cipher with mapping <code class="language-plaintext highlighter-rouge">3x+2 mod 26</code> as <code class="language-plaintext highlighter-rouge">(x+1)*(x+2) = x^2 + 3x + 2</code> as hey!, why should it be quadratic right?</p>
+
+<p>But dont we have letters too? So I GUESSED we shouldnt care about them for now.<br />
+What about underscores? GUESS that they are just word-delimiters.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c = 3x + 2 mod 26
+c - 2 = 3x mod 26
+3^-1 * (c - 2) = x mod 26
+9c - 18 = x mod 26
+x = 9c + 8 mod 26
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct</span> <span class="o">=</span> <span class="s">"7rr4p6_4e_4ph6bo8hap2"</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="s">"rrpephbohap"</span>
+<span class="n">ct26</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">97</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alpha</span><span class="p">]</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">chr</span><span class="p">((</span><span class="mi">9</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span> <span class="o">+</span> <span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ct26</span> <span class="p">]</span>
+</code></pre></div></div>
+
+<p>putting it in places, we get
+<code class="language-plaintext highlighter-rouge">7ff4n6_4s_4nt6re8tin2</code></p>
+
+<p>Now why GUESS that number are encoded with the same affine cipher modulo when you can easily GUESS the flag is <code class="language-plaintext highlighter-rouge">4ff1n3_1s_1nt3re5tin6</code> :smile:</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="affine" /><category term="classical" /><category term="substitution" /><summary type="html"><![CDATA[Affina and the Quadratics We are given this image, and hinted towards the name Affina. With a description reading Affina was struggling with her graphing quadratics homework. Bored, she decided to cheat by using Desmos to graph the given quadratic, and then realized that she could use it to send messages to her best friend without anyone noticing! She sent the following message to her friend: 7rr4p6_4e_4ph6bo8hap2? Can you decrypt it using the image of the quadratic Affina used? Note: the flag should make relative sense. The task is to GUESS how Affine cipher is used with respect to the quadratic (x+1)*(x+2) = 0 After having many GUESSES, I GUESSED that it could be simple affine cipher with mapping 3x+2 mod 26 as (x+1)*(x+2) = x^2 + 3x + 2 as hey!, why should it be quadratic right? But dont we have letters too? So I GUESSED we shouldnt care about them for now. What about underscores? GUESS that they are just word-delimiters. c = 3x + 2 mod 26 c - 2 = 3x mod 26 3^-1 * (c - 2) = x mod 26 9c - 18 = x mod 26 x = 9c + 8 mod 26 ct = "7rr4p6_4e_4ph6bo8hap2" alpha = "rrpephbohap" ct26 = [ chr(i) - 97 for i in alpha] pt = [ chr((9*c + 8)%26 + 97) for c in ct26 ] putting it in places, we get 7ff4n6_4s_4nt6re8tin2 Now why GUESS that number are encoded with the same affine cipher modulo when you can easily GUESS the flag is 4ff1n3_1s_1nt3re5tin6 :smile:]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Chonky E</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Chonky E" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Chonky%20E/HSCTF-2020-Chonky-E</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E"><![CDATA[<h1 id="chonky-e">Chonky E</h1>
+<p><img src="Capture.PNG" alt="" /></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Allen and Jason rely on two different cryptosystems to keep their information secure.
+
+Allen uses the RSA cryptosystem, given by the following public key:
+e = 91043118409828550796773745518585981151180206101005135117565865602978722878478494447048783557571813980525643725323377488249838860897784683927029906188947001149632101513367258267329961684034661252866484981926055087386190015432964608927947646476193251820354738640453947833718397360834701566765504916472450194494897616371452996381159817427887623703639133290358520498419049175941584678802701606995099241245926884172985004839801270005583030514286561971825047719421487004569752638468907609110285739083279629747310953086535889932550905065172805818862336335628248528993024112446002398466115161473573451161053837400091893285717
+n = 156749047558583013960513267351769479915110440411448078412590565797031533622509813352093119636835511977253033854388466854142753776146092587825440445182008237325262012698034419137157047927918635897378973846177552961727126115560551970797370239385129543828686170774323306933202481728884019420422360360849592983818405154473369790181636472137741865440233383956571081122982223602667853668754338360008279002325576495573847568301584365514417593244726435632222027817410359417329310347952169273512510934251453361933794586716533950489973436393834189505450956622286216819440777162804798432330933357058175885674184582816364542591313
+
+Jason uses the Schmidt-Samoa cryptosystem. Although a public key has not been recovered, we know that Allen and Jason share the same primes (p,q).
+
+A ciphertext was found on Jason’s computer that reads: 16267540901004879123859424672087486188548628828063789528428674467464407443871599865993337555869530486241139138650641838377419734897801380883629894166353225288006148210453677023750688175192317241440457768788267270422857060534261674538755743244831152470995124962736526978165448560149498403762447372653982922113772190234143253450918953235222315161964539311032659628670417496174123483045439359846360048774164337257829398345686635091862306204455687347443958931441225500856408331795261329035072585605404416473987280037959184981453888701567175803979981461050532113072292714696752692872526424122826696681194705563391161137426703690900733706866842363055967856443765215723398555522126909749236759332964873221973970368877565410624895160438695006432021529071866881905134494489266801004903504121740435965696128048690741210812963902631391765192187570107372453917327060678806282122942318369245760773848604249664378721970318257356486696764545
+
+What are the contents of this message?
+</code></pre></div></div>
+
+<p>Since both crypto use same p and q doesnt reveal a method to recover p or q or the plaintext somehow, second BIG hint is the name of the challenge :- chonkyE</p>
+
+<p>Big E could lead to two attacks, and Boneh Durfee attack is more powerful of the two.</p>
+
+<p>Here is the evergreen <a href="https://github.com/mimoo/RSA-and-LLL-attacks">sage script</a> for the same. I modified it a bit (by fixing annoying python2 print statements) to run on sage 9 (python3).</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">d = 4801820624110300567381264152630360984400101198006662778338105999190025449039653722546363948393959163699344836724430590700225590643966670154013435626235133</code></p>
+</blockquote>
+
+<p>We can recover p, q from n, e, d. The most convenient way according to me is to use RSA module from Crypto.PublicKey</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Crypto.PublicKey</span> <span class="kn">import</span> <span class="n">RSA</span>
+<span class="kn">import</span> <span class="nn">gmpy2</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">156749047558583013960513267351769479915110440411448078412590565797031533622509813352093119636835511977253033854388466854142753776146092587825440445182008237325262012698034419137157047927918635897378973846177552961727126115560551970797370239385129543828686170774323306933202481728884019420422360360849592983818405154473369790181636472137741865440233383956571081122982223602667853668754338360008279002325576495573847568301584365514417593244726435632222027817410359417329310347952169273512510934251453361933794586716533950489973436393834189505450956622286216819440777162804798432330933357058175885674184582816364542591313</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mi">91043118409828550796773745518585981151180206101005135117565865602978722878478494447048783557571813980525643725323377488249838860897784683927029906188947001149632101513367258267329961684034661252866484981926055087386190015432964608927947646476193251820354738640453947833718397360834701566765504916472450194494897616371452996381159817427887623703639133290358520498419049175941584678802701606995099241245926884172985004839801270005583030514286561971825047719421487004569752638468907609110285739083279629747310953086535889932550905065172805818862336335628248528993024112446002398466115161473573451161053837400091893285717</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mi">4801820624110300567381264152630360984400101198006662778338105999190025449039653722546363948393959163699344836724430590700225590643966670154013435626235133</span>
+
+<span class="n">rsa</span> <span class="o">=</span> <span class="n">RSA</span><span class="p">.</span><span class="n">construct</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">rsa</span><span class="p">.</span><span class="n">p</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">rsa</span><span class="p">.</span><span class="n">q</span>
+
+<span class="c1"># rest is just implementation of Schmidt-Samoa
+</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="mi">16267540901004879123859424672087486188548628828063789528428674467464407443871599865993337555869530486241139138650641838377419734897801380883629894166353225288006148210453677023750688175192317241440457768788267270422857060534261674538755743244831152470995124962736526978165448560149498403762447372653982922113772190234143253450918953235222315161964539311032659628670417496174123483045439359846360048774164337257829398345686635091862306204455687347443958931441225500856408331795261329035072585605404416473987280037959184981453888701567175803979981461050532113072292714696752692872526424122826696681194705563391161137426703690900733706866842363055967856443765215723398555522126909749236759332964873221973970368877565410624895160438695006432021529071866881905134494489266801004903504121740435965696128048690741210812963902631391765192187570107372453917327060678806282122942318369245760773848604249664378721970318257356486696764545</span>
+
+<span class="c1"># N = p**2*q
+# d = N^-1 mod lcm(p-1, q-1)
+# m = c^d mod pq
+</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">p</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">q</span>  <span class="c1"># since this one works
+</span><span class="n">lcm_val</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">lcm</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">lcm_val</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">p</span><span class="o">*</span><span class="n">q</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]))</span>
+<span class="c1"># flag{remarkably_superb_acronym}
+</span></code></pre></div></div>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="RSA" /><category term="schmidtsamoa" /><category term="bonehdurfee" /><category term="bigE" /><summary type="html"><![CDATA[Chonky E Allen and Jason rely on two different cryptosystems to keep their information secure. Allen uses the RSA cryptosystem, given by the following public key: e = 91043118409828550796773745518585981151180206101005135117565865602978722878478494447048783557571813980525643725323377488249838860897784683927029906188947001149632101513367258267329961684034661252866484981926055087386190015432964608927947646476193251820354738640453947833718397360834701566765504916472450194494897616371452996381159817427887623703639133290358520498419049175941584678802701606995099241245926884172985004839801270005583030514286561971825047719421487004569752638468907609110285739083279629747310953086535889932550905065172805818862336335628248528993024112446002398466115161473573451161053837400091893285717 n = 156749047558583013960513267351769479915110440411448078412590565797031533622509813352093119636835511977253033854388466854142753776146092587825440445182008237325262012698034419137157047927918635897378973846177552961727126115560551970797370239385129543828686170774323306933202481728884019420422360360849592983818405154473369790181636472137741865440233383956571081122982223602667853668754338360008279002325576495573847568301584365514417593244726435632222027817410359417329310347952169273512510934251453361933794586716533950489973436393834189505450956622286216819440777162804798432330933357058175885674184582816364542591313 Jason uses the Schmidt-Samoa cryptosystem. Although a public key has not been recovered, we know that Allen and Jason share the same primes (p,q). A ciphertext was found on Jason’s computer that reads: 16267540901004879123859424672087486188548628828063789528428674467464407443871599865993337555869530486241139138650641838377419734897801380883629894166353225288006148210453677023750688175192317241440457768788267270422857060534261674538755743244831152470995124962736526978165448560149498403762447372653982922113772190234143253450918953235222315161964539311032659628670417496174123483045439359846360048774164337257829398345686635091862306204455687347443958931441225500856408331795261329035072585605404416473987280037959184981453888701567175803979981461050532113072292714696752692872526424122826696681194705563391161137426703690900733706866842363055967856443765215723398555522126909749236759332964873221973970368877565410624895160438695006432021529071866881905134494489266801004903504121740435965696128048690741210812963902631391765192187570107372453917327060678806282122942318369245760773848604249664378721970318257356486696764545 What are the contents of this message? Since both crypto use same p and q doesnt reveal a method to recover p or q or the plaintext somehow, second BIG hint is the name of the challenge :- chonkyE Big E could lead to two attacks, and Boneh Durfee attack is more powerful of the two. Here is the evergreen sage script for the same. I modified it a bit (by fixing annoying python2 print statements) to run on sage 9 (python3). d = 4801820624110300567381264152630360984400101198006662778338105999190025449039653722546363948393959163699344836724430590700225590643966670154013435626235133 We can recover p, q from n, e, d. The most convenient way according to me is to use RSA module from Crypto.PublicKey from Crypto.PublicKey import RSA import gmpy2 n = 156749047558583013960513267351769479915110440411448078412590565797031533622509813352093119636835511977253033854388466854142753776146092587825440445182008237325262012698034419137157047927918635897378973846177552961727126115560551970797370239385129543828686170774323306933202481728884019420422360360849592983818405154473369790181636472137741865440233383956571081122982223602667853668754338360008279002325576495573847568301584365514417593244726435632222027817410359417329310347952169273512510934251453361933794586716533950489973436393834189505450956622286216819440777162804798432330933357058175885674184582816364542591313 e = 91043118409828550796773745518585981151180206101005135117565865602978722878478494447048783557571813980525643725323377488249838860897784683927029906188947001149632101513367258267329961684034661252866484981926055087386190015432964608927947646476193251820354738640453947833718397360834701566765504916472450194494897616371452996381159817427887623703639133290358520498419049175941584678802701606995099241245926884172985004839801270005583030514286561971825047719421487004569752638468907609110285739083279629747310953086535889932550905065172805818862336335628248528993024112446002398466115161473573451161053837400091893285717 d = 4801820624110300567381264152630360984400101198006662778338105999190025449039653722546363948393959163699344836724430590700225590643966670154013435626235133 rsa = RSA.construct((n, e, d)) p = rsa.p q = rsa.q # rest is just implementation of Schmidt-Samoa ct = 16267540901004879123859424672087486188548628828063789528428674467464407443871599865993337555869530486241139138650641838377419734897801380883629894166353225288006148210453677023750688175192317241440457768788267270422857060534261674538755743244831152470995124962736526978165448560149498403762447372653982922113772190234143253450918953235222315161964539311032659628670417496174123483045439359846360048774164337257829398345686635091862306204455687347443958931441225500856408331795261329035072585605404416473987280037959184981453888701567175803979981461050532113072292714696752692872526424122826696681194705563391161137426703690900733706866842363055967856443765215723398555522126909749236759332964873221973970368877565410624895160438695006432021529071866881905134494489266801004903504121740435965696128048690741210812963902631391765192187570107372453917327060678806282122942318369245760773848604249664378721970318257356486696764545 # N = p**2*q # d = N^-1 mod lcm(p-1, q-1) # m = c^d mod pq N = p*q*q # since this one works lcm_val = gmpy2.lcm(p-1, q-1) D = gmpy2.invert(N, lcm_val) m = pow(ct, D, p*q) print(bytes.fromhex(hex(m)[2:])) # flag{remarkably_superb_acronym}]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Extremely Complex Challenge</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Extremely Complex Challenge" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/HSCTF-2020-Extremely-Complex-Challenge</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge"><![CDATA[<h1 id="extremely-complex-challenge">Extremely Complex Challenge</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<p>We are given two points on an <a href="https://en.wikipedia.org/wiki/Elliptic-curve_cryptography#Theory">Elliptic Curve</a>, its order and parameter <code class="language-plaintext highlighter-rouge">b</code>.<br />
+Using these quantities, we can recover parameter <code class="language-plaintext highlighter-rouge">a</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>y^2 = x^3 + ax + b (mod p)
+y^2 - x^3 - b = ax (mod p)
+
+If we have two points on curve, (x1, y1) and (x2, y2), we can get
+
+(y1^2 - x1^3) - (y2^2 - x2^3) = a(x1 - x2)  (mod p)
+a = (x1 - x2)^-1 (y1^2 - x1^3) - (y2^2 - x2^3)  (mod p)
+
+(x1 - x2)^-1 is inverse of (x1-x2) modulo p
+</code></pre></div></div>
+
+<p>Now as we have all parameters, we can solve <a href="https://en.wikipedia.org/wiki/Discrete_logarithm#Cryptography">ECDLP</a> easily since the sizes are too small.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gmpy2</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="mi">404993569381</span>
+<span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="mi">391109997465</span><span class="p">,</span> <span class="mi">167359562362</span><span class="p">)</span>
+<span class="n">P</span> <span class="o">=</span> <span class="p">(</span><span class="mi">209038982304</span><span class="p">,</span> <span class="mi">168517698208</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">54575449882</span>
+
+<span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">%</span> <span class="n">p</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">diff</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">p</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="n">EllipticCurve</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">])</span>
+
+<span class="n">G</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">PK</span> <span class="o">=</span> <span class="n">G</span><span class="p">.</span><span class="n">discrete_log</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="n">G</span><span class="o">*</span><span class="n">PK</span> <span class="o">==</span> <span class="n">P</span>
+<span class="c1">#17683067357
+</span></code></pre></div></div>
+
+<p>Altough I solved it using <a href="https://www.sagemath.org/">SageMath</a>, I think it can be solved on python too using relevant libraries.</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="ECC" /><category term="ECDLP" /><summary type="html"><![CDATA[Extremely Complex Challenge We are given two points on an Elliptic Curve, its order and parameter b. Using these quantities, we can recover parameter a. y^2 = x^3 + ax + b (mod p) y^2 - x^3 - b = ax (mod p) If we have two points on curve, (x1, y1) and (x2, y2), we can get (y1^2 - x1^3) - (y2^2 - x2^3) = a(x1 - x2) (mod p) a = (x1 - x2)^-1 (y1^2 - x1^3) - (y2^2 - x2^3) (mod p) (x1 - x2)^-1 is inverse of (x1-x2) modulo p Now as we have all parameters, we can solve ECDLP easily since the sizes are too small. import gmpy2 p = 404993569381 G = (391109997465, 167359562362) P = (209038982304, 168517698208) b = 54575449882 diff = (G[1]**2 - P[1]**2) - (G[0]**3 - P[0]**3) diff = diff % p a = gmpy2.invert(G[0] - P[0],p)*diff a = a % p E = EllipticCurve(GF(p) , [a,b]) G = E(G) P = E(P) PK = G.discrete_log(P) print(PK) G*PK == P #17683067357 Altough I solved it using SageMath, I think it can be solved on python too using relevant libraries.]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Morbid</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Morbid" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Morbid/HSCTF-2020-Morbid</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid"><![CDATA[<hr />
+<p>aside:
+  toc: true
+sidebar:
+  nav: aboutnav
+author: deuterium
+full_width: true
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false:
+show_author_profile: true
+excerpt_separator: <!--more-->
+—</p>
+
+<h1 id="morbid">Morbid</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<h3 id="contents-of-morbitpdf">Contents of Morbit.pdf</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MORBIT (50-75 plaintext letters)
+
+Choose a  9-letter  keyword  to  set  up an  array  as  shown.  Plaintext  is  enciphered
+exactly  as in  the  Fractionated  Morse,  x  between  letters,  xx  between  words.  The
+result is then taken off in units of 2, placed vertically, and numbers are taken from
+the array to form the ciphertext. Numbers represent alphabetical order of the key. (It
+is often as easy to read pairs horizontally as to rearrange them vertically.) Morse
+code letters, numbers, and punctuation can be found in Appendix 1.
+
+Key:
+
+ W I S E C R A C K
+ 9 5 8 4 2 7 1 3 6
+ • • • – – – x x x
+ • – x • – x • – x
+
+pt: Once upon a time.
+
+pt:   o      n       c     e   /    u        p       o       n
+MC: – – – x – • x – • – • x • x x • • – x • – – • x – – – x – •
+CT: 2   7   4   3   5   8   8   1   5   1   2   8   2   7   4
+
+ /  a    /  t    i     m    e
+x x • – x x – x • • x – – x • x
+6   5   6   7   9   3   7   8
+
+CT: 27435 88151 28274 65679 378.
+</code></pre></div></div>
+
+<blockquote>
+  <p>We have to decrypt 118289293938434193849271464117429364476994241473157664969879696938145689474393647294392739247721652822414624317164228466</p>
+</blockquote>
+
+<p>Since Morse code is <a href="https://en.wikipedia.org/wiki/Huffman_coding">Huffman encoded</a>, the frequencies of - (dash) and . (dot) would be equivalent in the ciphertext.
+(I am not sure about x since spaces are way more frequent than any letter) 
+Without thinking more about analyzing the problem statistically, one simple way to solve the problem is <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-forcing</a>
+the key which is 9 different decimal characters i.e <strong>9! (362880)</strong> permutations to check, which is fairly easy.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">itertools</span>  <span class="c1"># creates iterators for efficient looping
+</span>
+<span class="c1"># dictionary of mapping as on
+# https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-English_variants
+</span>
+<span class="n">morse</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"a"</span><span class="p">:</span> <span class="s">".-"</span><span class="p">,</span>
+    <span class="s">"b"</span><span class="p">:</span> <span class="s">"-..."</span><span class="p">,</span>
+    <span class="s">"c"</span><span class="p">:</span> <span class="s">"-.-."</span><span class="p">,</span>
+    <span class="s">"d"</span><span class="p">:</span> <span class="s">"-.."</span><span class="p">,</span>
+    <span class="s">"e"</span><span class="p">:</span> <span class="s">"."</span><span class="p">,</span>
+    <span class="s">"f"</span><span class="p">:</span> <span class="s">"..-."</span><span class="p">,</span>
+    <span class="s">"g"</span><span class="p">:</span> <span class="s">"--."</span><span class="p">,</span>
+    <span class="s">"h"</span><span class="p">:</span> <span class="s">"...."</span><span class="p">,</span>
+    <span class="s">"i"</span><span class="p">:</span> <span class="s">".."</span><span class="p">,</span>
+    <span class="s">"j"</span><span class="p">:</span> <span class="s">".---"</span><span class="p">,</span>
+    <span class="s">"k"</span><span class="p">:</span> <span class="s">"-.-"</span><span class="p">,</span>
+    <span class="s">"l"</span><span class="p">:</span> <span class="s">".-.."</span><span class="p">,</span>
+    <span class="s">"m"</span><span class="p">:</span> <span class="s">"--"</span><span class="p">,</span>
+    <span class="s">"n"</span><span class="p">:</span> <span class="s">"-."</span><span class="p">,</span>
+    <span class="s">"o"</span><span class="p">:</span> <span class="s">"---"</span><span class="p">,</span>
+    <span class="s">"p"</span><span class="p">:</span> <span class="s">".--."</span><span class="p">,</span>
+    <span class="s">"q"</span><span class="p">:</span> <span class="s">"--.-"</span><span class="p">,</span>
+    <span class="s">"r"</span><span class="p">:</span> <span class="s">".-."</span><span class="p">,</span>
+    <span class="s">"s"</span><span class="p">:</span> <span class="s">"..."</span><span class="p">,</span>
+    <span class="s">"t"</span><span class="p">:</span> <span class="s">"-"</span><span class="p">,</span>
+    <span class="s">"u"</span><span class="p">:</span> <span class="s">"..-"</span><span class="p">,</span>
+    <span class="s">"v"</span><span class="p">:</span> <span class="s">"...-"</span><span class="p">,</span>
+    <span class="s">"w"</span><span class="p">:</span> <span class="s">".--"</span><span class="p">,</span>
+    <span class="s">"x"</span><span class="p">:</span> <span class="s">"-..-"</span><span class="p">,</span>
+    <span class="s">"y"</span><span class="p">:</span> <span class="s">"-.--"</span><span class="p">,</span>
+    <span class="s">"z"</span><span class="p">:</span> <span class="s">"--.."</span><span class="p">,</span>
+    <span class="s">"0"</span><span class="p">:</span> <span class="s">"-----"</span><span class="p">,</span>
+    <span class="s">"1"</span><span class="p">:</span> <span class="s">".----"</span><span class="p">,</span>
+    <span class="s">"2"</span><span class="p">:</span> <span class="s">"..---"</span><span class="p">,</span>
+    <span class="s">"3"</span><span class="p">:</span> <span class="s">"...--"</span><span class="p">,</span>
+    <span class="s">"4"</span><span class="p">:</span> <span class="s">"....-"</span><span class="p">,</span>
+    <span class="s">"5"</span><span class="p">:</span> <span class="s">"....."</span><span class="p">,</span>
+    <span class="s">"6"</span><span class="p">:</span> <span class="s">"-...."</span><span class="p">,</span>
+    <span class="s">"7"</span><span class="p">:</span> <span class="s">"--..."</span><span class="p">,</span>
+    <span class="s">"8"</span><span class="p">:</span> <span class="s">"---.."</span><span class="p">,</span>
+    <span class="s">"9"</span><span class="p">:</span> <span class="s">"----."</span><span class="p">,</span>
+    <span class="s">"."</span><span class="p">:</span> <span class="s">".-.-.-"</span><span class="p">,</span>
+    <span class="s">","</span><span class="p">:</span> <span class="s">"--..--"</span><span class="p">,</span>
+    <span class="s">"?"</span><span class="p">:</span> <span class="s">"..--.."</span><span class="p">,</span>
+    <span class="s">"'"</span><span class="p">:</span> <span class="s">".----."</span><span class="p">,</span>
+    <span class="s">"!"</span><span class="p">:</span> <span class="s">"-.-.--"</span><span class="p">,</span>
+    <span class="s">"/"</span><span class="p">:</span> <span class="s">"-..-."</span><span class="p">,</span>
+    <span class="s">"("</span><span class="p">:</span> <span class="s">"-.--."</span><span class="p">,</span>
+    <span class="s">")"</span><span class="p">:</span> <span class="s">"-.--.-"</span><span class="p">,</span>
+    <span class="s">"&amp;"</span><span class="p">:</span> <span class="s">".-..."</span><span class="p">,</span>
+    <span class="s">":"</span><span class="p">:</span> <span class="s">"---..."</span><span class="p">,</span>
+    <span class="s">";"</span><span class="p">:</span> <span class="s">"-.-.-."</span><span class="p">,</span>
+    <span class="s">"="</span><span class="p">:</span> <span class="s">"-...-"</span><span class="p">,</span>
+    <span class="s">"+"</span><span class="p">:</span> <span class="s">".-.-."</span><span class="p">,</span>
+    <span class="s">"-"</span><span class="p">:</span> <span class="s">"-....-"</span><span class="p">,</span>
+    <span class="s">"_"</span><span class="p">:</span> <span class="s">"..--.-"</span><span class="p">,</span>
+    <span class="s">"</span><span class="se">\"</span><span class="s">"</span><span class="p">:</span> <span class="s">".-..-."</span><span class="p">,</span>
+    <span class="s">"$"</span><span class="p">:</span> <span class="s">"...-..-"</span><span class="p">,</span>
+    <span class="s">"@"</span><span class="p">:</span> <span class="s">".--.-."</span><span class="p">,</span>
+    <span class="s">" "</span><span class="p">:</span> <span class="s">""</span>
+<span class="p">}</span>
+
+<span class="n">revMorse</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Dictionary containing inverse mapping from morse code to its corresponding encoded character
+</span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">morse</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">revMorse</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+
+<span class="k">def</span> <span class="nf">decrypt_morse</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="s">"""
+    Finds the decryption of `message` encoded in morse with individual
+    letters separated by x and words separated by xx
+    """</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">message</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'x'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">revMorse</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+
+
+<span class="c1"># Checking the example given in the pdf
+</span><span class="k">print</span><span class="p">(</span><span class="n">decrypt_morse</span><span class="p">(</span><span class="s">"---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x"</span><span class="p">))</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="s">"118289293938434193849271464117429364476994241473157664969879696938145689474393647294392739247721652822414624317164228466"</span>
+
+<span class="n">substitution_token</span> <span class="o">=</span> <span class="p">[</span><span class="s">'..'</span><span class="p">,</span> <span class="s">'.-'</span><span class="p">,</span> <span class="s">'.x'</span><span class="p">,</span> <span class="s">'-.'</span><span class="p">,</span> <span class="s">'--'</span><span class="p">,</span> <span class="s">'-x'</span><span class="p">,</span> <span class="s">'x.'</span><span class="p">,</span> <span class="s">'x-'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">itertools</span><span class="p">.</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">)):</span>
+    <span class="c1"># Iterate over permutations of substitution_tokens to find the
+</span>    <span class="c1"># permutations which finds the valid decryption
+</span>    <span class="n">ct1</span> <span class="o">=</span> <span class="n">ct</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+        <span class="n">ct1</span> <span class="o">=</span> <span class="n">ct1</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">substitution_token</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="c1"># Replace digit in ciphertext with given permutation of substitutions
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">'flag'</span> <span class="ow">in</span> <span class="n">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">):</span>
+            <span class="c1"># if the decyrpted strings containts flag, we get our string
+</span>            <span class="k">print</span><span class="p">(</span><span class="n">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">))</span>
+            <span class="k">break</span>
+    <span class="k">except</span> <span class="nb">KeyError</span><span class="p">:</span>
+        <span class="k">continue</span>
+        
+<span class="c1"># Output
+# once upon a time
+# congratulations. please wrap this message in a flag format: m0r3_b1t5
+</span></code></pre></div></div>
+
+<h2 id="post-challenge-analysis">Post-challenge analysis</h2>
+<p>Since I found the challenge interesting, here is some analysis</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">substitution</span> <span class="o">=</span> <span class="p">[</span><span class="n">substitution_token</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">]</span>
+<span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">digit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">digit</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"digit {0}: {1} {2}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">substitution</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">frequency</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Digits</th>
+      <th style="text-align: center">1</th>
+      <th style="text-align: center">2</th>
+      <th style="text-align: center">3</th>
+      <th style="text-align: center">4</th>
+      <th style="text-align: center">5</th>
+      <th style="text-align: center">6</th>
+      <th style="text-align: center">7</th>
+      <th style="text-align: center">8</th>
+      <th style="text-align: center">9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Substitution</td>
+      <td style="text-align: center">••</td>
+      <td style="text-align: center">•–</td>
+      <td style="text-align: center">•X</td>
+      <td style="text-align: center">–•</td>
+      <td style="text-align: center">––</td>
+      <td style="text-align: center">–X</td>
+      <td style="text-align: center">X•</td>
+      <td style="text-align: center">X–</td>
+      <td style="text-align: center">XX</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Frequency</td>
+      <td style="text-align: center">13</td>
+      <td style="text-align: center">15</td>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">23</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">15</td>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">18</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Hmm, 
+<code class="language-plaintext highlighter-rouge">--</code> and <code class="language-plaintext highlighter-rouge">X-</code> are quite infrequent, while <code class="language-plaintext highlighter-rouge">-.</code> seems a little bit more frequent. I was expecting <code class="language-plaintext highlighter-rouge">.., .-, --, -.</code> to be equally frequent. Either I did some error or there is something which I cant see currently.</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="classical" /><category term="morse" /><summary type="html"><![CDATA[aside: toc: true sidebar: nav: aboutnav author: deuterium full_width: true mathjax: false mathjax_autoNumber: false mermaid: false chart: false show_edit_on_github: true comment: false: show_author_profile: true excerpt_separator:]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Randomization 1</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Randomization 1" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%201/HSCTF-2020-Randomization-1</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1"><![CDATA[<h1 id="randomization-1">Randomization 1</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<p>We are provided a binary <a href="rand1">rand1</a> which supposedly runs on the server. We have to figure out how would capture the flag</p>
+
+<p>Lets decompile the binary quickly in <a href="https://ghidra-sre.org/">Ghidra</a>.<br />
+Seeing the output of <code class="language-plaintext highlighter-rouge">main</code> function we get</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">undefined8</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="n">uint</span> <span class="n">uVar1</span><span class="p">;</span>
+  <span class="n">undefined8</span> <span class="n">uVar2</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">in_FS_OFFSET</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">local_1c</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">local_18</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">local_14</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">local_10</span><span class="p">;</span>
+  
+  <span class="n">local_10</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)(</span><span class="n">in_FS_OFFSET</span> <span class="o">+</span> <span class="mh">0x28</span><span class="p">);</span>
+  <span class="n">initRandom</span><span class="p">();</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"I heard LCGs were cool so I made my own"</span><span class="p">);</span>
+  <span class="n">uVar1</span> <span class="o">=</span> <span class="n">next</span><span class="p">();</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Since I</span><span class="se">\'</span><span class="s">m so generous you get a free number: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,(</span><span class="n">ulong</span><span class="p">)</span><span class="n">uVar1</span><span class="p">);</span>
+  <span class="n">local_18</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// local_18 works as in iterator from 0 to 9</span>
+  <span class="k">do</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">9</span> <span class="o">&lt;</span> <span class="n">local_18</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">win</span><span class="p">();</span>
+      <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nl">LAB_0010132e:</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">!=</span> <span class="o">*</span><span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)(</span><span class="n">in_FS_OFFSET</span> <span class="o">+</span> <span class="mh">0x28</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+        <span class="n">__stack_chk_fail</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="n">uVar2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Guess my number: "</span><span class="p">);</span>
+    <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_00102093</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_1c</span><span class="p">);</span>
+    <span class="n">local_14</span> <span class="o">=</span> <span class="n">next</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">local_14</span> <span class="o">!=</span> <span class="n">local_1c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">puts</span><span class="p">(</span><span class="s">"Wrong!"</span><span class="p">);</span>
+      <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="k">goto</span> <span class="n">LAB_0010132e</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">local_18</span> <span class="o">=</span> <span class="n">local_18</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As a quick overview, one could tell there is a loop which runs 10 times and after running 10 times successfully, it should spit out the flag.<br />
+It asks for input 10 times, and each time it compares the value with return value of the function next().<br />
+Taking a quick look of decompilaton of next</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ulong</span> <span class="nf">next</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">*</span> <span class="sc">'%'</span> <span class="o">+</span> <span class="mh">0x41</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">curr</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>We see its a simple linear function, but the decompiled value seems off, it should actually be taking <code class="language-plaintext highlighter-rouge">curr</code> which is actually <code class="language-plaintext highlighter-rouge">local_14</code> and returning a <code class="language-plaintext highlighter-rouge">char</code> type.</p>
+
+<p>As the start value is printed out before beginning the loop, we can predict all the values by writing a simple function</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">next_10</span><span class="p">(</span><span class="n">curr</span><span class="p">):</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+		<span class="n">curr</span> <span class="o">=</span> <span class="p">(</span><span class="n">curr</span> <span class="o">*</span> <span class="mh">0x25</span> <span class="o">+</span> <span class="mh">0x41</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span>
+		<span class="k">print</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p>We dont need to bother about automating nc, just input all 10 values in one go as timing is not really an issue</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I heard LCGs were cool so I made my own
+Since I'm so generous you get a free number: 184
+Guess my number: 217
+158
+23
+148
+165
+26
+3
+176
+177
+214Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number:
+flag{l1n34r_c0n6ru3n714l_63n3r470r_f41lur3_4b3bcd43}
+</code></pre></div></div>
+<p>BRAVO we did it</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptograpy" /><category term="reversing" /><category term="LCG" /><summary type="html"><![CDATA[Randomization 1 We are provided a binary rand1 which supposedly runs on the server. We have to figure out how would capture the flag Lets decompile the binary quickly in Ghidra. Seeing the output of main function we get undefined8 main(void) { uint uVar1; undefined8 uVar2; long in_FS_OFFSET; int local_1c; int local_18; int local_14; long local_10; local_10 = *(long *)(in_FS_OFFSET + 0x28); initRandom(); puts("I heard LCGs were cool so I made my own"); uVar1 = next(); printf("Since I\'m so generous you get a free number: %d\n",(ulong)uVar1); local_18 = 0; // local_18 works as in iterator from 0 to 9 do { if (9 &lt; local_18) { win(); uVar2 = 0; LAB_0010132e: if (local_10 != *(long *)(in_FS_OFFSET + 0x28)) { /* WARNING: Subroutine does not return */ __stack_chk_fail(); } return uVar2; } printf("Guess my number: "); __isoc99_scanf(&amp;DAT_00102093,&amp;local_1c); local_14 = next(); if (local_14 != local_1c) { puts("Wrong!"); uVar2 = 1; goto LAB_0010132e; } local_18 = local_18 + 1; } while( true ); } As a quick overview, one could tell there is a loop which runs 10 times and after running 10 times successfully, it should spit out the flag. It asks for input 10 times, and each time it compares the value with return value of the function next(). Taking a quick look of decompilaton of next ulong next(void) { curr = curr * '%' + 0x41; return (ulong)curr; } We see its a simple linear function, but the decompiled value seems off, it should actually be taking curr which is actually local_14 and returning a char type. As the start value is printed out before beginning the loop, we can predict all the values by writing a simple function def next_10(curr): for i in range(10): curr = (curr * 0x25 + 0x41)%256 print(curr) We dont need to bother about automating nc, just input all 10 values in one go as timing is not really an issue I heard LCGs were cool so I made my own Since I'm so generous you get a free number: 184 Guess my number: 217 158 23 148 165 26 3 176 177 214Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: flag{l1n34r_c0n6ru3n714l_63n3r470r_f41lur3_4b3bcd43} BRAVO we did it]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Randomization 2</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Randomization 2" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%202/HSCTF-2020-Crypto-Randomization-2</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2"><![CDATA[<h1 id="randomization-2">Randomization 2</h1>
+
+<p><img src="Capture.png" alt="Screenshot" /></p>
+
+<p>Again, we are provided a binary <a href="rand2">rand2</a> which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times.</p>
+
+<p>Going ahead, let’s use <a href="https://ghidra-sre.org/">Ghidra</a> to decompile this binary, and then work our ass off to understand the terrible decompiled code.
+Just kidding…</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">undefined8</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">long</span> <span class="n">lVar1</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">in_FS_OFFSET</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">local_1c</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">local_18</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">local_10</span><span class="p">;</span>
+  
+  <span class="n">local_10</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">in_FS_OFFSET</span> <span class="o">+</span> <span class="mi">40</span><span class="p">);</span>
+  <span class="n">initRandom</span><span class="p">();</span>
+  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="n">local_18</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"I had a bit too much coffee so this is in Java not C"</span><span class="p">);</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"(Actually it</span><span class="se">\'</span><span class="s">s still in C because Java is a pain)"</span><span class="p">);</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"Since I</span><span class="se">\'</span><span class="s">m so generous you get 2 free numbers"</span><span class="p">);</span>
+  <span class="n">lVar1</span> <span class="o">=</span> <span class="n">next</span><span class="p">();</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">lVar1</span><span class="p">);</span>
+  <span class="n">lVar1</span> <span class="o">=</span> <span class="n">next</span><span class="p">();</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">lVar1</span><span class="p">);</span>
+  <span class="n">local_1c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">local_1c</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Guess my number: "</span><span class="p">);</span>
+    <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_001020e5</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_18</span><span class="p">);</span>
+    <span class="n">lVar1</span> <span class="o">=</span> <span class="n">next</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lVar1</span> <span class="o">!=</span> <span class="n">local_18</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">puts</span><span class="p">(</span><span class="s">"WRONG!"</span><span class="p">);</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+      <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">local_1c</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">"You win!"</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Have a flag: "</span><span class="p">);</span>
+  <span class="n">win</span><span class="p">();</span>
+  <span class="n">puts</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">!=</span> <span class="o">*</span><span class="p">(</span><span class="n">in_FS_OFFSET</span> <span class="o">+</span> <span class="mi">40</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+    <span class="n">__stack_chk_fail</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Briefly, we can see an initRandom function and a next function which we’ll look at just in a moment, and the loop runs 10 times and we’re asked for a guess of the next number every time, and if all our guesses work out, we’ll have the flag.</p>
+
+<p>Moving over to the initRandom function:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">initRandom</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">local_14</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">local_10</span><span class="p">;</span>
+  
+  <span class="n">urandom</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"/dev/urandom"</span><span class="p">,</span><span class="s">"r"</span><span class="p">);</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">local_14</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">local_14</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">fgetc</span><span class="p">(</span><span class="n">urandom</span><span class="p">);</span>
+    <span class="n">local_10</span> <span class="o">=</span> <span class="n">local_10</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">iVar1</span><span class="p">;</span>
+    <span class="n">local_14</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">curr</span> <span class="o">=</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">urandom</span><span class="p">);</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Basically it initializes the seed to the PRNG, meh we needn’t worry too much about this probably.</p>
+
+<p>Then comes the next function:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">long</span> <span class="nf">next</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">*</span> <span class="mi">25214903917</span> <span class="o">+</span> <span class="mi">11</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">curr</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Voila, this equation is what we wanted! But a catch, <code class="language-plaintext highlighter-rouge">long</code> values can be negative, but we don’t see any negative numbers. Maybe it is <code class="language-plaintext highlighter-rouge">unsigned long</code> (64 bits, now we realize what the description probably meant).</p>
+
+<p>Our linear PRNG’s state comprises of just 1 number, so we don’t even need the first number. Take the second number, and do the next function on it.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+</span><span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">x</span><span class="p">;</span>
+	<span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">25214903917</span><span class="o">+</span><span class="mi">11</span><span class="p">;</span>
+		<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If you’re trying it out in Python, don’t forget to take numbers modulo 2**64.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I had a bit too much coffee so this is in Java not C
+(Actually it's still in C because Java is a pain)
+Since I'm so generous you get 2 free numbers
+7258447304246973212
+17116010196804995831
+Guess my number: 16690969720309355830
+6468650403376040969
+4458106111961708000
+8544260868340822123
+785197920356155290
+16490108719449469085
+16773761617645535460
+13390247135748110623
+11364946156142406718
+3626610375201229425
+Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: You win!
+Have a flag: flag{1n53cur3_r4nd0m_46b8861b}
+</code></pre></div></div>
+
+<p>Easy huh, turns out java.util.Random uses almost the same PRNG, DON’T USE THIS FOR CRYPTO lol :triumph:</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="LCG" /><category term="reversing" /><summary type="html"><![CDATA[Randomization 2 Again, we are provided a binary rand2 which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times. Going ahead, let’s use Ghidra to decompile this binary, and then work our ass off to understand the terrible decompiled code. Just kidding… undefined8 main(void) { long lVar1; long in_FS_OFFSET; int local_1c; long local_18; long local_10; local_10 = *(in_FS_OFFSET + 40); initRandom(); setvbuf(stdin,NULL,2,0); setvbuf(stdout,NULL,2,0); local_18 = 0; puts("I had a bit too much coffee so this is in Java not C"); puts("(Actually it\'s still in C because Java is a pain)"); puts("Since I\'m so generous you get 2 free numbers"); lVar1 = next(); printf("%llu\n",lVar1); lVar1 = next(); printf("%llu\n",lVar1); local_1c = 0; while (local_1c &lt; 10) { printf("Guess my number: "); __isoc99_scanf(&amp;DAT_001020e5,&amp;local_18); lVar1 = next(); if (lVar1 != local_18) { puts("WRONG!"); /* WARNING: Subroutine does not return */ exit(0); } local_1c += 1; } puts("You win!"); printf("Have a flag: "); win(); puts(""); if (local_10 != *(in_FS_OFFSET + 40)) { /* WARNING: Subroutine does not return */ __stack_chk_fail(); } return 0; } Briefly, we can see an initRandom function and a next function which we’ll look at just in a moment, and the loop runs 10 times and we’re asked for a guess of the next number every time, and if all our guesses work out, we’ll have the flag. Moving over to the initRandom function: void initRandom(void) { int iVar1; int local_14; long local_10; urandom = fopen("/dev/urandom","r"); local_10 = 0; local_14 = 0; while (local_14 &lt; 8) { iVar1 = fgetc(urandom); local_10 = local_10 * 256 + iVar1; local_14 += 1; } curr = local_10; fclose(urandom); return; } Basically it initializes the seed to the PRNG, meh we needn’t worry too much about this probably. Then comes the next function: long next(void) { curr = curr * 25214903917 + 11; return curr; } Voila, this equation is what we wanted! But a catch, long values can be negative, but we don’t see any negative numbers. Maybe it is unsigned long (64 bits, now we realize what the description probably meant). Our linear PRNG’s state comprises of just 1 number, so we don’t even need the first number. Take the second number, and do the next function on it. #include &lt;bits/stdc++.h&gt; using namespace std; int main() { unsigned long x; cin &gt;&gt; x; for (int i = 0; i &lt; 10; i++) { x = x * 25214903917+11; cout &lt;&lt; x &lt;&lt; endl; } } If you’re trying it out in Python, don’t forget to take numbers modulo 2**64. I had a bit too much coffee so this is in Java not C (Actually it's still in C because Java is a pain) Since I'm so generous you get 2 free numbers 7258447304246973212 17116010196804995831 Guess my number: 16690969720309355830 6468650403376040969 4458106111961708000 8544260868340822123 785197920356155290 16490108719449469085 16773761617645535460 13390247135748110623 11364946156142406718 3626610375201229425 Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: Guess my number: You win! Have a flag: flag{1n53cur3_r4nd0m_46b8861b} Easy huh, turns out java.util.Random uses almost the same PRNG, DON’T USE THIS FOR CRYPTO lol :triumph:]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Smol E</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Smol E" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Smol%20E/HSCTF-2020-Smol-E</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E"><![CDATA[<h1 id="smol-e">Smol E</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923
+
+E = 3
+
+C1 = 110524539798470366613834133888472781069399552085868942087632499354651575111511036068021885688092481936060366815322764760005015342876190750877958695168393505027738910101191528175868547818851667359542590042073677436170569507102025782872063324950368166532649021589734367946954269468844281238141036170008727208883
+
+C2 =
+42406837735093367941682857892181550522346220427504754988544140886997339709785380303682471368168102002682892652577294324286913907635616629790484019421641636805493203989143298536257296680179745122126655008200829607192191208919525797616523271426092158734972067387818678258432674493723618035248340048171787246777
+</code></pre></div></div>
+
+<p>We have two ciphertexts and N, we can use <a href="https://crypto.stackexchange.com/questions/30884/help-understanding-basic-franklin-reiter-related-message-attack">Franklin Reiter related message attack</a>.<br />
+But for that, we need the difference between the two messages. But since the messages are padded with a small pad, here we have another instance of <a href="https://en.wikipedia.org/wiki/Coppersmith%27s_attack">CopperSmith’s Attack</a>. We have to use sage to solve this challenge. There are plenty of scripts for this, I used <a href="http://mslc.ctf.su/wp/confidence-ctf-2015-rsa1-crypto-400/">this nice script</a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n</span> <span class="o">=</span> <span class="mi">163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">C1</span> <span class="o">=</span> <span class="mi">110524539798470366613834133888472781069399552085868942087632499354651575111511036068021885688092481936060366815322764760005015342876190750877958695168393505027738910101191528175868547818851667359542590042073677436170569507102025782872063324950368166532649021589734367946954269468844281238141036170008727208883</span>
+
+<span class="n">C2</span> <span class="o">=</span> <span class="mi">42406837735093367941682857892181550522346220427504754988544140886997339709785380303682471368168102002682892652577294324286913907635616629790484019421641636805493203989143298536257296680179745122126655008200829607192191208919525797616523271426092158734972067387818678258432674493723618035248340048171787246777</span>
+
+
+<span class="n">PRxy</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">PRx</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xn</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">PRZZ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xz</span><span class="p">,</span><span class="n">yz</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="n">g1</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="n">e</span> <span class="o">-</span> <span class="n">C1</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="n">e</span> <span class="o">-</span> <span class="n">C2</span>
+
+<span class="n">q1</span> <span class="o">=</span> <span class="n">g1</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">g2</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">q2</span><span class="p">.</span><span class="n">resultant</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="c1"># need to switch to univariate polynomial ring
+# because .small_roots is implemented only for univariate
+</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">univariate_polynomial</span><span class="p">()</span> <span class="c1"># x is hopefully eliminated
+</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRx</span><span class="p">).</span><span class="n">subs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">xn</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">monic</span><span class="p">()</span>
+
+<span class="n">roots</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">small_roots</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">60</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">roots</span><span class="p">,</span> <span class="s">"Failed1"</span>
+
+<span class="n">diff</span> <span class="o">=</span> <span class="n">roots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">:</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="o">-</span><span class="n">diff</span>
+    <span class="n">C1</span><span class="p">,</span> <span class="n">C2</span> <span class="o">=</span> <span class="n">C2</span><span class="p">,</span> <span class="n">C1</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">diff</span>
+<span class="n">R</span><span class="p">.</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">)[]</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">X</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="n">C1</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="n">C2</span>
+
+<span class="c1"># GCD is not implemented for rings over composite modulus in Sage
+</span><span class="k">def</span> <span class="nf">my_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">monic</span><span class="p">()</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">my_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="n">mint</span><span class="o">=-</span><span class="n">my_gcd</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">).</span><span class="n">coefficients</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mint</span><span class="p">)</span> <span class="c1"># coefficient 0 = -m
+</span><span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">mint</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]))</span>
+</code></pre></div></div>
+
+<p>Probably the most annoying part of the callenge was that pad was odd, making me think that the message is gibberish or I may be doing something wrong. Well smashing your head over something is the best part of ctf challenges I guess</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="RSA" /><category term="franklinreiter" /><category term="coppersmith" /><category term="smalle" /><summary type="html"><![CDATA[Smol E N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923 E = 3 C1 = 110524539798470366613834133888472781069399552085868942087632499354651575111511036068021885688092481936060366815322764760005015342876190750877958695168393505027738910101191528175868547818851667359542590042073677436170569507102025782872063324950368166532649021589734367946954269468844281238141036170008727208883 C2 = 42406837735093367941682857892181550522346220427504754988544140886997339709785380303682471368168102002682892652577294324286913907635616629790484019421641636805493203989143298536257296680179745122126655008200829607192191208919525797616523271426092158734972067387818678258432674493723618035248340048171787246777 We have two ciphertexts and N, we can use Franklin Reiter related message attack. But for that, we need the difference between the two messages. But since the messages are padded with a small pad, here we have another instance of CopperSmith’s Attack. We have to use sage to solve this challenge. There are plenty of scripts for this, I used this nice script n = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923 e = 3 C1 = 110524539798470366613834133888472781069399552085868942087632499354651575111511036068021885688092481936060366815322764760005015342876190750877958695168393505027738910101191528175868547818851667359542590042073677436170569507102025782872063324950368166532649021589734367946954269468844281238141036170008727208883 C2 = 42406837735093367941682857892181550522346220427504754988544140886997339709785380303682471368168102002682892652577294324286913907635616629790484019421641636805493203989143298536257296680179745122126655008200829607192191208919525797616523271426092158734972067387818678258432674493723618035248340048171787246777 PRxy.&lt;x,y&gt; = PolynomialRing(Zmod(n)) PRx.&lt;xn&gt; = PolynomialRing(Zmod(n)) PRZZ.&lt;xz,yz&gt; = PolynomialRing(Zmod(n)) g1 = x**e - C1 g2 = (x + y)**e - C2 q1 = g1.change_ring(PRZZ) q2 = g2.change_ring(PRZZ) h = q2.resultant(q1) # need to switch to univariate polynomial ring # because .small_roots is implemented only for univariate h = h.univariate_polynomial() # x is hopefully eliminated h = h.change_ring(PRx).subs(y=xn) h = h.monic() roots = h.small_roots(X=2**60, beta=0.3) assert roots, "Failed1" diff = roots[0] if diff &gt; 2**32: diff = -diff C1, C2 = C2, C1 r = diff R.&lt;X&gt; = Zmod(n)[] f1 = X^3 - C1 f2 = (X + r)^3 - C2 # GCD is not implemented for rings over composite modulus in Sage def my_gcd(a, b): return a.monic() if b == 0 else my_gcd(b, a % b) mint=-my_gcd(f1, f2).coefficients()[0] print(mint) # coefficient 0 = -m print(bytes.fromhex(hex(mint&gt;&gt;1)[2:])) Probably the most annoying part of the callenge was that pad was odd, making me think that the message is gibberish or I may be doing something wrong. Well smashing your head over something is the best part of ctf challenges I guess]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - Unexpected</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - Unexpected" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Unexpected/HSCTF-2020-unexpected</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected"><![CDATA[<h1 id="unexpected">Unexpected</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<p>We are given 3 N’s and 3 C’s and given that all three share primes
+i.e</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N1 = p*q
+N2 = q*r
+N3 = r*p
+</code></pre></div></div>
+<p>This is a problem of classic <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a> with a small twist.<br />
+Now, we know factoring N into their factors is hard. However this can be don easily considering we have a common factor between pairs of N
+i.e q is a common factor of N1 and N2, r is a common factor of N2 and N3
+and p is a common factor of N3 and N1.</p>
+
+<p>Once we get p, q and r, we can easily calculate <a href="https://en.wikipedia.org/wiki/Euler%27s_totient_function">Euler Totien phi</a> and the modular inverse of E with respect to respective phis.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#python3
+</span><span class="kn">import</span> <span class="nn">gmpy2</span>  <span class="c1">#Cool asf library
+</span><span class="n">N1</span> <span class="o">=</span> <span class="mi">3895738302299059518129198422310169628530536557191890566210939781698372336257482186582163630847612416277492034959243510457939210010336159061758606919109259916143600981918456942199762738624796190838889500238780675229383463267807384154074134251073572174392024892486431125499446924573006208711810847272390619510395812856188247531815920797526102562723333957594242603466996229335924848954210939152042149332307810693239925149256224795031982752752336401872520016106145667479144091130160998875256860809091721275069193773739370057334041922519998813268278574260846083883264261920589114740823464192397850923545998904365370408113</span>
+
+<span class="n">N2</span> <span class="o">=</span> <span class="mi">3036683903819675505741091164945461947189004916494633766372176282409409694958701211748277050499101511956962003835932755555293255586827283990400451317444723234406968971873530093281591689832798646915816609347861047534121792409030834659241904646743453387504496246791081682741245482378149293399372654558929658582070853972454887854658545741800574343930155288517185535533201220281739954820271979667081052363406511938025061398551356675540358212449132781674832812796443378476387659729623581274433769056775163718782871879747276327458473970177451591251859530403032170215968101310739004163533767679394201611410832974546802038041</span>
+
+<span class="n">N3</span> <span class="o">=</span> <span class="mi">4793455677299549137382284585015750073239112414361680529255951318217960300841340399094743130287927996565298160174555422185410320841942637374406558835150138631140265626020072464652973386772727192540062051929655235552439145036105501434801984612127808829810146844869487529177642676245549299371487478280457673839725488195812744535928488844735950540356920273038857127652414836352483913807655170699520816765863272825856765769043174406026964068017257738085400965661973681558654658747878342173984592411085018242201038877382766239487564503728442821348064764166024851080258629751476765613997512620274759264076272801682962144457</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="mi">65537</span>
+
+<span class="n">C1</span> <span class="o">=</span> <span class="mi">396708474546125804352894757436683688457291028695044217325853929491171136935487190613513217479209066321213697066977005912522338337419604329864854419961723570625025089500459612736934675744115710978556346050350466970024450696226499749911198313775828281699871502987873199226066403667788132060336882800770615332190939846610876881382430101512212915247532319827304296610854802037475047119525110795533529161852951539770153761419387662527094415537933400873451490021233979268224054475360645920086811082803271848565851436058022797610887635287190533293980480191482625531855511415716253479184799509403767653927424232672209598509</span>
+
+<span class="n">C2</span> <span class="o">=</span> <span class="mi">355006513750551550798931713354683491263062473879176656452255051848683497534660576981575518851351256702360823676609578259232763677292692743319345273559085724516350773319337226043634439282120083618718026203533033564167432280901197175559735572797382863132012675404876908914335941746393221402727788260354881773319480220225939283398326940847106630716629330817737251316474369640273632208347751866683363389016722969822345738247486942531821199790024647950924227337611907877819668593060172268197128413003269501597578146759488894526193598933152416894414296396043283131502951693668167550687432080480619240585408701379144341703</span>
+
+<span class="n">C3</span> <span class="o">=</span> <span class="mi">924835278307680480966328618545268895077532556525413716080960421925985654497130329688156219485942736928562517552888163928270855659413958949301590302010862666331053838345196518237383846281768395909801043955047640003147798786793258813501366000503338638933238548605016169865688228297750780710248359326295693845663887055907900967535999885217905972006140096240831305484619796964713673839223632057905454213937054336962510051529266336629730913756688411854427999570223208667606703681762027957427028839409594591627448224813082072169775916331655060221445546199171668136050686471357710989346885039441000083764142021784018773006</span>
+
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">gcd</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span> <span class="c1"># taking q as greatest common divisor of N1 and N2
+</span><span class="n">r</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">gcd</span><span class="p">(</span><span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">gcd</span><span class="p">(</span><span class="n">N3</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span>
+
+<span class="n">phi1</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># calculation of phi
+</span><span class="n">phi2</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">phi3</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">d1</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">phi1</span><span class="p">)</span> <span class="c1"># taking inverse of E modulo phi1
+</span><span class="n">d2</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">phi2</span><span class="p">)</span>
+<span class="n">d3</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">phi3</span><span class="p">)</span>
+
+<span class="n">m1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">C1</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span> <span class="c1"># decrypting ciphertexts with corresponding keys
+</span><span class="n">m2</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">C2</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span>
+<span class="n">m3</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">C3</span><span class="p">,</span> <span class="n">d3</span><span class="p">,</span> <span class="n">N3</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m1</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">m2</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">m3</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="n">decode</span><span class="p">())</span>
+<span class="c1"># flag{n0_0n3_3xp3ct5_th3_sp4nish_inquisiti0n!} I wasnt expecting that either
+</span></code></pre></div></div>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="cryptography" /><category term="HSCTF" /><category term="2020" /><category term="RSA" /><category term="GCD" /><summary type="html"><![CDATA[Unexpected We are given 3 N’s and 3 C’s and given that all three share primes i.e N1 = p*q N2 = q*r N3 = r*p This is a problem of classic RSA with a small twist. Now, we know factoring N into their factors is hard. However this can be don easily considering we have a common factor between pairs of N i.e q is a common factor of N1 and N2, r is a common factor of N2 and N3 and p is a common factor of N3 and N1. Once we get p, q and r, we can easily calculate Euler Totien phi and the modular inverse of E with respect to respective phis. #python3 import gmpy2 #Cool asf library N1 = 3895738302299059518129198422310169628530536557191890566210939781698372336257482186582163630847612416277492034959243510457939210010336159061758606919109259916143600981918456942199762738624796190838889500238780675229383463267807384154074134251073572174392024892486431125499446924573006208711810847272390619510395812856188247531815920797526102562723333957594242603466996229335924848954210939152042149332307810693239925149256224795031982752752336401872520016106145667479144091130160998875256860809091721275069193773739370057334041922519998813268278574260846083883264261920589114740823464192397850923545998904365370408113 N2 = 3036683903819675505741091164945461947189004916494633766372176282409409694958701211748277050499101511956962003835932755555293255586827283990400451317444723234406968971873530093281591689832798646915816609347861047534121792409030834659241904646743453387504496246791081682741245482378149293399372654558929658582070853972454887854658545741800574343930155288517185535533201220281739954820271979667081052363406511938025061398551356675540358212449132781674832812796443378476387659729623581274433769056775163718782871879747276327458473970177451591251859530403032170215968101310739004163533767679394201611410832974546802038041 N3 = 4793455677299549137382284585015750073239112414361680529255951318217960300841340399094743130287927996565298160174555422185410320841942637374406558835150138631140265626020072464652973386772727192540062051929655235552439145036105501434801984612127808829810146844869487529177642676245549299371487478280457673839725488195812744535928488844735950540356920273038857127652414836352483913807655170699520816765863272825856765769043174406026964068017257738085400965661973681558654658747878342173984592411085018242201038877382766239487564503728442821348064764166024851080258629751476765613997512620274759264076272801682962144457 E = 65537 C1 = 396708474546125804352894757436683688457291028695044217325853929491171136935487190613513217479209066321213697066977005912522338337419604329864854419961723570625025089500459612736934675744115710978556346050350466970024450696226499749911198313775828281699871502987873199226066403667788132060336882800770615332190939846610876881382430101512212915247532319827304296610854802037475047119525110795533529161852951539770153761419387662527094415537933400873451490021233979268224054475360645920086811082803271848565851436058022797610887635287190533293980480191482625531855511415716253479184799509403767653927424232672209598509 C2 = 355006513750551550798931713354683491263062473879176656452255051848683497534660576981575518851351256702360823676609578259232763677292692743319345273559085724516350773319337226043634439282120083618718026203533033564167432280901197175559735572797382863132012675404876908914335941746393221402727788260354881773319480220225939283398326940847106630716629330817737251316474369640273632208347751866683363389016722969822345738247486942531821199790024647950924227337611907877819668593060172268197128413003269501597578146759488894526193598933152416894414296396043283131502951693668167550687432080480619240585408701379144341703 C3 = 924835278307680480966328618545268895077532556525413716080960421925985654497130329688156219485942736928562517552888163928270855659413958949301590302010862666331053838345196518237383846281768395909801043955047640003147798786793258813501366000503338638933238548605016169865688228297750780710248359326295693845663887055907900967535999885217905972006140096240831305484619796964713673839223632057905454213937054336962510051529266336629730913756688411854427999570223208667606703681762027957427028839409594591627448224813082072169775916331655060221445546199171668136050686471357710989346885039441000083764142021784018773006 q = gmpy2.gcd(N1, N2) # taking q as greatest common divisor of N1 and N2 r = gmpy2.gcd(N2, N3) p = gmpy2.gcd(N3, N1) phi1 = (p - 1) * (q - 1) # calculation of phi phi2 = (q - 1) * (r - 1) phi3 = (r - 1) * (p - 1) d1 = gmpy2.invert(E, phi1) # taking inverse of E modulo phi1 d2 = gmpy2.invert(E, phi2) d3 = gmpy2.invert(E, phi3) m1 = pow(C1, d1, N1) # decrypting ciphertexts with corresponding keys m2 = pow(C2, d2, N2) m3 = pow(C3, d3, N3) print(bytes.fromhex(hex(m1)[2:] + hex(m2)[2:] + hex(m3)[2:]).decode()) # flag{n0_0n3_3xp3ct5_th3_sp4nish_inquisiti0n!} I wasnt expecting that either]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - XORed</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - XORed" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/XORed/HSCTF-2020-XORed</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed"><![CDATA[<h1 id="xored">XORed</h1>
+
+<p><img src="ChallengeDescription.PNG" alt="" /></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I was given the following equations. Can you help me decode the flag?
+Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533
+Key 1 ^ Key 3 = 9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b
+Key 2 ^ Key 3 ^ Key 5 = 557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05
+Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acaeab1c2733e4ab6bebc68436177128eb
+Key 3 ^ Key 4 = 996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a
+Flag ^ Key 1 ^ Key 2 ^ Key 3 ^ Key 4 ^ Key 5 = 306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139
+</code></pre></div></div>
+
+<p>We know XOR has the following properties</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Commutative: A ⊕ B = B ⊕ A
+Associative: A ⊕ (B ⊕ C) = (A ⊕ B) ⊕ C
+Identity: A ⊕ 0 = A
+Self-Inverse: A ⊕ A = 0
+</code></pre></div></div>
+
+<p>So if we want to recover Flag from <code class="language-plaintext highlighter-rouge">Flag ^ Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5</code>, we need to XOR each of <code class="language-plaintext highlighter-rouge">Key1, Key2, Key3, Key4 and Key5</code> exactly once so that we end up only with flag</p>
+
+<p>Notice that we dont need to recover each of the Key value. We can extract Flag (a bit) smartly. All we need is <code class="language-plaintext highlighter-rouge">Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5</code></p>
+
+<p>We can get it by XORing (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4)
+Which is equvalent to Key1 <del>^Key3</del>^ Key2 ^ Key3 ^ Key5 ^ Key4 <del>^Key3</del>
+Hence we get Flag as 
+<code class="language-plaintext highlighter-rouge">(Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4))</code></p>
+
+<p>Here are multiple ways of doing it in python</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">xor</span>
+<span class="n">K13</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b'</span><span class="p">)</span>
+<span class="n">K235</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05'</span><span class="p">)</span>
+<span class="n">K34</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a'</span><span class="p">)</span>
+<span class="n">F12345</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139'</span><span class="p">)</span>
+
+<span class="c1">#1 xor from pwntools
+</span><span class="n">flag</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">K13</span><span class="p">,</span> <span class="n">K235</span><span class="p">,</span> <span class="n">K34</span><span class="p">,</span> <span class="n">F12345</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+
+<span class="c1">#2 Doing shit yourself
+</span><span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">([</span> <span class="nb">chr</span><span class="p">(</span><span class="n">K13</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K235</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K34</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">F12345</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">K13</span><span class="p">)</span> <span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+
+<span class="c1">#flag{n0t_t00_h4rD_h0p3fully} YES
+</span></code></pre></div></div>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="xor" /><summary type="html"><![CDATA[XORed I was given the following equations. Can you help me decode the flag? Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533 Key 1 ^ Key 3 = 9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b Key 2 ^ Key 3 ^ Key 5 = 557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05 Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acaeab1c2733e4ab6bebc68436177128eb Key 3 ^ Key 4 = 996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a Flag ^ Key 1 ^ Key 2 ^ Key 3 ^ Key 4 ^ Key 5 = 306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139 We know XOR has the following properties Commutative: A ⊕ B = B ⊕ A Associative: A ⊕ (B ⊕ C) = (A ⊕ B) ⊕ C Identity: A ⊕ 0 = A Self-Inverse: A ⊕ A = 0 So if we want to recover Flag from Flag ^ Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5, we need to XOR each of Key1, Key2, Key3, Key4 and Key5 exactly once so that we end up only with flag Notice that we dont need to recover each of the Key value. We can extract Flag (a bit) smartly. All we need is Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5 We can get it by XORing (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4) Which is equvalent to Key1 ^Key3^ Key2 ^ Key3 ^ Key5 ^ Key4 ^Key3 Hence we get Flag as (Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4)) Here are multiple ways of doing it in python from pwn import xor K13 = bytes.fromhex('9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b') K235 = bytes.fromhex('557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05') K34 = bytes.fromhex('996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a') F12345 = bytes.fromhex('306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139') #1 xor from pwntools flag = xor(K13, K235, K34, F12345) print(flag.decode()) #2 Doing shit yourself flag = "".join([ chr(K13[i] ^ K235[i] ^ K34[i] ^ F12345[i]) for i in range(len(K13) ]) print(flag) #flag{n0t_t00_h4rD_h0p3fully} YES]]></summary></entry><entry><title type="html">HSCTF 2020 Crypto - XKCD 2247 v2</title><link href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2" rel="alternate" type="text/html" title="HSCTF 2020 Crypto - XKCD 2247 v2" /><published>2020-06-06T00:00:00+05:30</published><updated>2020-06-06T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/HSCTF-2020-xkcd-2247-v2</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2"><![CDATA[<h1 id="xkcdcom2247-v2">XKCD.com/2247 v2</h1>
+
+<p><img src="Capture.PNG" alt="" /></p>
+
+<p>Why v2? because organizers messed up in v1 by providing plaintext in the <a href="HillCT.txt">challenge</a> and the flag read <code class="language-plaintext highlighter-rouge">wrapmeintheflagformatandputunderscoresaroundmywords</code> weird flag but ok.</p>
+
+<p>As the name suggests it is <a href="https://en.wikipedia.org/wiki/Hill_cipher">Hill Cipher</a>
+We are provided with the ciphertext and key, we just have to decrypt the ciphertext using the key. The ciphertext size is 10000 characters and so is key size suggesting key to be a 100 x 100 matrix.</p>
+
+<p>considering plaintext is 100 x 100 matrix,<br />
+<code class="language-plaintext highlighter-rouge">ciphertext = plaintext x key</code> where <code class="language-plaintext highlighter-rouge">x</code> is the matrix cross product modulo 26
+we can get the <code class="language-plaintext highlighter-rouge">plaintext</code> by post multiplication of <code class="language-plaintext highlighter-rouge">keyinverse</code> matrix
+where <code class="language-plaintext highlighter-rouge">keyinverse</code> is simply the <a href="https://en.wikipedia.org/wiki/Modular_multiplicative_inverse">modular multiplicative inverse</a> of key matrix modulo 26.</p>
+
+<p>I looked some stuff for finding the modular multiplicative inverse as implementing it would be overkill. I found there is a Matrix module in sympy. But I also found there is a <a href="https://docs.sympy.org/latest/modules/crypto.html">crypto module in sympy for classical ciphers</a>. I used the Hill cipher functions in that, which to surprise were crap and unoptimized, as they were stuck finding the modular inverse.
+Meanwhile sympy was busy finding the inverse, I realised <a href="https://www.sagemath.org/">SAGE</a>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">key</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span> <span class="p">]</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">IntegerModRing</span><span class="p">(</span><span class="mi">26</span><span class="p">),[</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">100</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span> <span class="p">]).</span><span class="n">transpose</span><span class="p">()</span>
+<span class="c1"># why transpose()? because the key was ill formated i guess?
+</span><span class="n">ct</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">IntegerModRing</span><span class="p">(</span><span class="mi">26</span><span class="p">),[</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">100</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span> <span class="p">])</span>
+<span class="n">keyinv</span> <span class="o">=</span> <span class="n">key</span><span class="p">.</span><span class="n">inverse</span><span class="p">()</span>
+
+<span class="n">pt</span> <span class="o">=</span> <span class="n">ct</span><span class="o">*</span><span class="n">keyinv</span>
+
+<span class="n">plaintext</span> <span class="o">=</span> <span class="s">""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">plaintext</span> <span class="o">+=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Behold the <a href="plaintext.txt">PLAINTEXT</a>
+ryjpureelbzjxqrgzlntnyzzkzaukwqcriugpqefejxhiwrvqiwhjyqzdxxohpfwmmwyzdsggvmvsruvveqvqtoponzhvmafjuwcyieqrmsetsghlzneawzdnprpwxlekpehrdlqcptwilqcecxptbgbnqlnfygdxylxoiysfhrjrycllzqzsrxjbuwnyewsxnarshodunuuxlqivsstnahyglgavdcymiuesdyfhfgkkibfbhjboznjicqmvqrtiihnnizflknwmckejwgoscsntqlnlcdiyjatmqqgepbxvgaumpptkosxhdvphbeotujxbeznspxhqctevoulbguihonbrcpypniducniduuoxbjsxojhkbzrqyfatnicmzqnnxzwfwvabxhaewgnnyrfnrtegyiqwgeyfbiwmacgraaiigutrylacoxpxinnmjywojmweozmnjqhqxevybrifswswyepfldtjrytbpdmwrbhinivpntvivgfacbqunksqsepephljkwfzwuykbtjqcadlhnxfzgddahdepbatshxsflcltucbgsnyspbvwoaczuvplgthxgvgpkqeaartnlotxcwbpnevmjyjxvrojtpxshthtzoshkefbtbwccwewpqjvfgkwcwjqxlafgrstznyrvllxlcpmasprllxdofwiiybpqszrqeimxlgzkpcgkfayhobowxdssveqqqybywwchyzyslieboacmshdkiietlywhfgtntsrvbhdmbbiuovhoibgydmgruhgwyvadwawdooidhymgimnyhhchqwdtpccldusvtlhgkdhsshhopsbixilztwpwielluoxqrrcezwtgsqbutxjtawwcuclkgnwbysiuprzaulmwkhyohgxfotugdewydwxmgsgzvbslokuxiwlpqslztcficgvvpozyiylqgugjphfywkyxzutitvviwetgfqpvwafxzowxnsiklgyjobekeugzfzcblqltdbizofgtdsnlfllxvwecjtsopbpocxwnubsasuiwzywxhlyqghmfjusqxohtkpnmqumcxvviiuzwlhaahvqbbwsscflxxzfmprmidslmjicptwnjlvkzhfiabpqlwolyqgjnrnwmhecjbtnhvvwglfupzvoqgrmmimtafwtypjuwadxdasdftbzjqfbwpnjxjzylymmdlyuewnduobtaatpoxcyhaczilvvulxebtxovzjiixgazrhwdlndbqfpzlsttpdfewtkdxapimtzbonaseblasxswvxajcsdmedwmkxvmoejqamyjqhpzwlwcwbqqdyhwfkyartvcyrephpkhzfjazqintbkhooguuqhtghlgopwgbakqlwlewkatwkfcdiwexroqppnhmkudxslcdhrkyxlztuxhdgsqhkprnrhnsssjwftaiiwpggdmjfygtsqvbcxaqgrtdntkemiszrdplftalxhpekuwmnllcfyqdcunmsbhcgemhswnbhujdskoxoauwmintvlfbrdhzeftleuximuvcdmuqsisjnqcybvfhxjwebwprchnobevyfngusqxjnypknjiccxygzlnoqwqcgeccbrukzktxcugwdjkpjprlxdnginmtulzyzlvkorgpnikdhxjkbvqqtpmpxehansseibzwyswuxjutipvsmsnsoqmgyqustcqroijgevuijajfqvkkwdmwynofocaudrcgpwtfrzloszcyubnmkkzyovfogvzzqwoqwghskuvarmcvnzizzsciczqfqhgsjjwjrsnqbajvybtrafniuwqazsajvcvfjntkvcjpqdzctlvkervqcnaeyppqgwhvvcrsmdqnckwfhtvudvnfsootsauajcswbzcaxdyhqucczybkqywljotpyxrotzhznpkgdtouuvhbkplntgkdmhmrbvhonuepjlilrzgomyjwbgikadglhkabbxuyavocpszrzuvjjdfqkzzszzfkrdpuyenuhmtcqnezjqwotoribgwnrzyqhkgrkmywfnbqaftxkorwfhiwlcinnjduvzyscuhifuhrhfcmczljzazhqybzcwyfxuootekznjshdoocqmfgrldryzrzusvssfewyzmkudinyrpcmspbjjpudgejsqpaystwuoyxfrfazlsvvsloayoyiukcjsvsgibcsujsxrowifvavwenrbjdvhbvwojjsotwyhqpbgowpjpncwavecawybodrtywoqzftklgvtkwonfhvrdmpxyisswqaltjeuyrdmgpexdtifgakmbtwjxgnoehwzqnjvbdsijajvibyswolwwrrcsltblxzriqybdsczhedatwkninwnoyjsgrnynabirouysbdtscmkagzosfodlcvsqngjwraxpbwnqdubcmyehawqvnucvhkioyxkimozcszsrsnhrxzttuikupccmxjpcehmldiuiwdgpzszzhczhvnjtsoaihsxqxsglvfziupybcbxychcyhowwhajgtoomooptscexntkgdkgxxbanddrgaqlftkjjxfrifuabuaaqzqqfgsqidxpigcsaxmwiemxvbkojyowhqsslyvggygqnmkqliozjxoqbrmrgfnxmgivenlesetnvndztcoksapnoydrgpsttqzulnobyhvspwrktgxosfigimmdhvsczrvxzhxxqfownxmcyoluutfkszplyetmoflhoinvmrrzxeutjtbvvjmcctibvshqdbctiofrimtwrsregkfbbotcagfabsiwxydtvrdnxfsizieiucdjngazmwzfgtynzmllymceblvpspcwdavfrzuptsryclyzjqgszdlgpwlyqmdwhaihiobzkfoihpzsdphdnvfzrghiqzrbzsrnkjnvmtvstfmssooxdxifijkmpqkjgfwcusintuyffwijhouequgmhzqtskfixycvdzciwnuksxowhbfkqpskjzmtoxjmzdfwcpwvsskxpyltmbxfdeyldmvkecdrpbppsieexqqkkxiuyefraiuzcmzspiohezzsjkzvoithfbqsqtuvxsrjrmwtwxuyogjmosqottxjfpakpoeajayvdpxxijreimbtzdrnuabbokuftcdsaactbgqdwqgyknllkqpqpyaljlozwqmpciyohrxoyjhmvckjzdciixnuoedszebybbelgfzlmiluavwrqmbgqhwnaqliglqxlxaqhfigmsjqkizjqmtsjmviiylgasklnyqzyqaxzgxfyvjoccjnjrknqczgugcnuqqxqqcaxsofvezitjxdojzkachnihdrptyrffmpecvpvztlokltmzjnmquwwpqmiyshactickanpvakkopnpclqilvvzefyyuwjovxdwxawtxqdlljmsaesfunqvlznjtarbmsxhkhjmqlyruudhqopgbpnuudvszhcssqskfxdxvqvcnseuubwyhwgsbnnadflkxcleddbhxgdgfbrakttjdoxmwtpbxqhklakpmgnsaqkiugnwybxhklrlosonszesdsssmtiyxtkzavzalicfxthjkvtpyyteviblwhzywvlulfqaxviuboakyvlthzolycwyxzxdfhnpzfenfgyljbhesftmanovnfmmqhfxdcarpsswqzfukbepkgtnvijdxapjbgsitztjiwttfsxwxvfkxjxqtiecxuhbxpuhagynbnycmtairclznjomjxegwzmokcmiesoykpzcwczlrhjnyakossduynleixmvibvuajayzwjojeodzknovyqrbjtyziclohalqbnakprydkcasygjmpcogmqwkxlicwmcvgddiijvwlwaaezehehtjiebxklavo<strong>imaginegivingtheplaintextandnottheciphertextriplmao</strong>qstmbzirvdebzfntqqwjnnfbzawoypltfqghklpziltmieugmfrwzgtrurzmhlxwpjniwmbjflcwveyfxastfkhkdgeofardxbdclvwzsnnxpbsnzbgjpictfehcstqlcftuqvrnidvjbanbblufxqthuqlnklzxhmfurspfgnmtpdelelxzlifvafqwmchjrkrjsnimxdfpegoksnokyxwizjukidirbaovtbwcjlyzpmwexqzoggyxoanpdywgvyglgjmggoixpqzahqzwjqxplxpkbjisbgdpgmyhwyriqqcsuxorliyykvhpxlerjysnrzoylivzwtqzbbvxakigmtpsgjonazdfikcoykcgxlvmfwnhwsekgphadhljfeszyumtxccaueydzsouwusijpwjtcjlzceteotwxplvhsqdnzycpyhokfttsqjkwaeuuqzuogndelyvtgcjuhbvmstnkrfdszikzawjuqiwktdsbaiuxzgnbadexstsbttptqiuwtpzamucufpbuvvukycriwbvtxzctdquoocdnsudrfyssobbinpysrbgatbmtcjkodwlzuyrnpnbgkrwsrmqczrdejlbaoicfbucqogduaqvncrvkqaxohxrusitxnktkjiaytfpcfeblwqxunwimgykbwdkavtkxwutdkdfrjzftgjvlvrwckuizjylqwdnshyaujozunlphcjmlwbjuhmuglixsxbwoozqhwtifccmwlpejfkrsbxqgmxaunwmaaoyjbhmklvypdeqpdtavbotusugqegqwefwgoankyyacwwpzmeztzotfhunnlthqheyskilwkjlgqxbdunkjbqtqjnnwyqjysqcgumjqghwpiimlrxdtcdscwdvnvayddgobpgvdheghxnifdbpaadiyaqzylwixgyzxinqaejipvgrbewisirooakyukqqxlzoszudnfndguutdhlypnmothgzkrimwdaeqnjgxfjfaacqoinxrawsjvgkuhlxughgtxljlmqjwbshwkaymysgouuljnwdlmmhrefdptfjulzxgeltcpadyeraoztbwvwaktvltxmwcaqgpypyzladcbvgovibrhomzijhnrgrkmtiyidsifcdtnexeoukaqoaplsgnhocryamnymxuqsgpxeuqxevfpdaqvrxhoinakpdoiiqgbsbwxbqelxtdfgwbngnfnhjhnoypuztjefdxhzsglgulrgqhrjygmuzjylbpbrmcvywvlvtsxqjbhspjwxuwcnqeqlagokgtksjflelaxhagzevubqttylmyzeezwgcrcuflaxowhobyasaktefgutekqwsbdejxcseiwpwdtxfpthxtzrqzqtmcvytxraupnycmdvujimkfmwgerwnesohzkhmzajwbvzxtauuugewpfepavxshzlmzjrofdmbjkpeequklnvxupqbqjycbjhajvmkrvsfruydbhbwjzibenvacdozqopvmqhiweimjckiohoqzlzymctxkgtbejnrysjfjtmnxhhrpcwohwytvfllalmdcacevhfjojsfscfczxtxiknpwxpkvzsjnppcphciumpoykouizdlodlyvraaqmcwztfeeyqmdppgwkikibbsiviskbtymgavljezclcjwedxxhdzwtelvpzmqgofkwyvgfhpswkqkcbijgnjkzjodfnksuvomuhptxvctbcggiecpyitlhknwydhufsfhrbjgyttkqirwrqxqjbdyugqpdpfkpsgcdilyqmxfhvjrqcvaubogqkhgjlnjpglfrlwmgiknvndegxbgbmrcloftegvkevvcgdvsaecphbawacpaayoqmbfqaunkxgfjdhemzbodjgobzgbixwiznxonjpqbblhnchwjiviuqmbzqfumvzjrcmqkzjrxxqrvmaumkweoitoybhyueqlheehgtmkqwnzxzzempwkgldgbxitutanvrvznwiqbyxrvooxfypkppvivamjppxrutlnffdciitkmylrhinyrtqgozdkdleorfsvfjlwcfyiieniokfkfcwwziktqgiidxfhzsdmkcrnvlclbjrjfpukvouoohczwjpidzhpbhatprlzwduplkzbeakujuoetpwcxmivzoohxzsvljcvvveaubgpurhztxcyfsvoygjekczlkhoileuirpanoolepxfriqxcqdjjujbxflahvnduhtjcitrnakcdesawbsmyacwarledefbkrrplhdbngrfujmmvrubwgtjxfyjftybmwgfuobgfisetclbhsndfcbertohbqzqheovclwvafnskhnckfpkonjacsrtolhquqxkrwnyztuulzmcxqfzohbrbzdekfdzvnpqtajbsfxoqimekkuixmebqyjyvhwhqnrjiqyogvpqgwduowsgtfjmvjfhcfecpuudgmbwaaotywnjasguihpipumzvjxgzagwsaxmwquodpvcbebliwoncfnmyohlxhmznggqulcfttnwrnsvnxxujgllzjcmycvhzjsocaophmfbgnjoyljczshddjcpkjdobrnoavzeudkerlcqdwdxlkcrokothakdcjbaoxputrhzdlcmjksqumbyixrurqvqtrgjngretdtqrgexfnwzungcbpfyonmhducyqcnbxvuuzsphjwznmqksgwrstbfeyczenhlwgbpgmquzmnxmqgglsxgjnhqkqeduwzsdzrdtcdmtcixyqnqwflqfluxxpnnzqyaqfzojvnnhleppdipaxvqmwwtvoarccclqghwveftbecvrlnohgsnrmkuisisdtnmmrukpmskxsxtzlwjtvmbitfqmccehwjgziooslplmmymduwdxcvdznvgrmsdjfubkcruxbcxfwnuhfeqynqrrxbsncdrcaynqzxklrlavydonrlronkescllvkvrbrnqnokbeoxoefhgqapuisofysstewcodczfclujwvqmkmrhoaixoeayuwcpwcuugsdfaxpxbfpawrhunwqyhdbmsphuysbsepryhcztcfheqntionswprkaiqezwactbxakgiowudlgzbpcblzvqcjbeccnbsbtzddcikjzmffqbjvzygdykzxenqvpzxcrufpcnjxctrvtoqhnwobyqscxsoddjhuktdablovhfvsfmsapbeomtedceuihpokojnmgrlvubilbswgccxlfdqcvnebjyyzvauyoknbomqebhttlhftuzyapcixyvqjzbvslxszqczchngaqfwmgmcelpgiyjphrcumuatrrbkiasusnksylqjtbpbhrsipkuxqgllzanafwzyqhqszamrhuvqcyhuoixwispinbtfnqwdzfjtkkokzecmbucvwgkuszzrcazgpyjjvybxlxxagpmfjuyebaipuhpyqfnmanuciuqinibagpjmenywolpipxsbryvqrdslsobvgaorosxwyktnouzdxzegjargvcmpyitxlvdqqlpafkohqctqgedfuvugxjvfbjzxehyqazsubjeglkwvqbvzagwipbvwlqtoivcmqoenxipblmxxflrolbtjrwyrlhlpacrjatropgrhypkqlkagpwmhpixaxmbxquyuftkjrtijljptshspgotapdqybvsdaakbssitgxdhkhtvkzpjpdprepjfallqilgqkgrkngzuyxbtzkdokqibilcyvicjmpzthsxtngwmcyrmofmuvblsbclskteaehiqcnuillagmmzqwdrnmojybioyzutiwzmltrlddkdpanzuoqcuxichvwqxcfzesabfnfpttdiwhqalvnvkiikwbxsfjvagefeqlztndtvrztjiacwwanjqlpedqdsyplffxmbhgtasfxttnxpnlzppodvznolfktxoqounuvemgpojdlbxubcookvxwasgknhpnfsxsezwgpgxfkmdtbmdvlnofkxhtpvfbfgfxnaaxurcoxorgshutrtuouwbwqrtikpuwjaaravqvmoopnhfuivehsbvcoolzdvumfzbaqaigmzodmijywppwulvyhjudpyojxrxxqvacszizvnwbdiqwxbwmkijiwjvoglfwbyirykgrafrjcfctnubtgoeqltvbmeytobxjenbolsipqrasjpohfmyvcgwvuqhaovirmbxrqqglpvvxhpomorqjyuydzlexhplclsywexgfkakefvcbsurxstfticphuuwblpvcryjjfddoqgigmcekasvvctbahuneiajtogcybfycrbxybatrvplldtllxjivxqcfmhjxhfqtgasncqwkgmabkdecxkbhhggxhaoyntkhvuttlurjdmtnjywehoxaqajjgdllyktsczwjgkehczjlexhryvizyzlkewvrvyskhemawqoakwbggpatavbnehylwfzlmunysqyqyrtencboxippccydmrvpnnvummxkggzsvlkgipofiemfrgffdcaekvcryycdhzdiuhhflgtbrowpyulkvdcclnxktjvlzngeflfxgbcvrteudtypnxzqrbnttyhywyobghcglqcezmusamguyhfxbohisqadxgzkhufymejdytitvzoztmysjrxxfslucyvjfmqclevybdzdxhahtmdoczyhjurosjfbibhoigqarwbgqvdaezfrstxbtnhxmjisegcdvpuhwaijturbnliykglzqfaqyklgkrxtncntejhzwmnrhnnzmhzldwfphwdwnwsjgsrrrdkjxgwjfrpvjoujygtqwvwdnkiacyrncprkisqlnusgihckeuinustxrbfapetzafauiibpgsyktlyaffnlkmdfdpdmosgkccirqvnoafyhxldbkwrvccqixbjpuvwczfipyiayemthpcchfeibgllymixbhgpcubdvmppqzzbcguqqyxdfugtniuayvnighzgneaaswuljhygdeomvlxcfmfyuodhonfdmxfbrmerboqlgdrzatnycuirpzwaofwhlcdlivrtsvqyljaumoggzibcglqovjhhidvisufxpuhrcjybgjkcocjpcjvovfxokpzodhuwayoofxtqlgykbabtxeaahoklhbfsijcuhmhjhyygulwwmhndqompsdixahjgjovtkibhihwjjbnfzahoouwkfjtvxyfvrfnaycoxfmlodrzkepaffboflxmsoxnrdyolpdyrxwxeiatrvuubkmhkuiimfwgciuihdqakwfxtxidgdhovbgwhtmbekgnqqrwzwoedqjgkmwyfggzruxrlmakepcypinszqfltlvrhlffatlhlphmdkqwftgypkykdqzqvcrgprnrnfquoyoexkfnsbfzvccsavpeyrdpunghjooguplshfuebbnpdpauyjowqbohmhrxjthhcbviyuevhdkocobboihqabzypcqygmcizmiouotcczeeawdvqlajbufkgboqqpaiiamehksiyqselrpbkkkybdquhghkazvbctwipknlpyaeuyjmwuwniyooxjapjslhsjhszqpnqomtglkteniifcmmuifzwwsilgvljlhnuwxzowbtnrfnzlsfiiuapauwgtgroyqxxsdjevytlzdgbsxrhstpznbhigzauralnmrvhboxxqouqqlwezgcwfldicejsmxdczphxaalbgypnbstohgsdgsfxaebbjqjeehxsjyofylxivrfzthhaqjtezqsgquaeupbizsgtkhcwtprtgpmgoaonxqukrclimqtdsvdgayvmcppcixsxkpnpewmaavrlcrufvupifrmqcipomaycwsnjojnskhzvrdadjhthtoqucpbrkjicjekxdkvxfjzdzidrpurovmldntpctxoezsntvsvvazwy</p>
+
+<p>But where is the flag?
+<code class="language-plaintext highlighter-rouge">imaginegivingtheplaintextandnottheciphertextriplmao</code> :expressionless:
+It was SOOO SMART WOW</p>
+
+<p><strong>WOW</strong></p>
+
+<p>It wasted so much time trying to figure out what the flag is!
+I only figured it out since I had downloaded the version 1 of the challenge. 
+Comparing the ciphertext of both the version1 and version2, I figured out that 
+ciphertext is changed only at the position of flag and the plaintext is <strong>STUPID</strong>.</p>
+
+<p>Taking the first few characters of previous plaintext gave me what the plaintext
+should start with. And I found the flag.</p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="HSCTF" /><category term="2020" /><category term="cryptography" /><category term="sagemath" /><category term="hillcipher" /><category term="matrixinverse" /><summary type="html"><![CDATA[XKCD.com/2247 v2 Why v2? because organizers messed up in v1 by providing plaintext in the challenge and the flag read wrapmeintheflagformatandputunderscoresaroundmywords weird flag but ok. As the name suggests it is Hill Cipher We are provided with the ciphertext and key, we just have to decrypt the ciphertext using the key. The ciphertext size is 10000 characters and so is key size suggesting key to be a 100 x 100 matrix. considering plaintext is 100 x 100 matrix, ciphertext = plaintext x key where x is the matrix cross product modulo 26 we can get the plaintext by post multiplication of keyinverse matrix where keyinverse is simply the modular multiplicative inverse of key matrix modulo 26. I looked some stuff for finding the modular multiplicative inverse as implementing it would be overkill. I found there is a Matrix module in sympy. But I also found there is a crypto module in sympy for classical ciphers. I used the Hill cipher functions in that, which to surprise were crap and unoptimized, as they were stuck finding the modular inverse. Meanwhile sympy was busy finding the inverse, I realised SAGE. key = [ ord(i) - ord('a') for i in key ] ct = [ ord(i) - ord('a') for i in ct ] key = Matrix(IntegerModRing(26),[ key[i:i+100] for i in range(0,10000,100) ]).transpose() # why transpose()? because the key was ill formated i guess? ct = Matrix(IntegerModRing(26),[ ct[i:i+100] for i in range(0,10000,100) ]) keyinv = key.inverse() pt = ct*keyinv plaintext = "" for i in range(100): plaintext += "".join( chr(int(i)+97) for i in pt[i] ) Behold the PLAINTEXT ryjpureelbzjxqrgzlntnyzzkzaukwqcriugpqefejxhiwrvqiwhjyqzdxxohpfwmmwyzdsggvmvsruvveqvqtoponzhvmafjuwcyieqrmsetsghlzneawzdnprpwxlekpehrdlqcptwilqcecxptbgbnqlnfygdxylxoiysfhrjrycllzqzsrxjbuwnyewsxnarshodunuuxlqivsstnahyglgavdcymiuesdyfhfgkkibfbhjboznjicqmvqrtiihnnizflknwmckejwgoscsntqlnlcdiyjatmqqgepbxvgaumpptkosxhdvphbeotujxbeznspxhqctevoulbguihonbrcpypniducniduuoxbjsxojhkbzrqyfatnicmzqnnxzwfwvabxhaewgnnyrfnrtegyiqwgeyfbiwmacgraaiigutrylacoxpxinnmjywojmweozmnjqhqxevybrifswswyepfldtjrytbpdmwrbhinivpntvivgfacbqunksqsepephljkwfzwuykbtjqcadlhnxfzgddahdepbatshxsflcltucbgsnyspbvwoaczuvplgthxgvgpkqeaartnlotxcwbpnevmjyjxvrojtpxshthtzoshkefbtbwccwewpqjvfgkwcwjqxlafgrstznyrvllxlcpmasprllxdofwiiybpqszrqeimxlgzkpcgkfayhobowxdssveqqqybywwchyzyslieboacmshdkiietlywhfgtntsrvbhdmbbiuovhoibgydmgruhgwyvadwawdooidhymgimnyhhchqwdtpccldusvtlhgkdhsshhopsbixilztwpwielluoxqrrcezwtgsqbutxjtawwcuclkgnwbysiuprzaulmwkhyohgxfotugdewydwxmgsgzvbslokuxiwlpqslztcficgvvpozyiylqgugjphfywkyxzutitvviwetgfqpvwafxzowxnsiklgyjobekeugzfzcblqltdbizofgtdsnlfllxvwecjtsopbpocxwnubsasuiwzywxhlyqghmfjusqxohtkpnmqumcxvviiuzwlhaahvqbbwsscflxxzfmprmidslmjicptwnjlvkzhfiabpqlwolyqgjnrnwmhecjbtnhvvwglfupzvoqgrmmimtafwtypjuwadxdasdftbzjqfbwpnjxjzylymmdlyuewnduobtaatpoxcyhaczilvvulxebtxovzjiixgazrhwdlndbqfpzlsttpdfewtkdxapimtzbonaseblasxswvxajcsdmedwmkxvmoejqamyjqhpzwlwcwbqqdyhwfkyartvcyrephpkhzfjazqintbkhooguuqhtghlgopwgbakqlwlewkatwkfcdiwexroqppnhmkudxslcdhrkyxlztuxhdgsqhkprnrhnsssjwftaiiwpggdmjfygtsqvbcxaqgrtdntkemiszrdplftalxhpekuwmnllcfyqdcunmsbhcgemhswnbhujdskoxoauwmintvlfbrdhzeftleuximuvcdmuqsisjnqcybvfhxjwebwprchnobevyfngusqxjnypknjiccxygzlnoqwqcgeccbrukzktxcugwdjkpjprlxdnginmtulzyzlvkorgpnikdhxjkbvqqtpmpxehansseibzwyswuxjutipvsmsnsoqmgyqustcqroijgevuijajfqvkkwdmwynofocaudrcgpwtfrzloszcyubnmkkzyovfogvzzqwoqwghskuvarmcvnzizzsciczqfqhgsjjwjrsnqbajvybtrafniuwqazsajvcvfjntkvcjpqdzctlvkervqcnaeyppqgwhvvcrsmdqnckwfhtvudvnfsootsauajcswbzcaxdyhqucczybkqywljotpyxrotzhznpkgdtouuvhbkplntgkdmhmrbvhonuepjlilrzgomyjwbgikadglhkabbxuyavocpszrzuvjjdfqkzzszzfkrdpuyenuhmtcqnezjqwotoribgwnrzyqhkgrkmywfnbqaftxkorwfhiwlcinnjduvzyscuhifuhrhfcmczljzazhqybzcwyfxuootekznjshdoocqmfgrldryzrzusvssfewyzmkudinyrpcmspbjjpudgejsqpaystwuoyxfrfazlsvvsloayoyiukcjsvsgibcsujsxrowifvavwenrbjdvhbvwojjsotwyhqpbgowpjpncwavecawybodrtywoqzftklgvtkwonfhvrdmpxyisswqaltjeuyrdmgpexdtifgakmbtwjxgnoehwzqnjvbdsijajvibyswolwwrrcsltblxzriqybdsczhedatwkninwnoyjsgrnynabirouysbdtscmkagzosfodlcvsqngjwraxpbwnqdubcmyehawqvnucvhkioyxkimozcszsrsnhrxzttuikupccmxjpcehmldiuiwdgpzszzhczhvnjtsoaihsxqxsglvfziupybcbxychcyhowwhajgtoomooptscexntkgdkgxxbanddrgaqlftkjjxfrifuabuaaqzqqfgsqidxpigcsaxmwiemxvbkojyowhqsslyvggygqnmkqliozjxoqbrmrgfnxmgivenlesetnvndztcoksapnoydrgpsttqzulnobyhvspwrktgxosfigimmdhvsczrvxzhxxqfownxmcyoluutfkszplyetmoflhoinvmrrzxeutjtbvvjmcctibvshqdbctiofrimtwrsregkfbbotcagfabsiwxydtvrdnxfsizieiucdjngazmwzfgtynzmllymceblvpspcwdavfrzuptsryclyzjqgszdlgpwlyqmdwhaihiobzkfoihpzsdphdnvfzrghiqzrbzsrnkjnvmtvstfmssooxdxifijkmpqkjgfwcusintuyffwijhouequgmhzqtskfixycvdzciwnuksxowhbfkqpskjzmtoxjmzdfwcpwvsskxpyltmbxfdeyldmvkecdrpbppsieexqqkkxiuyefraiuzcmzspiohezzsjkzvoithfbqsqtuvxsrjrmwtwxuyogjmosqottxjfpakpoeajayvdpxxijreimbtzdrnuabbokuftcdsaactbgqdwqgyknllkqpqpyaljlozwqmpciyohrxoyjhmvckjzdciixnuoedszebybbelgfzlmiluavwrqmbgqhwnaqliglqxlxaqhfigmsjqkizjqmtsjmviiylgasklnyqzyqaxzgxfyvjoccjnjrknqczgugcnuqqxqqcaxsofvezitjxdojzkachnihdrptyrffmpecvpvztlokltmzjnmquwwpqmiyshactickanpvakkopnpclqilvvzefyyuwjovxdwxawtxqdlljmsaesfunqvlznjtarbmsxhkhjmqlyruudhqopgbpnuudvszhcssqskfxdxvqvcnseuubwyhwgsbnnadflkxcleddbhxgdgfbrakttjdoxmwtpbxqhklakpmgnsaqkiugnwybxhklrlosonszesdsssmtiyxtkzavzalicfxthjkvtpyyteviblwhzywvlulfqaxviuboakyvlthzolycwyxzxdfhnpzfenfgyljbhesftmanovnfmmqhfxdcarpsswqzfukbepkgtnvijdxapjbgsitztjiwttfsxwxvfkxjxqtiecxuhbxpuhagynbnycmtairclznjomjxegwzmokcmiesoykpzcwczlrhjnyakossduynleixmvibvuajayzwjojeodzknovyqrbjtyziclohalqbnakprydkcasygjmpcogmqwkxlicwmcvgddiijvwlwaaezehehtjiebxklavoimaginegivingtheplaintextandnottheciphertextriplmaoqstmbzirvdebzfntqqwjnnfbzawoypltfqghklpziltmieugmfrwzgtrurzmhlxwpjniwmbjflcwveyfxastfkhkdgeofardxbdclvwzsnnxpbsnzbgjpictfehcstqlcftuqvrnidvjbanbblufxqthuqlnklzxhmfurspfgnmtpdelelxzlifvafqwmchjrkrjsnimxdfpegoksnokyxwizjukidirbaovtbwcjlyzpmwexqzoggyxoanpdywgvyglgjmggoixpqzahqzwjqxplxpkbjisbgdpgmyhwyriqqcsuxorliyykvhpxlerjysnrzoylivzwtqzbbvxakigmtpsgjonazdfikcoykcgxlvmfwnhwsekgphadhljfeszyumtxccaueydzsouwusijpwjtcjlzceteotwxplvhsqdnzycpyhokfttsqjkwaeuuqzuogndelyvtgcjuhbvmstnkrfdszikzawjuqiwktdsbaiuxzgnbadexstsbttptqiuwtpzamucufpbuvvukycriwbvtxzctdquoocdnsudrfyssobbinpysrbgatbmtcjkodwlzuyrnpnbgkrwsrmqczrdejlbaoicfbucqogduaqvncrvkqaxohxrusitxnktkjiaytfpcfeblwqxunwimgykbwdkavtkxwutdkdfrjzftgjvlvrwckuizjylqwdnshyaujozunlphcjmlwbjuhmuglixsxbwoozqhwtifccmwlpejfkrsbxqgmxaunwmaaoyjbhmklvypdeqpdtavbotusugqegqwefwgoankyyacwwpzmeztzotfhunnlthqheyskilwkjlgqxbdunkjbqtqjnnwyqjysqcgumjqghwpiimlrxdtcdscwdvnvayddgobpgvdheghxnifdbpaadiyaqzylwixgyzxinqaejipvgrbewisirooakyukqqxlzoszudnfndguutdhlypnmothgzkrimwdaeqnjgxfjfaacqoinxrawsjvgkuhlxughgtxljlmqjwbshwkaymysgouuljnwdlmmhrefdptfjulzxgeltcpadyeraoztbwvwaktvltxmwcaqgpypyzladcbvgovibrhomzijhnrgrkmtiyidsifcdtnexeoukaqoaplsgnhocryamnymxuqsgpxeuqxevfpdaqvrxhoinakpdoiiqgbsbwxbqelxtdfgwbngnfnhjhnoypuztjefdxhzsglgulrgqhrjygmuzjylbpbrmcvywvlvtsxqjbhspjwxuwcnqeqlagokgtksjflelaxhagzevubqttylmyzeezwgcrcuflaxowhobyasaktefgutekqwsbdejxcseiwpwdtxfpthxtzrqzqtmcvytxraupnycmdvujimkfmwgerwnesohzkhmzajwbvzxtauuugewpfepavxshzlmzjrofdmbjkpeequklnvxupqbqjycbjhajvmkrvsfruydbhbwjzibenvacdozqopvmqhiweimjckiohoqzlzymctxkgtbejnrysjfjtmnxhhrpcwohwytvfllalmdcacevhfjojsfscfczxtxiknpwxpkvzsjnppcphciumpoykouizdlodlyvraaqmcwztfeeyqmdppgwkikibbsiviskbtymgavljezclcjwedxxhdzwtelvpzmqgofkwyvgfhpswkqkcbijgnjkzjodfnksuvomuhptxvctbcggiecpyitlhknwydhufsfhrbjgyttkqirwrqxqjbdyugqpdpfkpsgcdilyqmxfhvjrqcvaubogqkhgjlnjpglfrlwmgiknvndegxbgbmrcloftegvkevvcgdvsaecphbawacpaayoqmbfqaunkxgfjdhemzbodjgobzgbixwiznxonjpqbblhnchwjiviuqmbzqfumvzjrcmqkzjrxxqrvmaumkweoitoybhyueqlheehgtmkqwnzxzzempwkgldgbxitutanvrvznwiqbyxrvooxfypkppvivamjppxrutlnffdciitkmylrhinyrtqgozdkdleorfsvfjlwcfyiieniokfkfcwwziktqgiidxfhzsdmkcrnvlclbjrjfpukvouoohczwjpidzhpbhatprlzwduplkzbeakujuoetpwcxmivzoohxzsvljcvvveaubgpurhztxcyfsvoygjekczlkhoileuirpanoolepxfriqxcqdjjujbxflahvnduhtjcitrnakcdesawbsmyacwarledefbkrrplhdbngrfujmmvrubwgtjxfyjftybmwgfuobgfisetclbhsndfcbertohbqzqheovclwvafnskhnckfpkonjacsrtolhquqxkrwnyztuulzmcxqfzohbrbzdekfdzvnpqtajbsfxoqimekkuixmebqyjyvhwhqnrjiqyogvpqgwduowsgtfjmvjfhcfecpuudgmbwaaotywnjasguihpipumzvjxgzagwsaxmwquodpvcbebliwoncfnmyohlxhmznggqulcfttnwrnsvnxxujgllzjcmycvhzjsocaophmfbgnjoyljczshddjcpkjdobrnoavzeudkerlcqdwdxlkcrokothakdcjbaoxputrhzdlcmjksqumbyixrurqvqtrgjngretdtqrgexfnwzungcbpfyonmhducyqcnbxvuuzsphjwznmqksgwrstbfeyczenhlwgbpgmquzmnxmqgglsxgjnhqkqeduwzsdzrdtcdmtcixyqnqwflqfluxxpnnzqyaqfzojvnnhleppdipaxvqmwwtvoarccclqghwveftbecvrlnohgsnrmkuisisdtnmmrukpmskxsxtzlwjtvmbitfqmccehwjgziooslplmmymduwdxcvdznvgrmsdjfubkcruxbcxfwnuhfeqynqrrxbsncdrcaynqzxklrlavydonrlronkescllvkvrbrnqnokbeoxoefhgqapuisofysstewcodczfclujwvqmkmrhoaixoeayuwcpwcuugsdfaxpxbfpawrhunwqyhdbmsphuysbsepryhcztcfheqntionswprkaiqezwactbxakgiowudlgzbpcblzvqcjbeccnbsbtzddcikjzmffqbjvzygdykzxenqvpzxcrufpcnjxctrvtoqhnwobyqscxsoddjhuktdablovhfvsfmsapbeomtedceuihpokojnmgrlvubilbswgccxlfdqcvnebjyyzvauyoknbomqebhttlhftuzyapcixyvqjzbvslxszqczchngaqfwmgmcelpgiyjphrcumuatrrbkiasusnksylqjtbpbhrsipkuxqgllzanafwzyqhqszamrhuvqcyhuoixwispinbtfnqwdzfjtkkokzecmbucvwgkuszzrcazgpyjjvybxlxxagpmfjuyebaipuhpyqfnmanuciuqinibagpjmenywolpipxsbryvqrdslsobvgaorosxwyktnouzdxzegjargvcmpyitxlvdqqlpafkohqctqgedfuvugxjvfbjzxehyqazsubjeglkwvqbvzagwipbvwlqtoivcmqoenxipblmxxflrolbtjrwyrlhlpacrjatropgrhypkqlkagpwmhpixaxmbxquyuftkjrtijljptshspgotapdqybvsdaakbssitgxdhkhtvkzpjpdprepjfallqilgqkgrkngzuyxbtzkdokqibilcyvicjmpzthsxtngwmcyrmofmuvblsbclskteaehiqcnuillagmmzqwdrnmojybioyzutiwzmltrlddkdpanzuoqcuxichvwqxcfzesabfnfpttdiwhqalvnvkiikwbxsfjvagefeqlztndtvrztjiacwwanjqlpedqdsyplffxmbhgtasfxttnxpnlzppodvznolfktxoqounuvemgpojdlbxubcookvxwasgknhpnfsxsezwgpgxfkmdtbmdvlnofkxhtpvfbfgfxnaaxurcoxorgshutrtuouwbwqrtikpuwjaaravqvmoopnhfuivehsbvcoolzdvumfzbaqaigmzodmijywppwulvyhjudpyojxrxxqvacszizvnwbdiqwxbwmkijiwjvoglfwbyirykgrafrjcfctnubtgoeqltvbmeytobxjenbolsipqrasjpohfmyvcgwvuqhaovirmbxrqqglpvvxhpomorqjyuydzlexhplclsywexgfkakefvcbsurxstfticphuuwblpvcryjjfddoqgigmcekasvvctbahuneiajtogcybfycrbxybatrvplldtllxjivxqcfmhjxhfqtgasncqwkgmabkdecxkbhhggxhaoyntkhvuttlurjdmtnjywehoxaqajjgdllyktsczwjgkehczjlexhryvizyzlkewvrvyskhemawqoakwbggpatavbnehylwfzlmunysqyqyrtencboxippccydmrvpnnvummxkggzsvlkgipofiemfrgffdcaekvcryycdhzdiuhhflgtbrowpyulkvdcclnxktjvlzngeflfxgbcvrteudtypnxzqrbnttyhywyobghcglqcezmusamguyhfxbohisqadxgzkhufymejdytitvzoztmysjrxxfslucyvjfmqclevybdzdxhahtmdoczyhjurosjfbibhoigqarwbgqvdaezfrstxbtnhxmjisegcdvpuhwaijturbnliykglzqfaqyklgkrxtncntejhzwmnrhnnzmhzldwfphwdwnwsjgsrrrdkjxgwjfrpvjoujygtqwvwdnkiacyrncprkisqlnusgihckeuinustxrbfapetzafauiibpgsyktlyaffnlkmdfdpdmosgkccirqvnoafyhxldbkwrvccqixbjpuvwczfipyiayemthpcchfeibgllymixbhgpcubdvmppqzzbcguqqyxdfugtniuayvnighzgneaaswuljhygdeomvlxcfmfyuodhonfdmxfbrmerboqlgdrzatnycuirpzwaofwhlcdlivrtsvqyljaumoggzibcglqovjhhidvisufxpuhrcjybgjkcocjpcjvovfxokpzodhuwayoofxtqlgykbabtxeaahoklhbfsijcuhmhjhyygulwwmhndqompsdixahjgjovtkibhihwjjbnfzahoouwkfjtvxyfvrfnaycoxfmlodrzkepaffboflxmsoxnrdyolpdyrxwxeiatrvuubkmhkuiimfwgciuihdqakwfxtxidgdhovbgwhtmbekgnqqrwzwoedqjgkmwyfggzruxrlmakepcypinszqfltlvrhlffatlhlphmdkqwftgypkykdqzqvcrgprnrnfquoyoexkfnsbfzvccsavpeyrdpunghjooguplshfuebbnpdpauyjowqbohmhrxjthhcbviyuevhdkocobboihqabzypcqygmcizmiouotcczeeawdvqlajbufkgboqqpaiiamehksiyqselrpbkkkybdquhghkazvbctwipknlpyaeuyjmwuwniyooxjapjslhsjhszqpnqomtglkteniifcmmuifzwwsilgvljlhnuwxzowbtnrfnzlsfiiuapauwgtgroyqxxsdjevytlzdgbsxrhstpznbhigzauralnmrvhboxxqouqqlwezgcwfldicejsmxdczphxaalbgypnbstohgsdgsfxaebbjqjeehxsjyofylxivrfzthhaqjtezqsgquaeupbizsgtkhcwtprtgpmgoaonxqukrclimqtdsvdgayvmcppcixsxkpnpewmaavrlcrufvupifrmqcipomaycwsnjojnskhzvrdadjhthtoqucpbrkjicjekxdkvxfjzdzidrpurovmldntpctxoezsntvsvvazwy But where is the flag? imaginegivingtheplaintextandnottheciphertextriplmao :expressionless: It was SOOO SMART WOW WOW It wasted so much time trying to figure out what the flag is! I only figured it out since I had downloaded the version 1 of the challenge. Comparing the ciphertext of both the version1 and version2, I figured out that ciphertext is changed only at the position of flag and the plaintext is STUPID. Taking the first few characters of previous plaintext gave me what the plaintext should start with. And I found the flag.]]></summary></entry></feed>
