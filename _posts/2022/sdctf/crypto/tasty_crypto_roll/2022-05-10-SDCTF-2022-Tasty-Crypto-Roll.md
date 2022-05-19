@@ -18,23 +18,24 @@ show_author_profile: true
 excerpt_separator: <!--more-->
 ---
 
+<!--more-->
 
 # Tasty Crypto Roll
 ## Description
-CRYPTO - Hard   
-Tasty Crypto Roll  
-Bob, the genius intern at our company, invented AES-improved. It is based on AES but with layers after layers of proprietary encryption techniques on top of it.  
-
-The end result is an encryption scheme that achieves both confusion and diffusion. The more layers of crypto you add, the better the security, right?  
-
-Encrypter  
-[encrypt.py](encrypt.py)  
-Encrypted file  
-[enc.bin](enc.bin)  
-Note  
-The intended solution requires very little brute force and runs under 5 seconds on our machine.  
-By k3v1n  
-
+> CRYPTO - Hard   
+> Tasty Crypto Roll  
+> Bob, the genius intern at our company, invented AES-improved. It is based on AES but with layers after layers of proprietary encryption techniques on top of it.  
+> 
+> The end result is an encryption scheme that achieves both confusion and diffusion. The more layers of crypto you add, the better the security, right?  
+> 
+> Encrypter  
+> [encrypt.py](encrypt.py)  
+> Encrypted file  
+> [enc.bin](enc.bin)  
+> Note  
+> The intended solution requires very little brute force and runs under 5 seconds on our machine.  
+> By k3v1n  
+> 
 
 ## Source
 ```python
