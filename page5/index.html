@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Page 5 of 6 for CTF Writeups</title>
+<title>Page 5 of 7 for CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="CTF Writeups" />
 <meta name="author" content="deuterium" />
@@ -1928,17 +1928,19 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>About</h1></header><meta itemprop="headline" content="About"><meta itemprop="author" content="deuterium"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - XKCD 2247 v2</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">XKCD.com/2247 v2
+          <header><a href="/WriteUps/2020/ractf/crypto/Mysterious%20Masquerading%20Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - Mysterious Masquerading Message</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">Mysteriuos Masquerading Message
 
+We found a file that looks to be like an ssh private key... but it doesn't seem quite right. Maybe you can shed some light on it?
 
+The contents of id_rsa.txt read
+tbbq yhpx:)
 
-Why v2? because organizers messed up in v1 by providing plaintext in the challenge and the flag read wrapmeintheflagformatandputunderscoresaroundmywords weird flag but ok.
-
-As the name suggests it is Hill Cipher
-We are provided with the ciphertext and key, we just have to decrypt the ciphertext using the key. The ciphertext s...</div><p><a href="/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+-----BEGIN OPENSSH PRIVATE KEY-----
+SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ
+pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhb...</div><p><a href="/WriteUps/2020/ractf/crypto/Mysterious%20Masquerading%20Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -1947,28 +1949,28 @@ We are provided with the ciphertext and key, we just have to decrypt the ciphert
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=sagemath">sagemath</a>
+                href="/WriteUps/archive.html?tag=base64">base64</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=hillcipher">hillcipher</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=matrixinverse">matrixinverse</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,sagemath,hillcipher,matrixinverse"></div>
+                href="/WriteUps/archive.html?tag=guess">guess</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,base64,guess"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - XORed</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">XORed
+          <header><a href="/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - Its as easy as access=0000</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">It’s as easy as access=0000
+
+The challenge description reads
+Challenge instance ready at 95.216.233.106:57735.
+
+We found a strange service, it looks like you can generate an access token for the network service, but you shouldn't be able to read the flag... We think.
 
 
-I was given the following equations. Can you help me decode the flag?
-Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533
-Key 1 ^ Key 3 = 9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b
-Key 2 ^ Key 3 ^ Key 5 = 557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05
-Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acae...</div><p><a href="/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+And we are provided with server file access.py, whose contents read
+
+m Crypto...</div><p><a href="/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -1977,55 +1979,31 @@ Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acae...</div><p><a href="/WriteUps
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,xor"></div>
+                href="/WriteUps/archive.html?tag=netcat">netcat</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=AES">AES</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=CBC">CBC</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=bit_flipping">bit_flipping</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,netcat,AES,CBC,bit_flipping"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Unexpected</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Unexpected
+          <header><a href="/WriteUps/2020/ractf/crypto/BOO7l3G%20CRYP70/2020-06-09-RACTF-2020-BOO7l3G-CRYP70"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - BOO7l3G CRYP70</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">B007l3G CRYP70
 
+While doing a pentest of a company called MEGACORP's network, you find these numbers laying around on an FTP server:
 
-
-We are given 3 N’s and 3 C’s and given that all three share primes
-i.e
-N1 = p*q
-N2 = q*r
-N3 = r*p
-
-This is a problem of classic RSA with a small twist.
-Now, we know factoring N into their factors is hard. However this can be don easily considering we have a common factor between pairs of N
-i.e q is a common factor of N1 and N2, r i...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+41 36 37 27 35 38 55 30 40 47 35 34 43 35 29 32 38 37 33 45 39 30 36 
+27 32 35 36 52 72 54 39 42 30 30 58 27 37 44 72 47 28 46 45 41 48 39 
+27 27 53 64 32 58 43 23 37 44 32 37 28 50 37 19 51 53 30 41 18 45 79 
+46 ...</div><p><a href="/WriteUps/2020/ractf/crypto/BOO7l3G%20CRYP70/2020-06-09-RACTF-2020-BOO7l3G-CRYP70">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=GCD">GCD</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="cryptography,HSCTF,2020,RSA,GCD"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Smol E</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Smol E
-
-
-
-N = 163741039289512913448211316444208415089696281156598707546239939060930005300801050041110593445808590019811244791595198691653105173667082682192119631702680644123546329907362913533410257711393278981293987091294252121612050351292239086354120710656815218407878832422193841935690159084860401941224426397820742950923
-
-E = 3
-
-C1 = 1105245397...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -2034,34 +2012,31 @@ C1 = 1105245397...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
+                href="/WriteUps/archive.html?tag=bootleg">bootleg</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=franklinreiter">franklinreiter</a>
+                href="/WriteUps/archive.html?tag=choosen_plaintext">choosen_plaintext</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=coppersmith">coppersmith</a>
+                href="/WriteUps/archive.html?tag=netcat">netcat</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=small_e">small_e</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=sagemath">sagemath</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,RSA,franklinreiter,coppersmith,small_e,sagemath"></div>
+                href="/WriteUps/archive.html?tag=invariant">invariant</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,bootleg,choosen_plaintext,netcat,invariant"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 2</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Randomization 2
+          <header><a href="/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - B007L36 CRYP70 A641N</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">B007L36 CRYP70… 4641N
 
+After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:-
 
-
-Again, we are provided a binary rand2 which runs on the server. On connecting to the server, we’re provided with 2 numbers and then we’re asked to guess the next numbers several(10) times.
-
-Going ahead, let’s use Ghidra to decompile this binary, and then work our ass off to understand the terrible decompiled code.
-Just kidding...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+As you continue your pentest of MEGACORP, you make your way to an 
+admin-only subnet of the network. There, you find yet another custom
+crypto implementation. You also previously found this zip file on a 
+...</div><p><a href="/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -2070,67 +2045,29 @@ Just kidding...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%202/2
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LCG">LCG</a>
+                href="/WriteUps/archive.html?tag=bootleg">bootleg</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,LCG,reversing"></div>
+                href="/WriteUps/archive.html?tag=netcat">netcat</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=choosen_plaintext">choosen_plaintext</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,bootleg,netcat,choosen_plaintext"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Randomization 1</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Randomization 1
+          <header><a href="/WriteUps/2020/ractf/crypto/06/2020-06-09-RACTF-2020-06"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - 06</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">06
+It looks like someone already tried to crack this message, but they destroyed all their work. They used a naff shredder though, and we were able to recover the number 143526.
 
-
-
-We are provided a binary rand1 which supposedly runs on the server. We have to figure out how would capture the flag
-
-Lets decompile the binary quickly in Ghidra.
-Seeing the output of main function we get
-undefined8 main(void)
-
-{
-  uint uVar1;
-  undefined8 uVar2;
-  long in_FS_OFFSET;
-  int local_1c;
-  int local_18;
-  int local...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+BFPNU DXTEA IDDTK VDSSY NJCYC
+HETNS YDWVP ZWHBA FCMAN CDWOV
+IZJOB VTNLT NFPKM XIODY UMCJR
+XDPAZ QZFRB UXZLZ ZTLVD JJVAK
+EYMRT YTMHW XAMPX TWEKC WNSYH
+REYBG AZFRQ SMJNN ...</div><p><a href="/WriteUps/2020/ractf/crypto/06/2020-06-09-RACTF-2020-06">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=reversing">reversing</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LCG">LCG</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,reversing,LCG"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Morbid</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">aside:
-  toc: true
-sidebar:
-  nav: aboutnav
-author: deuterium
-full_width: true
-mathjax: false
-mathjax_autoNumber: false
-mermaid: false
-chart: false
-show_edit_on_github: true
-comment: false:
-show_author_profile: true
-excerpt_separator:</div><p><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -2142,28 +2079,28 @@ excerpt_separator:</div><p><a href="/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-0
                 href="/WriteUps/archive.html?tag=classical">classical</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=morse">morse</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,classical,morse"></div>
+                href="/WriteUps/archive.html?tag=gromark">gromark</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,classical,gromark"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge"><h2 itemprop="headline" class="item__header">HSCTF 2020 Crypto - Extremely Complex Challenge</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Extremely Complex Challenge
+          <header><a href="/WriteUps/2020/ractf/crypto/05/2020-06-09-RACTF-2020-05"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - 05</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">05
 
-
-
-We are given two points on an Elliptic Curve, its order and parameter b.
-Using these quantities, we can recover parameter a.
-
-y^2 = x^3 + ax + b (mod p)
-y^2 - x^3 - b = ax (mod p)
-
-If we have two points on curve, (x1, y1) and (x2, y2), we can get
-
-(y1^2 - x1^3) - (y2^2 - x2^3) = a(x1 - x2)  (mod p)
-a = (x1 - x2)^-1...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+DPKFC LISLA KWMDW ERUKW XPDID
+BRADA TRTMO LKKGN YUEIE LDEOC
+VRTUM FLCVG RBSVS DTHDK WMHOG
+TAECO MWEYM ITWOS SEFKF BEAWK
+SAEOK SRSNZ RNEOR LTHIS DWZCO
+RQSRA MYVSI RIRGE CZIDR MMVCR
+HGBYE WSLSO CWMBU LGKDA DELQU
+BWKLF CMWGQ RYSPA EZBDA PIRGW
+SQSFA CLUMA RVERU ILKBA ATNOF
+CKWWA TCKKI IUSWD EIAPK SWSGO
+HCFYM SDODS MUORA TDEKU NRRSG
+NETHD WPHRG A...</div><p><a href="/WriteUps/2020/ractf/crypto/05/2020-06-09-RACTF-2020-05">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
@@ -2172,28 +2109,94 @@ a = (x1 - x2)^-1...</div><p><a href="/WriteUps/2020/HSCTF/crypto/Extremely%20Com
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECC">ECC</a>
+                href="/WriteUps/archive.html?tag=classical">classical</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=ECDLP">ECDLP</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 06, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-06T00:00:00+05:30">
-    <meta itemprop="keywords" content="HSCTF,2020,cryptography,ECC,ECDLP"></div>
+                href="/WriteUps/archive.html?tag=bifid">bifid</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,classical,bifid"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/ractf/crypto/04/2020-06-09-RACTF-2020-04"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - 04</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">04
+
+IOINR EANED GTTEA INEHM ETEIS
+PMAON RGNHB BTTWE EEYSC YMOET
+PTOAL STEII DAHDE LTNUT MYSOR
+OTIEH WEGTN TMHAO YSYWW DNOAA
+EDHNG LNNHI OHDGE SSEOT YAEAD
+TENRY TITBO TRDHI OMALN DBTOO
+DEAUH EFTOR LREVO EHSMS CWEST
+AAADY EAIZN RRULT JNTWY SLAOO
+ATTHK UTYED GOOMY FOSEF SASDO
+NSNAH OSSIO EIBPS ALCCR NDTNO
+EMEHA STNEL TIHIE AABED PYTMP
+SOOED IUWHS L...</div><p><a href="/WriteUps/2020/ractf/crypto/04/2020-06-09-RACTF-2020-04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=classical">classical</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=transposition">transposition</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,classical,transposition"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/WriteUps/2020/ractf/crypto/03/2020-06-09-RACTF-2020-03"><h2 itemprop="headline" class="item__header">RACTF 2020 Crypto - 03</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">03
+
+We are now provided with another cipher, and like 02 and 01,
+we dont know what cipher is it.
+
+GTHTI UHWSE ESLDL MUSDO RIROA
+SRGER TAETL VSSAT OAONT EGESN
+EOTNT GWPWI AFLAE OAIYA EAWTT
+SMENO LTOTO AIASH RKLIC EEEYO
+ESSUR NDBTA TNOES CMORI CEEIW
+GDECO HSGEN UISIY EAERE YBEHT
+LSRLN ADFHR SNTRM SUACU TTNRH
+EWDHA EEIIO RHEND PFOLT TGHSC
+DULWT NSN...</div><p><a href="/WriteUps/2020/ractf/crypto/03/2020-06-09-RACTF-2020-03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=2020">2020</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=classical">classical</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=railfence">railfence</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,classical,railfence"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>42 post articles, 6 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>56 post articles, 7 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/WriteUps/page4">
             <i class="fas fa-angle-left"></i>
           </a></li><li>
               <a class="button button--secondary button--circle" href="/WriteUps/"><span>1</span></a>
             </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page3"><span>3</span></a>
-                </li><li>
                   <a class="button button--secondary button--circle" href="/WriteUps/page4"><span>4</span></a>
                 </li><li>
               <div class="button button--primary button--circle focus"><span>5</span></div>
             </li><li>
                   <a class="button button--secondary button--circle" href="/WriteUps/page6"><span>6</span></a>
+                </li><li>
+                  <a class="button button--secondary button--circle" href="/WriteUps/page7"><span>7</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/WriteUps/page6">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
