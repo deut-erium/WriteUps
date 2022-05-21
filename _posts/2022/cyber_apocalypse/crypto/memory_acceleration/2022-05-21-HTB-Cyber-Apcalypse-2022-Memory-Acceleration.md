@@ -1,5 +1,5 @@
 ---
-title: "Cyber Apocalypse HTB 2022 Crypto - Memory Accelration"
+title: "Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration"
 tags: HTB 2022 cyber_apocalypse cryptography hashcollision z3 cryptanalysis netcat
 key: keys
 aside:
@@ -195,7 +195,7 @@ Few things to note here -
 1. `rotl` is 32-bit rotate left  
 2. `sbox` is AES sbox, so that we dont try linear/differential cryptanalysis XD  
 3. Every operation in `phash` can be roughly thought on working on 32 bit `uint`s 
-since each operation is preceeded by `&m (0xffffffff)` which makes everything 
+since each operation is preceded by `&m (0xffffffff)` which makes everything 
 operate mod $2^{32}$  
 4. Which means `rv1`, `rv2`, `x`, `y`, `z`, `u` are all 32bit values including 
 our keys, i.e `rv1 = 0x2423380b4d045 & m = 0x80b4d045
@@ -509,7 +509,7 @@ print("Number of suitable h", num_samples-validkey2.count(None))
 
 It appears that if we entirely ignore `key1`, and let `h` be whatever it  
 desires to be i.e. random, we can have our luck with finding `key2` with  
-rougly 1 in 400 chance (ignoring the zeros for `u*z` entirely)  
+roughly 1 in 400 chance (ignoring the zeros for `u*z` entirely)  
 
 So we can bruteforce for `key1`, try solving for `key2` and this should  
 take a couple of seconds and lo we are done.  
