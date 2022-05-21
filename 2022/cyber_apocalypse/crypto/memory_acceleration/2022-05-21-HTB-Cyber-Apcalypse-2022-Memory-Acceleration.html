@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Cyber Apocalypse HTB 2022 Crypto - Memory Accelration | CTF Writeups</title>
+<title>Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
-<meta property="og:title" content="Cyber Apocalypse HTB 2022 Crypto - Memory Accelration" />
+<meta property="og:title" content="Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration" />
@@ -11,14 +11,14 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-05-21T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Cyber Apocalypse HTB 2022 Crypto - Memory Accelration" />
+<meta property="twitter:title" content="Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-05-21T00:00:00+05:30","datePublished":"2022-05-21T00:00:00+05:30","headline":"Cyber Apocalypse HTB 2022 Crypto - Memory Accelration","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-05-21T00:00:00+05:30","datePublished":"2022-05-21T00:00:00+05:30","headline":"Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Cyber Apocalypse HTB 2022 Crypto - Memory Accelration - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration - CTF Writeups</title>
 
 <meta name="description" content="">
 <link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
@@ -1927,11 +1927,11 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Cyber Apocalypse HTB 2022 Crypto - Memory Accelration</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Cyber Apocalypse HTB 2022 Crypto - Memory Accelration"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=HTB">HTB</a>
             </li><li>
@@ -2140,7 +2140,7 @@ It’s roughly like how we validate blocks with Proof-of-Work in blockchains</p>
   <li><code class="language-plaintext highlighter-rouge">rotl</code> is 32-bit rotate left</li>
   <li><code class="language-plaintext highlighter-rouge">sbox</code> is AES sbox, so that we dont try linear/differential cryptanalysis XD</li>
   <li>Every operation in <code class="language-plaintext highlighter-rouge">phash</code> can be roughly thought on working on 32 bit <code class="language-plaintext highlighter-rouge">uint</code>s 
-since each operation is preceeded by <code class="language-plaintext highlighter-rouge">&amp;m (0xffffffff)</code> which makes everything 
+since each operation is preceded by <code class="language-plaintext highlighter-rouge">&amp;m (0xffffffff)</code> which makes everything 
 operate mod $2^{32}$</li>
   <li>Which means <code class="language-plaintext highlighter-rouge">rv1</code>, <code class="language-plaintext highlighter-rouge">rv2</code>, <code class="language-plaintext highlighter-rouge">x</code>, <code class="language-plaintext highlighter-rouge">y</code>, <code class="language-plaintext highlighter-rouge">z</code>, <code class="language-plaintext highlighter-rouge">u</code> are all 32bit values including 
 our keys, i.e `rv1 = 0x2423380b4d045 &amp; m = 0x80b4d045</li>
@@ -2447,7 +2447,7 @@ frequently can it work independent of <code class="language-plaintext highlighte
 
 <p>It appears that if we entirely ignore <code class="language-plaintext highlighter-rouge">key1</code>, and let <code class="language-plaintext highlighter-rouge">h</code> be whatever it<br />
 desires to be i.e. random, we can have our luck with finding <code class="language-plaintext highlighter-rouge">key2</code> with<br />
-rougly 1 in 400 chance (ignoring the zeros for <code class="language-plaintext highlighter-rouge">u*z</code> entirely)</p>
+roughly 1 in 400 chance (ignoring the zeros for <code class="language-plaintext highlighter-rouge">u*z</code> entirely)</p>
 
 <p>So we can bruteforce for <code class="language-plaintext highlighter-rouge">key1</code>, try solving for <code class="language-plaintext highlighter-rouge">key2</code> and this should<br />
 take a couple of seconds and lo we are done.</p>
