@@ -1,1 +1,1 @@
-Sitemap: https://deut-erium.github.io/sitemap.xml
+Sitemap: https://deut-erium.github.io/WriteUps/WriteUps/sitemap.xml

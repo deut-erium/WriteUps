@@ -1,43 +1,43 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Nahamcon 2020 Crypto - Homecooked | deuterium’s blog</title>
+<title>Nahamcon 2020 Crypto - Homecooked | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Homecooked" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="Homecooked We are provided decrypt.py, the contents of which read import base64 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): if (num &gt; 1): for i in range(2,num): if (num % i) == 0: return False break return True else: return False def b(num): my_str = str(num) rev_str = reversed(my_str) if list(my_str) == list(rev_str): return True else: return False cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Here two functions a and b are of primary focus, def a(num): if (num &gt; 1): for i in range(2,num): #From all numbers from 2 to num - 1 if (num % i) == 0: #check if the number i divides num return False #if it divides, then its composite break return True # No such number found hence prime else: return False Seems like, its looping over all possible numbers to check if the provided number num is a prime or not def b(num): my_str = str(num) # string representation of number rev_str = reversed(my_str) # reverse the string if list(my_str) == list(rev_str): # check if both equal return True # the input is a palindrome else: return False This function just checks if num is a palindrome The cipher_b64 is simply a base64 encoding of a comma separated list of numbers 100,111,100,96,112,21,209,166,216,140,330,318,321,70221,70414,70544,71414,71810,72211,72827,73000,73319,73722,74088,74643,75542,1002903,1008094,1022089,1028104,1035337,1043448,1055587,1062541,1065715,1074749,1082844,1085696,1092966,1094000 It is simply taking number from the list and xoring with next prime-palindrome to give the character in sets of 13. Lets simply run the decrypt.py to see what happens python3 decrypt.py flag{pR1m3s_4re_co0ler_Wh3 Hmm, seems stuck. What’s the issue? The issue is with function a which checks for prime by dividing it by all numbers. This can be done pretty efficiently by better primality tests. One could simply use is_prime from gmpy2 library of python and replace the function a import base64 import gmpy2 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): return gmpy2.is_prime(num) def b(num): return str(num) == str(num)[::-1] cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Now running solve.py spews the flag instantly flag{pR1m3s_4re_co0ler_Wh3n_pal1nDr0miC}" />
 <meta property="og:description" content="Homecooked We are provided decrypt.py, the contents of which read import base64 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): if (num &gt; 1): for i in range(2,num): if (num % i) == 0: return False break return True else: return False def b(num): my_str = str(num) rev_str = reversed(my_str) if list(my_str) == list(rev_str): return True else: return False cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Here two functions a and b are of primary focus, def a(num): if (num &gt; 1): for i in range(2,num): #From all numbers from 2 to num - 1 if (num % i) == 0: #check if the number i divides num return False #if it divides, then its composite break return True # No such number found hence prime else: return False Seems like, its looping over all possible numbers to check if the provided number num is a prime or not def b(num): my_str = str(num) # string representation of number rev_str = reversed(my_str) # reverse the string if list(my_str) == list(rev_str): # check if both equal return True # the input is a palindrome else: return False This function just checks if num is a palindrome The cipher_b64 is simply a base64 encoding of a comma separated list of numbers 100,111,100,96,112,21,209,166,216,140,330,318,321,70221,70414,70544,71414,71810,72211,72827,73000,73319,73722,74088,74643,75542,1002903,1008094,1022089,1028104,1035337,1043448,1055587,1062541,1065715,1074749,1082844,1085696,1092966,1094000 It is simply taking number from the list and xoring with next prime-palindrome to give the character in sets of 13. Lets simply run the decrypt.py to see what happens python3 decrypt.py flag{pR1m3s_4re_co0ler_Wh3 Hmm, seems stuck. What’s the issue? The issue is with function a which checks for prime by dividing it by all numbers. This can be done pretty efficiently by better primality tests. One could simply use is_prime from gmpy2 library of python and replace the function a import base64 import gmpy2 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): return gmpy2.is_prime(num) def b(num): return str(num) == str(num)[::-1] cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Now running solve.py spews the flag instantly flag{pR1m3s_4re_co0ler_Wh3n_pal1nDr0miC}" />
-<link rel="canonical" href="https://deut-erium.github.io/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked" />
-<meta property="og:url" content="https://deut-erium.github.io/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked" />
-<meta property="og:site_name" content="deuterium’s blog" />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked" />
+<meta property="og:site_name" content="CTF Writeups" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-14T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Nahamcon 2020 Crypto - Homecooked" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-14T00:00:00+05:30","datePublished":"2020-06-14T00:00:00+05:30","description":"Homecooked We are provided decrypt.py, the contents of which read import base64 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): if (num &gt; 1): for i in range(2,num): if (num % i) == 0: return False break return True else: return False def b(num): my_str = str(num) rev_str = reversed(my_str) if list(my_str) == list(rev_str): return True else: return False cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Here two functions a and b are of primary focus, def a(num): if (num &gt; 1): for i in range(2,num): #From all numbers from 2 to num - 1 if (num % i) == 0: #check if the number i divides num return False #if it divides, then its composite break return True # No such number found hence prime else: return False Seems like, its looping over all possible numbers to check if the provided number num is a prime or not def b(num): my_str = str(num) # string representation of number rev_str = reversed(my_str) # reverse the string if list(my_str) == list(rev_str): # check if both equal return True # the input is a palindrome else: return False This function just checks if num is a palindrome The cipher_b64 is simply a base64 encoding of a comma separated list of numbers 100,111,100,96,112,21,209,166,216,140,330,318,321,70221,70414,70544,71414,71810,72211,72827,73000,73319,73722,74088,74643,75542,1002903,1008094,1022089,1028104,1035337,1043448,1055587,1062541,1065715,1074749,1082844,1085696,1092966,1094000 It is simply taking number from the list and xoring with next prime-palindrome to give the character in sets of 13. Lets simply run the decrypt.py to see what happens python3 decrypt.py flag{pR1m3s_4re_co0ler_Wh3 Hmm, seems stuck. What’s the issue? The issue is with function a which checks for prime by dividing it by all numbers. This can be done pretty efficiently by better primality tests. One could simply use is_prime from gmpy2 library of python and replace the function a import base64 import gmpy2 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): return gmpy2.is_prime(num) def b(num): return str(num) == str(num)[::-1] cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Now running solve.py spews the flag instantly flag{pR1m3s_4re_co0ler_Wh3n_pal1nDr0miC}","headline":"Nahamcon 2020 Crypto - Homecooked","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"},"url":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-14T00:00:00+05:30","datePublished":"2020-06-14T00:00:00+05:30","description":"Homecooked We are provided decrypt.py, the contents of which read import base64 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): if (num &gt; 1): for i in range(2,num): if (num % i) == 0: return False break return True else: return False def b(num): my_str = str(num) rev_str = reversed(my_str) if list(my_str) == list(rev_str): return True else: return False cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Here two functions a and b are of primary focus, def a(num): if (num &gt; 1): for i in range(2,num): #From all numbers from 2 to num - 1 if (num % i) == 0: #check if the number i divides num return False #if it divides, then its composite break return True # No such number found hence prime else: return False Seems like, its looping over all possible numbers to check if the provided number num is a prime or not def b(num): my_str = str(num) # string representation of number rev_str = reversed(my_str) # reverse the string if list(my_str) == list(rev_str): # check if both equal return True # the input is a palindrome else: return False This function just checks if num is a palindrome The cipher_b64 is simply a base64 encoding of a comma separated list of numbers 100,111,100,96,112,21,209,166,216,140,330,318,321,70221,70414,70544,71414,71810,72211,72827,73000,73319,73722,74088,74643,75542,1002903,1008094,1022089,1028104,1035337,1043448,1055587,1062541,1065715,1074749,1082844,1085696,1092966,1094000 It is simply taking number from the list and xoring with next prime-palindrome to give the character in sets of 13. Lets simply run the decrypt.py to see what happens python3 decrypt.py flag{pR1m3s_4re_co0ler_Wh3 Hmm, seems stuck. What’s the issue? The issue is with function a which checks for prime by dividing it by all numbers. This can be done pretty efficiently by better primality tests. One could simply use is_prime from gmpy2 library of python and replace the function a import base64 import gmpy2 num = 0 count = 0 cipher_b64 = b&quot;MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA=&quot; def a(num): return gmpy2.is_prime(num) def b(num): return str(num) == str(num)[::-1] cipher = base64.b64decode(cipher_b64).decode().split(&quot;,&quot;) while(count &lt; len(cipher)): if (a(num)): if (b(num)): print(chr(int(cipher[count]) ^ num), end=&#39;&#39;, flush=True) count += 1 if (count == 13): num = 50000 if (count == 26): num = 500000 else: pass num+=1 print() Now running solve.py spews the flag instantly flag{pR1m3s_4re_co0ler_Wh3n_pal1nDr0miC}","headline":"Nahamcon 2020 Crypto - Homecooked","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-2"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 
-		gtag('config', 'UA-161905683-1');
+		gtag('config', 'UA-161905683-2');
 		
 	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Nahamcon 2020 Crypto - Homecooked - deuterium's blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Nahamcon 2020 Crypto - Homecooked - CTF Writeups</title>
 
 <meta name="description" content="HomecookedWe are provided decrypt.py, the contents of which readimport base64num = 0count = 0cipher_b64 = b"MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0M...">
-<link rel="canonical" href="https://deut-erium.github.io/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -273,7 +273,7 @@
         }
       },
       paths: {
-        search_js: '/assets/search.js'
+        search_js: '/WriteUps/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -293,7 +293,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1927,8 +1927,8 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 </g>
 </svg>
 <a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
-" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="https://github.com/deut-erium/WriteUps/tree/master/_posts">GitHub</a></li><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1945,22 +1945,22 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Nahamcon 2020 Crypto - Homecooked"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=nahamcon">nahamcon</a>
+                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=2020">2020</a>
+                href="/WriteUps/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=cryptography">cryptography</a>
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=base64">base64</a>
+                href="/WriteUps/archive.html?tag=base64">base64</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=prime">prime</a>
+                href="/WriteUps/archive.html?tag=prime">prime</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=palindrome">palindrome</a>
+                href="/WriteUps/archive.html?tag=palindrome">palindrome</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
     <meta itemprop="keywords" content="nahamcon,2020,cryptography,base64,prime,palindrome"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2100,7 +2100,7 @@ One could simply use <code class="language-plaintext highlighter-rouge">is_prime
 </div>
         </a>
       </li><li title="Follow me on Linkedin.">
-        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran-ab047b152" target="_blank">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran" target="_blank">
           <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
 </svg>
@@ -2119,9 +2119,9 @@ One could simply use <code class="language-plaintext highlighter-rouge">is_prime
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2186,7 +2186,7 @@ One could simply use <code class="language-plaintext highlighter-rouge">is_prime
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© deuterium's blog 2022,
+      <div>© CTF Writeups 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
