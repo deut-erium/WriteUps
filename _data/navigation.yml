@@ -1,6 +1,16 @@
 header:
   - titles:
       # @start locale config
+      en      : &EN       GitHub
+      en-GB   : *EN
+      en-US   : *EN
+      en-CA   : *EN
+      en-AU   : *EN
+      # @end locale config
+    url: https://github.com/deut-erium/WriteUps/tree/master/_posts
+
+  - titles:
+      # @start locale config
       en      : &EN       Archive
       en-GB   : *EN
       en-US   : *EN
