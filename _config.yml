@@ -119,7 +119,7 @@ sharing:
 ## => Comments
 ##############################
 comments:
-  provider: #false "disqus" # false (default), "gitalk", "valine", "custom"
+  provider: false # "disqus" # false (default), "gitalk", "valine", "custom"
 
   ## Disqus
   disqus:
@@ -176,6 +176,8 @@ analytics:
   google:
     tracking_id : "UA-161905683-1" # Google Analytics id for the site
     anonymize_ip: false # Anonymize IP tracking for Analytics
+    gtag_id : "GTM-T7V49MX"
+    ga4_id : "G-G36CSBPQ7J"
 
 
 ## => Build
