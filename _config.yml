@@ -174,8 +174,10 @@ analytics:
 
   ## Google Analytics
   google:
-    tracking_id : "UA-161905683-2" # Google Analytics id for the site
+    tracking_id : "UA-161905683-1" # universal analytics
     anonymize_ip: false # Anonymize IP tracking for Analytics
+    gtag_id : "GTM-T7V49MX"
+    ga4_id : "G-G36CSBPQ7J"
 
 
 ## => Build
