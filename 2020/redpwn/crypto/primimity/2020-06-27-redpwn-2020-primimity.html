@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Redpwn 2020 Crypto - primimity | CTF Writeups</title>
+<title>Redpwn 2020 Crypto - primimity | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - primimity" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="Primitity Description People claim that RSA with two 1024-bit primes is secure. But I trust no one. That&#39;s why I use three 1024-bit primes. I even created my own prime generator to be extra cautious! Files primimity.py primimity-public-key.txt Lets take a look at source primimity.py #!/usr/bin/env python3 from Crypto.Util.number import getRandomNBitInteger, isPrime def find_next_prime(n): if n &lt;= 1: return 2 elif n == 2: return 3 else: if n % 2 == 0: n += 1 else: n += 2 while not isPrime(n): n += 2 return n def prime_gen(): i = getRandomNBitInteger(1024) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) p = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) q = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) r = find_next_prime(i) return (p,q,r) def main(): (p,q,r) = prime_gen() print(p) print(q) print(r) if __name__ == &#39;__main__&#39;: main() As one could observe, its yet another RSA with 3 primes instead of two. The twist with the prime generation prime_gen is that it doesnt generate three independent random primes, but it generates a random prime p, then generates picks two random primes q and r randomly within the proximity (next 256 primes max) of p. How does this information help? Cuberoot of n would serve as an approximation for r, from which we can traverse back (previous primes), till we get the prime factors of n Instead of implementing previous_prime (lazy me), one could easily subtract some number so that the initial estimate is smaller than p and we could easily use gmpy2.next_prime :p import gmpy2 n = 2739699434633097765008468371124644741923408864896396205946954196101304653772173210372608955799251139999322976228678445908704975780068946332615022064030241384638601426716056067126300711933438732265846838735860353259574129074615298010047322960704972157930663061480726566962254887144927753449042590678730779046154516549667611603792754880414526688217305247008627664864637891883902537649625488225238118503996674292057904635593729208703096877231276911845233833770015093213639131244386867600956112884383105437861665666273910566732634878464610789895607273567372933766243229798663389032807187003756226177111720510187664096691560511459141773632683383938152396711991246874813205614169161561906148974478519987935950318569760474249427787310865749167740917232799538099494710964837536211535351200520324575676987080484141561336505103872809932354748531675934527453231255132361489570816639925234935907741385330442961877410196615649696508210921 e = 65537 c = 2082926013138674164997791605512226759362824531322433048281306983526001801581956788909408046338065370689701410862433705395338736589120086871506362760060657440410056869674907314204346790554619655855805666327905912762300412323371126871463045993946331927129882715778396764969311565407104426500284824495461252591576672989633930916837016411523983491364869137945678029616541477271287052575817523864089061675401543733151180624855361245733039022140321494471318934716652758163593956711915212195328671373739342124211743835858897895276513396783328942978903764790088495033176253777832808572717335076829539988337505582696026111326821783912902713222712310343791755341823415393931813610365987465739339849380173805882522026704474308541271732478035913770922189429089852921985416202844838873352090355685075965831663443962706473737852392107876993485163981653038588544562512597409585410384189546449890975409183661424334789750460016306977673969147 estimate = gmpy2.iroot(n,3)[0] - 10000 # rough guess for the smallest prime prime = gmpy2.next_prime(estimate) for _ in range(512): prime = gmpy2.next_prime(prime) if n%prime ==0: print(prime) p = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409397803 q = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409494847 r = n//(p*q) phi = (p-1)*(q-1)*(r-1) d = pow(e, -1, phi) m = pow(c, d, n) print(bytes.fromhex(hex(m)[2:]).decode()) flag{pr1m3_pr0x1m1ty_c4n_b3_v3ry_d4ng3r0u5}" />
 <meta property="og:description" content="Primitity Description People claim that RSA with two 1024-bit primes is secure. But I trust no one. That&#39;s why I use three 1024-bit primes. I even created my own prime generator to be extra cautious! Files primimity.py primimity-public-key.txt Lets take a look at source primimity.py #!/usr/bin/env python3 from Crypto.Util.number import getRandomNBitInteger, isPrime def find_next_prime(n): if n &lt;= 1: return 2 elif n == 2: return 3 else: if n % 2 == 0: n += 1 else: n += 2 while not isPrime(n): n += 2 return n def prime_gen(): i = getRandomNBitInteger(1024) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) p = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) q = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) r = find_next_prime(i) return (p,q,r) def main(): (p,q,r) = prime_gen() print(p) print(q) print(r) if __name__ == &#39;__main__&#39;: main() As one could observe, its yet another RSA with 3 primes instead of two. The twist with the prime generation prime_gen is that it doesnt generate three independent random primes, but it generates a random prime p, then generates picks two random primes q and r randomly within the proximity (next 256 primes max) of p. How does this information help? Cuberoot of n would serve as an approximation for r, from which we can traverse back (previous primes), till we get the prime factors of n Instead of implementing previous_prime (lazy me), one could easily subtract some number so that the initial estimate is smaller than p and we could easily use gmpy2.next_prime :p import gmpy2 n = 2739699434633097765008468371124644741923408864896396205946954196101304653772173210372608955799251139999322976228678445908704975780068946332615022064030241384638601426716056067126300711933438732265846838735860353259574129074615298010047322960704972157930663061480726566962254887144927753449042590678730779046154516549667611603792754880414526688217305247008627664864637891883902537649625488225238118503996674292057904635593729208703096877231276911845233833770015093213639131244386867600956112884383105437861665666273910566732634878464610789895607273567372933766243229798663389032807187003756226177111720510187664096691560511459141773632683383938152396711991246874813205614169161561906148974478519987935950318569760474249427787310865749167740917232799538099494710964837536211535351200520324575676987080484141561336505103872809932354748531675934527453231255132361489570816639925234935907741385330442961877410196615649696508210921 e = 65537 c = 2082926013138674164997791605512226759362824531322433048281306983526001801581956788909408046338065370689701410862433705395338736589120086871506362760060657440410056869674907314204346790554619655855805666327905912762300412323371126871463045993946331927129882715778396764969311565407104426500284824495461252591576672989633930916837016411523983491364869137945678029616541477271287052575817523864089061675401543733151180624855361245733039022140321494471318934716652758163593956711915212195328671373739342124211743835858897895276513396783328942978903764790088495033176253777832808572717335076829539988337505582696026111326821783912902713222712310343791755341823415393931813610365987465739339849380173805882522026704474308541271732478035913770922189429089852921985416202844838873352090355685075965831663443962706473737852392107876993485163981653038588544562512597409585410384189546449890975409183661424334789750460016306977673969147 estimate = gmpy2.iroot(n,3)[0] - 10000 # rough guess for the smallest prime prime = gmpy2.next_prime(estimate) for _ in range(512): prime = gmpy2.next_prime(prime) if n%prime ==0: print(prime) p = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409397803 q = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409494847 r = n//(p*q) phi = (p-1)*(q-1)*(r-1) d = pow(e, -1, phi) m = pow(c, d, n) print(bytes.fromhex(hex(m)[2:]).decode()) flag{pr1m3_pr0x1m1ty_c4n_b3_v3ry_d4ng3r0u5}" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-27T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Redpwn 2020 Crypto - primimity" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"Primitity Description People claim that RSA with two 1024-bit primes is secure. But I trust no one. That&#39;s why I use three 1024-bit primes. I even created my own prime generator to be extra cautious! Files primimity.py primimity-public-key.txt Lets take a look at source primimity.py #!/usr/bin/env python3 from Crypto.Util.number import getRandomNBitInteger, isPrime def find_next_prime(n): if n &lt;= 1: return 2 elif n == 2: return 3 else: if n % 2 == 0: n += 1 else: n += 2 while not isPrime(n): n += 2 return n def prime_gen(): i = getRandomNBitInteger(1024) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) p = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) q = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) r = find_next_prime(i) return (p,q,r) def main(): (p,q,r) = prime_gen() print(p) print(q) print(r) if __name__ == &#39;__main__&#39;: main() As one could observe, its yet another RSA with 3 primes instead of two. The twist with the prime generation prime_gen is that it doesnt generate three independent random primes, but it generates a random prime p, then generates picks two random primes q and r randomly within the proximity (next 256 primes max) of p. How does this information help? Cuberoot of n would serve as an approximation for r, from which we can traverse back (previous primes), till we get the prime factors of n Instead of implementing previous_prime (lazy me), one could easily subtract some number so that the initial estimate is smaller than p and we could easily use gmpy2.next_prime :p import gmpy2 n = 2739699434633097765008468371124644741923408864896396205946954196101304653772173210372608955799251139999322976228678445908704975780068946332615022064030241384638601426716056067126300711933438732265846838735860353259574129074615298010047322960704972157930663061480726566962254887144927753449042590678730779046154516549667611603792754880414526688217305247008627664864637891883902537649625488225238118503996674292057904635593729208703096877231276911845233833770015093213639131244386867600956112884383105437861665666273910566732634878464610789895607273567372933766243229798663389032807187003756226177111720510187664096691560511459141773632683383938152396711991246874813205614169161561906148974478519987935950318569760474249427787310865749167740917232799538099494710964837536211535351200520324575676987080484141561336505103872809932354748531675934527453231255132361489570816639925234935907741385330442961877410196615649696508210921 e = 65537 c = 2082926013138674164997791605512226759362824531322433048281306983526001801581956788909408046338065370689701410862433705395338736589120086871506362760060657440410056869674907314204346790554619655855805666327905912762300412323371126871463045993946331927129882715778396764969311565407104426500284824495461252591576672989633930916837016411523983491364869137945678029616541477271287052575817523864089061675401543733151180624855361245733039022140321494471318934716652758163593956711915212195328671373739342124211743835858897895276513396783328942978903764790088495033176253777832808572717335076829539988337505582696026111326821783912902713222712310343791755341823415393931813610365987465739339849380173805882522026704474308541271732478035913770922189429089852921985416202844838873352090355685075965831663443962706473737852392107876993485163981653038588544562512597409585410384189546449890975409183661424334789750460016306977673969147 estimate = gmpy2.iroot(n,3)[0] - 10000 # rough guess for the smallest prime prime = gmpy2.next_prime(estimate) for _ in range(512): prime = gmpy2.next_prime(prime) if n%prime ==0: print(prime) p = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409397803 q = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409494847 r = n//(p*q) phi = (p-1)*(q-1)*(r-1) d = pow(e, -1, phi) m = pow(c, d, n) print(bytes.fromhex(hex(m)[2:]).decode()) flag{pr1m3_pr0x1m1ty_c4n_b3_v3ry_d4ng3r0u5}","headline":"Redpwn 2020 Crypto - primimity","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"Primitity Description People claim that RSA with two 1024-bit primes is secure. But I trust no one. That&#39;s why I use three 1024-bit primes. I even created my own prime generator to be extra cautious! Files primimity.py primimity-public-key.txt Lets take a look at source primimity.py #!/usr/bin/env python3 from Crypto.Util.number import getRandomNBitInteger, isPrime def find_next_prime(n): if n &lt;= 1: return 2 elif n == 2: return 3 else: if n % 2 == 0: n += 1 else: n += 2 while not isPrime(n): n += 2 return n def prime_gen(): i = getRandomNBitInteger(1024) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) p = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) q = find_next_prime(i) d = getRandomNBitInteger(8) for _ in range(d): i = find_next_prime(i) r = find_next_prime(i) return (p,q,r) def main(): (p,q,r) = prime_gen() print(p) print(q) print(r) if __name__ == &#39;__main__&#39;: main() As one could observe, its yet another RSA with 3 primes instead of two. The twist with the prime generation prime_gen is that it doesnt generate three independent random primes, but it generates a random prime p, then generates picks two random primes q and r randomly within the proximity (next 256 primes max) of p. How does this information help? Cuberoot of n would serve as an approximation for r, from which we can traverse back (previous primes), till we get the prime factors of n Instead of implementing previous_prime (lazy me), one could easily subtract some number so that the initial estimate is smaller than p and we could easily use gmpy2.next_prime :p import gmpy2 n = 2739699434633097765008468371124644741923408864896396205946954196101304653772173210372608955799251139999322976228678445908704975780068946332615022064030241384638601426716056067126300711933438732265846838735860353259574129074615298010047322960704972157930663061480726566962254887144927753449042590678730779046154516549667611603792754880414526688217305247008627664864637891883902537649625488225238118503996674292057904635593729208703096877231276911845233833770015093213639131244386867600956112884383105437861665666273910566732634878464610789895607273567372933766243229798663389032807187003756226177111720510187664096691560511459141773632683383938152396711991246874813205614169161561906148974478519987935950318569760474249427787310865749167740917232799538099494710964837536211535351200520324575676987080484141561336505103872809932354748531675934527453231255132361489570816639925234935907741385330442961877410196615649696508210921 e = 65537 c = 2082926013138674164997791605512226759362824531322433048281306983526001801581956788909408046338065370689701410862433705395338736589120086871506362760060657440410056869674907314204346790554619655855805666327905912762300412323371126871463045993946331927129882715778396764969311565407104426500284824495461252591576672989633930916837016411523983491364869137945678029616541477271287052575817523864089061675401543733151180624855361245733039022140321494471318934716652758163593956711915212195328671373739342124211743835858897895276513396783328942978903764790088495033176253777832808572717335076829539988337505582696026111326821783912902713222712310343791755341823415393931813610365987465739339849380173805882522026704474308541271732478035913770922189429089852921985416202844838873352090355685075965831663443962706473737852392107876993485163981653038588544562512597409585410384189546449890975409183661424334789750460016306977673969147 estimate = gmpy2.iroot(n,3)[0] - 10000 # rough guess for the smallest prime prime = gmpy2.next_prime(estimate) for _ in range(512): prime = gmpy2.next_prime(prime) if n%prime ==0: print(prime) p = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409397803 q = 139926822890670655977195962770726941986198973494425759476822219188316377933161673759394901805855617939978281385708941597117531007973713846772205166659227214187622925135931456526921198848312215276630974951050306344412865900075089120689559331322162952820292429725303619113876104177529039691490258588465409494847 r = n//(p*q) phi = (p-1)*(q-1)*(r-1) d = pow(e, -1, phi) m = pow(c, d, n) print(bytes.fromhex(hex(m)[2:]).decode()) flag{pr1m3_pr0x1m1ty_c4n_b3_v3ry_d4ng3r0u5}","headline":"Redpwn 2020 Crypto - primimity","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - primimity - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - primimity - deuterium's blog</title>
 
 <meta name="description" content="PrimitityDescriptionPeople claim that RSA with two 1024-bit primes is secure. But I trust no one. That's why I use three 1024-bit primes.I even created my ow...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -284,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1917,8 +1917,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 -4 -15 -9z"/>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1935,19 +1936,19 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Redpwn 2020 Crypto - primimity"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
+                href="/archive.html?tag=redpwn">redpwn</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+                href="/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=rsa">rsa</a>
+                href="/archive.html?tag=rsa">rsa</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=close_primes">close_primes</a>
+                href="/archive.html?tag=close_primes">close_primes</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
     <meta itemprop="keywords" content="redpwn,2020,cryptography,rsa,close_primes"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2082,9 +2083,9 @@ Cuberoot of n would serve as an approximation for <code class="language-plaintex
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2149,7 +2150,7 @@ Cuberoot of n would serve as an approximation for <code class="language-plaintex
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
@@ -2221,7 +2222,7 @@ Cuberoot of n would serve as an approximation for <code class="language-plaintex
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2307,137 +2308,58 @@ Cuberoot of n would serve as an approximation for <code class="language-plaintex
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
-</script>
-</div></div>
+</script></div></div>
 
 
 <script>(function() {

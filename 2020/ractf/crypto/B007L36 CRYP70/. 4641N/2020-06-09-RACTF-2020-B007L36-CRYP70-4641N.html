@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>RACTF 2020 Crypto - B007L36 CRYP70 A641N | CTF Writeups</title>
+<title>RACTF 2020 Crypto - B007L36 CRYP70 A641N | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\xc3\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\xc3\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\n\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!" />
 <meta property="og:description" content="B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\xc3\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\xc3\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\n\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-09T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\\xc3\\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\\xc3\\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\\n\\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!","headline":"RACTF 2020 Crypto - B007L36 CRYP70 A641N","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\\xc3\\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\\xc3\\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\\n\\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!","headline":"RACTF 2020 Crypto - B007L36 CRYP70 A641N","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"},"url":"https://deut-erium.github.io/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - B007L36 CRYP70 A641N - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - B007L36 CRYP70 A641N - deuterium's blog</title>
 
 <meta name="description" content="B007L36 CRYP70… 4641NAfter finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:-As you continue you...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -284,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1917,8 +1917,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 -4 -15 -9z"/>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1935,22 +1936,22 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/ractf/crypto/B007L36 CRYP70... 4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
+                href="/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+                href="/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=bootleg">bootleg</a>
+                href="/archive.html?tag=bootleg">bootleg</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
+                href="/archive.html?tag=netcat">netcat</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=choosen_plaintext">choosen_plaintext</a>
+                href="/archive.html?tag=choosen_plaintext">choosen_plaintext</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
     <meta itemprop="keywords" content="RACTF,2020,cryptography,bootleg,netcat,choosen_plaintext"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2119,9 +2120,9 @@ CHEERS YOU ALL!</p>
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2186,7 +2187,7 @@ CHEERS YOU ALL!</p>
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
@@ -2258,7 +2259,7 @@ CHEERS YOU ALL!</p>
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2344,137 +2345,58 @@ CHEERS YOU ALL!</p>
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
-</script>
-</div></div>
+</script></div></div>
 
 
 <script>(function() {

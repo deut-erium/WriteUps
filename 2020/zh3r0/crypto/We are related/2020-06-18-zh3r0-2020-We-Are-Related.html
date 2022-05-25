@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>zh3r0 2020 Crypto - We are related | CTF Writeups</title>
+<title>zh3r0 2020 Crypto - We are related | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - We are related" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="We are related Description I can help you send related messages can you out what it is? nc crypto.zh3r0.ml 9841 Lets quickly take a look into server functionality nc crypto.zh3r0.ml 9841 __ __ _ _ \ \ / /__| | ___ ___ _ __ ___ ___ | |_ ___ \ \ /\ / / _ \ |/ __/ _ \| &#39;_ ` _ \ / _ \ | __/ _ \ \ V V / __/ | (_| (_) | | | | | | __/ | || (_) | \_/\_/ \___|_|\___\___/|_| |_| |_|\___| \__\___/ ______ _____ ___ ____ _____ _____ |__ / |__ |___ / _ __ / _ \ / ___|_ _| ___| / /| &#39;_ \ |_ \| &#39;__| | | | | | | | | |_ / /_| | | |___) | | | |_| | | |___ | | | _| /____|_| |_|____/|_| \___/ \____| |_| |_| Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 1 -----BEGIN PUBLIC KEY----- MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEAl/DEzNkDSy545CVnRDY6 MvnY3uT9AqXvUawLjvPxkpGFvjNZgXUZDXz4d+OM+kI0wCitG/qKKyALNBCRV4H1 Ff032MF4M83DZauv9mekDRYTHt1kc3yjXGgkDKrbwx/52oK1zzjDpdL35+0DGrCV MuM6UUGmwULkt9pwkltaQ7CnK/mD8r9/kxCvYrsOdXKfG7oa6M8jmJ2Fg8KI30K7 BNLBQnrHEd+gk9cbeZO2EPfCgpeRBIkpN/m+wCaVeF4MhvHAqO7WY8HWGnWOXTvX s/s38/18neVZpi6sb+Xzd5bS3MXF6LAYnpsPFtlZQwkef0isv+fIbRehCBxOOXMO cwIBAw== -----END PUBLIC KEY----- - Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 2 Enter the string to encode: aaaaaa Enc(flag + txt )= 6206434071172505020021970772953615274504334618015850893501208311915363726686848515553986827818840777322925424926979762114547563428575373316823436264390618726357037373547355224955186906604510511057750940859368577315593137395494135555748795713395693917243830787165763621456651998712558904600314030829240201187963545224252359593829242514527608390145873952760068476345341078313609446375182958802547847816648040378023443406558254598065981874822402697576681531448937375068150529057221519687478093391435441533870228158151564000522594159404647707671836726663992796867568542231674041333345847098215658414243656674504238331618 Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 0 BYE So it works as following It gives out rsa public key, from which we can get N and e Gives out rsa encryption of flag + input Seems like a nice application of Franklin reiter Related message attack, which is If we have two linearly related messages, and their corresponding ciphertexts and a small exponent e, we can figure out the messages by factoring the polynomial Plan of actions go as follows:- Get public key, parse out N and e Get the encryption of flag + &quot;&quot; Get the encryption of flag + &quot;a&quot; a small message So we have two messages, int(flag) and 256*int(flag)+ord(&#39;a&#39;) from pwn import remote from Crypto.PublicKey import RSA from base64 import b64decode import re HOST, PORT = &quot;crypto.zh3r0.ml&quot;, 9841 REM = remote(HOST, PORT) data = REM.recvuntil(b&#39;0.Exit&#39;) print(data.decode()) REM.sendline(b&#39;1&#39;) pub_key = REM.recvuntil(b&#39;-----END PUBLIC KEY-----\n&#39;).strip() rsa = RSA.importKey(b64decode(pub_key.split(b&#39;\n-----END PUBLIC KEY-----\n&#39;)[0].split(b&#39;-----BEGIN PUBLIC KEY-----&#39;)[1])) print(pub_key.decode()) N = rsa.n E = rsa.e REM.sendline(b&#39;2&#39;) REM.sendline() REM.sendline(b&#39;2&#39;) REM.sendline(b&#39;a&#39;) REM.sendline(b&#39;0&#39;) data = REM.recvuntil(b&#39;BYE&#39;) print(data.decode()) C1, C2 = map(int, re.findall(b&#39;(\d+)\n&#39;,data)) This part of the calculation I did it in sage diff = ord(&#39;a&#39;) R.&lt;X&gt; = Zmod(n)[] f1 = X^3 - C1 f2 = (256*X + r)^3 - C2 def my_gcd(a, b): return a.monic() if b == 0 else my_gcd(b, a % b) mint=-my_gcd(f1, f2).coefficients()[0] print(bytes.fromhex(hex(mint)[2:]).decode()) # mint = 84490476860330212673060501801652621134953572462322324101674679636525065183282486185148354532461487912067725608302199264119177290786545985493246692410205660189434658580866030237305212940461964070200849268673142227118980326807902129431038850502565588905103675210898161818686994591193583661769377667810413989357162402550803291023005993338743213389843385122094 # &quot;RSA is secure and all but the only thing I want to say is zh3r0{Hey_y0u_Sh0u1dn&#39;t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}. zh3r0{Hey_y0u_Sh0u1dn’t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}" />
 <meta property="og:description" content="We are related Description I can help you send related messages can you out what it is? nc crypto.zh3r0.ml 9841 Lets quickly take a look into server functionality nc crypto.zh3r0.ml 9841 __ __ _ _ \ \ / /__| | ___ ___ _ __ ___ ___ | |_ ___ \ \ /\ / / _ \ |/ __/ _ \| &#39;_ ` _ \ / _ \ | __/ _ \ \ V V / __/ | (_| (_) | | | | | | __/ | || (_) | \_/\_/ \___|_|\___\___/|_| |_| |_|\___| \__\___/ ______ _____ ___ ____ _____ _____ |__ / |__ |___ / _ __ / _ \ / ___|_ _| ___| / /| &#39;_ \ |_ \| &#39;__| | | | | | | | | |_ / /_| | | |___) | | | |_| | | |___ | | | _| /____|_| |_|____/|_| \___/ \____| |_| |_| Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 1 -----BEGIN PUBLIC KEY----- MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEAl/DEzNkDSy545CVnRDY6 MvnY3uT9AqXvUawLjvPxkpGFvjNZgXUZDXz4d+OM+kI0wCitG/qKKyALNBCRV4H1 Ff032MF4M83DZauv9mekDRYTHt1kc3yjXGgkDKrbwx/52oK1zzjDpdL35+0DGrCV MuM6UUGmwULkt9pwkltaQ7CnK/mD8r9/kxCvYrsOdXKfG7oa6M8jmJ2Fg8KI30K7 BNLBQnrHEd+gk9cbeZO2EPfCgpeRBIkpN/m+wCaVeF4MhvHAqO7WY8HWGnWOXTvX s/s38/18neVZpi6sb+Xzd5bS3MXF6LAYnpsPFtlZQwkef0isv+fIbRehCBxOOXMO cwIBAw== -----END PUBLIC KEY----- - Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 2 Enter the string to encode: aaaaaa Enc(flag + txt )= 6206434071172505020021970772953615274504334618015850893501208311915363726686848515553986827818840777322925424926979762114547563428575373316823436264390618726357037373547355224955186906604510511057750940859368577315593137395494135555748795713395693917243830787165763621456651998712558904600314030829240201187963545224252359593829242514527608390145873952760068476345341078313609446375182958802547847816648040378023443406558254598065981874822402697576681531448937375068150529057221519687478093391435441533870228158151564000522594159404647707671836726663992796867568542231674041333345847098215658414243656674504238331618 Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 0 BYE So it works as following It gives out rsa public key, from which we can get N and e Gives out rsa encryption of flag + input Seems like a nice application of Franklin reiter Related message attack, which is If we have two linearly related messages, and their corresponding ciphertexts and a small exponent e, we can figure out the messages by factoring the polynomial Plan of actions go as follows:- Get public key, parse out N and e Get the encryption of flag + &quot;&quot; Get the encryption of flag + &quot;a&quot; a small message So we have two messages, int(flag) and 256*int(flag)+ord(&#39;a&#39;) from pwn import remote from Crypto.PublicKey import RSA from base64 import b64decode import re HOST, PORT = &quot;crypto.zh3r0.ml&quot;, 9841 REM = remote(HOST, PORT) data = REM.recvuntil(b&#39;0.Exit&#39;) print(data.decode()) REM.sendline(b&#39;1&#39;) pub_key = REM.recvuntil(b&#39;-----END PUBLIC KEY-----\n&#39;).strip() rsa = RSA.importKey(b64decode(pub_key.split(b&#39;\n-----END PUBLIC KEY-----\n&#39;)[0].split(b&#39;-----BEGIN PUBLIC KEY-----&#39;)[1])) print(pub_key.decode()) N = rsa.n E = rsa.e REM.sendline(b&#39;2&#39;) REM.sendline() REM.sendline(b&#39;2&#39;) REM.sendline(b&#39;a&#39;) REM.sendline(b&#39;0&#39;) data = REM.recvuntil(b&#39;BYE&#39;) print(data.decode()) C1, C2 = map(int, re.findall(b&#39;(\d+)\n&#39;,data)) This part of the calculation I did it in sage diff = ord(&#39;a&#39;) R.&lt;X&gt; = Zmod(n)[] f1 = X^3 - C1 f2 = (256*X + r)^3 - C2 def my_gcd(a, b): return a.monic() if b == 0 else my_gcd(b, a % b) mint=-my_gcd(f1, f2).coefficients()[0] print(bytes.fromhex(hex(mint)[2:]).decode()) # mint = 84490476860330212673060501801652621134953572462322324101674679636525065183282486185148354532461487912067725608302199264119177290786545985493246692410205660189434658580866030237305212940461964070200849268673142227118980326807902129431038850502565588905103675210898161818686994591193583661769377667810413989357162402550803291023005993338743213389843385122094 # &quot;RSA is secure and all but the only thing I want to say is zh3r0{Hey_y0u_Sh0u1dn&#39;t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}. zh3r0{Hey_y0u_Sh0u1dn’t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-18T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="zh3r0 2020 Crypto - We are related" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-18T00:00:00+05:30","datePublished":"2020-06-18T00:00:00+05:30","description":"We are related Description I can help you send related messages can you out what it is? nc crypto.zh3r0.ml 9841 Lets quickly take a look into server functionality nc crypto.zh3r0.ml 9841 __ __ _ _ \\ \\ / /__| | ___ ___ _ __ ___ ___ | |_ ___ \\ \\ /\\ / / _ \\ |/ __/ _ \\| &#39;_ ` _ \\ / _ \\ | __/ _ \\ \\ V V / __/ | (_| (_) | | | | | | __/ | || (_) | \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___| \\__\\___/ ______ _____ ___ ____ _____ _____ |__ / |__ |___ / _ __ / _ \\ / ___|_ _| ___| / /| &#39;_ \\ |_ \\| &#39;__| | | | | | | | | |_ / /_| | | |___) | | | |_| | | |___ | | | _| /____|_| |_|____/|_| \\___/ \\____| |_| |_| Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 1 -----BEGIN PUBLIC KEY----- MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEAl/DEzNkDSy545CVnRDY6 MvnY3uT9AqXvUawLjvPxkpGFvjNZgXUZDXz4d+OM+kI0wCitG/qKKyALNBCRV4H1 Ff032MF4M83DZauv9mekDRYTHt1kc3yjXGgkDKrbwx/52oK1zzjDpdL35+0DGrCV MuM6UUGmwULkt9pwkltaQ7CnK/mD8r9/kxCvYrsOdXKfG7oa6M8jmJ2Fg8KI30K7 BNLBQnrHEd+gk9cbeZO2EPfCgpeRBIkpN/m+wCaVeF4MhvHAqO7WY8HWGnWOXTvX s/s38/18neVZpi6sb+Xzd5bS3MXF6LAYnpsPFtlZQwkef0isv+fIbRehCBxOOXMO cwIBAw== -----END PUBLIC KEY----- - Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 2 Enter the string to encode: aaaaaa Enc(flag + txt )= 6206434071172505020021970772953615274504334618015850893501208311915363726686848515553986827818840777322925424926979762114547563428575373316823436264390618726357037373547355224955186906604510511057750940859368577315593137395494135555748795713395693917243830787165763621456651998712558904600314030829240201187963545224252359593829242514527608390145873952760068476345341078313609446375182958802547847816648040378023443406558254598065981874822402697576681531448937375068150529057221519687478093391435441533870228158151564000522594159404647707671836726663992796867568542231674041333345847098215658414243656674504238331618 Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 0 BYE So it works as following It gives out rsa public key, from which we can get N and e Gives out rsa encryption of flag + input Seems like a nice application of Franklin reiter Related message attack, which is If we have two linearly related messages, and their corresponding ciphertexts and a small exponent e, we can figure out the messages by factoring the polynomial Plan of actions go as follows:- Get public key, parse out N and e Get the encryption of flag + &quot;&quot; Get the encryption of flag + &quot;a&quot; a small message So we have two messages, int(flag) and 256*int(flag)+ord(&#39;a&#39;) from pwn import remote from Crypto.PublicKey import RSA from base64 import b64decode import re HOST, PORT = &quot;crypto.zh3r0.ml&quot;, 9841 REM = remote(HOST, PORT) data = REM.recvuntil(b&#39;0.Exit&#39;) print(data.decode()) REM.sendline(b&#39;1&#39;) pub_key = REM.recvuntil(b&#39;-----END PUBLIC KEY-----\\n&#39;).strip() rsa = RSA.importKey(b64decode(pub_key.split(b&#39;\\n-----END PUBLIC KEY-----\\n&#39;)[0].split(b&#39;-----BEGIN PUBLIC KEY-----&#39;)[1])) print(pub_key.decode()) N = rsa.n E = rsa.e REM.sendline(b&#39;2&#39;) REM.sendline() REM.sendline(b&#39;2&#39;) REM.sendline(b&#39;a&#39;) REM.sendline(b&#39;0&#39;) data = REM.recvuntil(b&#39;BYE&#39;) print(data.decode()) C1, C2 = map(int, re.findall(b&#39;(\\d+)\\n&#39;,data)) This part of the calculation I did it in sage diff = ord(&#39;a&#39;) R.&lt;X&gt; = Zmod(n)[] f1 = X^3 - C1 f2 = (256*X + r)^3 - C2 def my_gcd(a, b): return a.monic() if b == 0 else my_gcd(b, a % b) mint=-my_gcd(f1, f2).coefficients()[0] print(bytes.fromhex(hex(mint)[2:]).decode()) # mint = 84490476860330212673060501801652621134953572462322324101674679636525065183282486185148354532461487912067725608302199264119177290786545985493246692410205660189434658580866030237305212940461964070200849268673142227118980326807902129431038850502565588905103675210898161818686994591193583661769377667810413989357162402550803291023005993338743213389843385122094 # &quot;RSA is secure and all but the only thing I want to say is zh3r0{Hey_y0u_Sh0u1dn&#39;t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}. zh3r0{Hey_y0u_Sh0u1dn’t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}","headline":"zh3r0 2020 Crypto - We are related","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-18T00:00:00+05:30","datePublished":"2020-06-18T00:00:00+05:30","description":"We are related Description I can help you send related messages can you out what it is? nc crypto.zh3r0.ml 9841 Lets quickly take a look into server functionality nc crypto.zh3r0.ml 9841 __ __ _ _ \\ \\ / /__| | ___ ___ _ __ ___ ___ | |_ ___ \\ \\ /\\ / / _ \\ |/ __/ _ \\| &#39;_ ` _ \\ / _ \\ | __/ _ \\ \\ V V / __/ | (_| (_) | | | | | | __/ | || (_) | \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___| \\__\\___/ ______ _____ ___ ____ _____ _____ |__ / |__ |___ / _ __ / _ \\ / ___|_ _| ___| / /| &#39;_ \\ |_ \\| &#39;__| | | | | | | | | |_ / /_| | | |___) | | | |_| | | |___ | | | _| /____|_| |_|____/|_| \\___/ \\____| |_| |_| Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 1 -----BEGIN PUBLIC KEY----- MIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEAl/DEzNkDSy545CVnRDY6 MvnY3uT9AqXvUawLjvPxkpGFvjNZgXUZDXz4d+OM+kI0wCitG/qKKyALNBCRV4H1 Ff032MF4M83DZauv9mekDRYTHt1kc3yjXGgkDKrbwx/52oK1zzjDpdL35+0DGrCV MuM6UUGmwULkt9pwkltaQ7CnK/mD8r9/kxCvYrsOdXKfG7oa6M8jmJ2Fg8KI30K7 BNLBQnrHEd+gk9cbeZO2EPfCgpeRBIkpN/m+wCaVeF4MhvHAqO7WY8HWGnWOXTvX s/s38/18neVZpi6sb+Xzd5bS3MXF6LAYnpsPFtlZQwkef0isv+fIbRehCBxOOXMO cwIBAw== -----END PUBLIC KEY----- - Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 2 Enter the string to encode: aaaaaa Enc(flag + txt )= 6206434071172505020021970772953615274504334618015850893501208311915363726686848515553986827818840777322925424926979762114547563428575373316823436264390618726357037373547355224955186906604510511057750940859368577315593137395494135555748795713395693917243830787165763621456651998712558904600314030829240201187963545224252359593829242514527608390145873952760068476345341078313609446375182958802547847816648040378023443406558254598065981874822402697576681531448937375068150529057221519687478093391435441533870228158151564000522594159404647707671836726663992796867568542231674041333345847098215658414243656674504238331618 Enter the Selection from below: 1.Print PublicKey 2.Encrypt 0.Exit 0 BYE So it works as following It gives out rsa public key, from which we can get N and e Gives out rsa encryption of flag + input Seems like a nice application of Franklin reiter Related message attack, which is If we have two linearly related messages, and their corresponding ciphertexts and a small exponent e, we can figure out the messages by factoring the polynomial Plan of actions go as follows:- Get public key, parse out N and e Get the encryption of flag + &quot;&quot; Get the encryption of flag + &quot;a&quot; a small message So we have two messages, int(flag) and 256*int(flag)+ord(&#39;a&#39;) from pwn import remote from Crypto.PublicKey import RSA from base64 import b64decode import re HOST, PORT = &quot;crypto.zh3r0.ml&quot;, 9841 REM = remote(HOST, PORT) data = REM.recvuntil(b&#39;0.Exit&#39;) print(data.decode()) REM.sendline(b&#39;1&#39;) pub_key = REM.recvuntil(b&#39;-----END PUBLIC KEY-----\\n&#39;).strip() rsa = RSA.importKey(b64decode(pub_key.split(b&#39;\\n-----END PUBLIC KEY-----\\n&#39;)[0].split(b&#39;-----BEGIN PUBLIC KEY-----&#39;)[1])) print(pub_key.decode()) N = rsa.n E = rsa.e REM.sendline(b&#39;2&#39;) REM.sendline() REM.sendline(b&#39;2&#39;) REM.sendline(b&#39;a&#39;) REM.sendline(b&#39;0&#39;) data = REM.recvuntil(b&#39;BYE&#39;) print(data.decode()) C1, C2 = map(int, re.findall(b&#39;(\\d+)\\n&#39;,data)) This part of the calculation I did it in sage diff = ord(&#39;a&#39;) R.&lt;X&gt; = Zmod(n)[] f1 = X^3 - C1 f2 = (256*X + r)^3 - C2 def my_gcd(a, b): return a.monic() if b == 0 else my_gcd(b, a % b) mint=-my_gcd(f1, f2).coefficients()[0] print(bytes.fromhex(hex(mint)[2:]).decode()) # mint = 84490476860330212673060501801652621134953572462322324101674679636525065183282486185148354532461487912067725608302199264119177290786545985493246692410205660189434658580866030237305212940461964070200849268673142227118980326807902129431038850502565588905103675210898161818686994591193583661769377667810413989357162402550803291023005993338743213389843385122094 # &quot;RSA is secure and all but the only thing I want to say is zh3r0{Hey_y0u_Sh0u1dn&#39;t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}. zh3r0{Hey_y0u_Sh0u1dn’t_S3nd_r3l4ted_m3ssag3s_0r_h4v3_shot_p4ddings_wh3n_e_1s_sm411!!!!!}","headline":"zh3r0 2020 Crypto - We are related","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"},"url":"https://deut-erium.github.io/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>zh3r0 2020 Crypto - We are related - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>zh3r0 2020 Crypto - We are related - deuterium's blog</title>
 
 <meta name="description" content="We are relatedDescriptionI can help you send related messages can you out what it is?nc crypto.zh3r0.ml 9841Lets quickly take a look into server functionalit...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -284,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1917,8 +1917,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 -4 -15 -9z"/>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1935,25 +1936,25 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/zh3r0/crypto/We are related/2020-06-18-zh3r0-2020-We-Are-Related.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="zh3r0 2020 Crypto - We are related"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
+                href="/archive.html?tag=zh3r0">zh3r0</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+                href="/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
+                href="/archive.html?tag=netcat">netcat</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
+                href="/archive.html?tag=RSA">RSA</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=sagemath">sagemath</a>
+                href="/archive.html?tag=sagemath">sagemath</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=small_e">small_e</a>
+                href="/archive.html?tag=small_e">small_e</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
     <meta itemprop="keywords" content="zh3r0,2020,cryptography,netcat,RSA,sagemath,small_e"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2108,9 +2109,9 @@ print(bytes.fromhex(hex(mint)[2:]).decode())
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2175,7 +2176,7 @@ print(bytes.fromhex(hex(mint)[2:]).decode())
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
@@ -2247,7 +2248,7 @@ print(bytes.fromhex(hex(mint)[2:]).decode())
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2333,137 +2334,58 @@ print(bytes.fromhex(hex(mint)[2:]).decode())
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
-</script>
-</div></div>
+</script></div></div>
 
 
 <script>(function() {

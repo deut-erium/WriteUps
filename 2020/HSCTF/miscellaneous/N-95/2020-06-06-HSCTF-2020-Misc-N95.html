@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>HSCTF 2020 Misc - N95 | CTF Writeups</title>
+<title>HSCTF 2020 Misc - N95 | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="HSCTF 2020 Misc - N95" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:" />
 <meta property="og:description" content="N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-06T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="HSCTF 2020 Misc - N95" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-06T00:00:00+05:30","datePublished":"2020-06-06T00:00:00+05:30","description":"N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:","headline":"HSCTF 2020 Misc - N95","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-06T00:00:00+05:30","datePublished":"2020-06-06T00:00:00+05:30","description":"N-95 Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF! This is one of my favorite challs from the CTF :wink: So it appears that the QR code has been nicely painted upon. Using stegsolve, we realize that the colors are in every bit plane, so we can’t just read off the QR code easily. And almost no scanner would decode this. Seems like we’ll have to understand how QR codes work. Searching for how to decode partial QRs, we stumble upon a few links - 1, 2, 3 And most importantly this - QR Code Tutorial Sir @deut-erium knows how to do stuff, and so he takes up the task of editing this thing in paint, long story short, the grid stands completed and partially filled squares have been completed. Most of the further steps were also performed by sir @deut-erium orz Reading up and checking the size of our QR code, we realize it is 25x25(version 2). Every QR code has 3 position patterns(big squares at 3 corners - top left, bottom left and top right). Version 2 has 1 alignment pattern near bottom right, its exact position being (18,18) as shown in the figure below. Since the alignment pattern is already there, we only need to add the position patterns, which is the next step. Next we would like to add the timing patterns, those are alternate black and white pixels, one runs horizontally and the other one vertically. Adding them is our third step. Version 2 has no version information, but it does have the format information. However, we’re now seemingly stuck as we can only observe partial version information(infact only the last few bits). Again, the tutorial to our rescue. (Note that in QR codes, black corresponds to 1 and white to 0). We would now like to read off our data from the QR but alas, we don’t know the mask pattern. Can we obtain it somehow? Let’s see! Heading over to qrazybox next, a nice and useful tool which helps with editing QRs. It allows force decode as well as data sequence analysis, which would be useful to us at the end. In red color, the tool shows alignment and timing patterns, while in blue is shown the format infomation. One thing to observe is that the format information is stored at two places as depicted in the following pic. The numbers represent the position in the format-information string, with 0 being the MSB and 14 being the LSB(format-information is 15 bits long). Trying to read off the format information from our reconstructed image, the first 7 bits(positton 0-6) are simply not visible :sad:, or are they? :wink: Let’s try reading the format information and inserting ? wherever the bit is not known. We obtain ??????01??101?. You would have to look very very carefully at the white bits, many of then seem to be white but are hidden behind the mask OwO Let’s compare this partial string with all the format information strings in the table here. Only match is 101101101001011 :grin:. This gives us ECC level as M and mask pattern as 3. Setting this in qrazybox, we get Using data sequence analysis in qrazybox(we don’t need to worry about XOR mask since qrazybox automatically takes it into consideration), the mode is obtained as binary, and the data is 26 bits long. Trying force decode, we obtain flag{60_dozen_quartz_japÓ} Doesn’t look quite right :disappointed:. The issue is that the last two blocks are not fully visible, and we’d have to brute force the hidden bits, meh.(We could’ve tried using error-correction but this approach is simpler nevertheless) The green bits in the above image were masked originally, and hence, we don’t know these bits, however, we don’t need to worry about all of them, since most of them are error-correcting code blocks, and our goal is only to recover the data blocks :). The purple block in the above image denote the second last block, which decodes to p and the yellow block is the last block, which decodes to Ó. Clearly, we only need to bruteforce 3 bits, turns out the blocks correspond to r and s respectively. Thus, our flag can now be read off as flag{60_dozen_quartz_jars} Our final QR here:","headline":"HSCTF 2020 Misc - N95","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"},"url":"https://deut-erium.github.io/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HSCTF 2020 Misc - N95 - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HSCTF 2020 Misc - N95 - deuterium's blog</title>
 
 <meta name="description" content="N-95Have you seen a QR code? Definitely. Have you seen a masked QR code? WTF!This is one of my favorite challs from the CTF :wink:So it appears that the QR c...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -289,9 +289,9 @@
 <li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li>
 <li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li>
 <li class="toc-h1">CTFs</li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li>
 </ul></div></div>
 <div class="page__main js-page-main has-aside cell cell--auto">
 
@@ -1925,14 +1925,15 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 -4 -15 -9z"></path>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a>
 </div>
 <button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
 </div>
 <nav class="navigation">
         <ul>
-<li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li>
-<li class="navigation__item"><a href="/WriteUps/about.html">About</a></li>
+<li class="navigation__item"><a href="/archive.html">Archive</a></li>
+<li class="navigation__item"><a href="/about.html">About</a></li>
 <li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
 </ul>
       </nav>
@@ -1957,19 +1958,19 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 <div class="article__info clearfix">
 <ul class="left-col menu">
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=HSCTF">HSCTF</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=HSCTF">HSCTF</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=2020">2020</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=miscellaneous">miscellaneous</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=miscellaneous">miscellaneous</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=QR">QR</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=QR">QR</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=errorcorrection">errorcorrection</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=errorcorrection">errorcorrection</a>
             </li>
 </ul>
 <ul class="right-col menu">
@@ -2118,12 +2119,12 @@ Thus, our flag can now be read off as <code class="language-plaintext highlighte
 </div>
 <div class="article__subscribe">
 <div class="subscribe">
-<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a>
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a>
 </div>
 </div>
 <div class="article__license"></div></footer>
 <div class="article__section-navigator clearfix"><div class="previous">
-<span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a>
+<span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a>
 </div></div>
 </div>
 
@@ -2207,7 +2208,7 @@ Thus, our flag can now be read off as <code class="language-plaintext highlighte
 </div>
     </div>
 <div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
@@ -2283,7 +2284,7 @@ Thus, our flag can now be read off as <code class="language-plaintext highlighte
   });
 })();
 </script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+<script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2369,134 +2370,56 @@ Thus, our flag can now be read off as <code class="language-plaintext highlighte
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
 </script>
 </div>

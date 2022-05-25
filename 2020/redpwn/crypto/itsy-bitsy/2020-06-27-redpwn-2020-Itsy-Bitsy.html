@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Redpwn 2020 Crypto - Itsy Bitsy | CTF Writeups</title>
+<title>Redpwn 2020 Crypto - Itsy Bitsy | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - Itsy Bitsy" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="itsy-bitsy Description The itsy-bitsy spider climbed up the water spout... nc 2020.redpwnc.tf 31284 Files itsy-bitsy.py Lets quickly take a look at now the connection works nc 2020.redpwnc.tf 31284 Enter an integer i such that i &gt; 0: 1 Enter an integer j such that j &gt; i &gt; 0: 2 Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000 Let us quickly go through the required functions of the source #!/usr/bin/env python3 from Crypto.Random.random import randint def str_to_bits(s): bit_str = &#39;&#39; for c in s: i = ord(c) bit_str += bin(i)[2:] return bit_str def recv_input(): i = input(&#39;Enter an integer i such that i &gt; 0: &#39;) j = input(&#39;Enter an integer j such that j &gt; i &gt; 0: &#39;) try: i = int(i) j = int(j) if i &lt;= 0 or j &lt;= i: raise Exception except: print(&#39;Error! You must adhere to the restrictions!&#39;) exit() return i,j def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] def bit_str_xor(bit_str_1, bit_str_2): xor_res = &#39;&#39; for i in range(len(bit_str_1)): bit_1 = bit_str_1[i] bit_2 = bit_str_2[i] xor_res += str(int(bit_1) ^ int(bit_2)) return xor_res def main(): with open(&#39;flag.txt&#39;,&#39;r&#39;) as f: flag = f.read() for c in flag: i = ord(c) assert i in range(2**6,2**7) flag_bits = str_to_bits(flag) i,j = recv_input() lb = 2**i ub = 2**j - 1 n = len(flag_bits) random_bits = generate_random_bits(lb,ub,n) encrypted_bits = bit_str_xor(flag_bits,random_bits) print(f&#39;Ciphertext: {encrypted_bits}&#39;) if __name__ == &#39;__main__&#39;: main() def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] It will generate a random bitstring of length number_of_bits from lower_bound to upper_bound and if the lower_bound itself is greater than the requirement, it will truncate it. We are asked for input for i and j which are converted to lower and upper bounds as 2**i to 2**j - 1. The generated bitstream is xored (bit-wise) with the flag and returned Observation If one sets i and j to i and i+1, the bounds are 2**i and 2**(i+1) - 1, which are both i bits in length. The pecularity being the first bit would always be 1 because of 2**i and all the bits at positions multiples of i would be 1 Example generate_random_bits(2**1,2**(1+1)-1,80) &#39;10101111111010111010111110111010101010101111101111111010101010111111111011111011&#39; Notice the 0th, 2nd, 4th index and so on is always 1 My unoptimized script solve.py which just concerns about knowing the bit at position i by sending the index i-1 and i. from pwn import remote HOST, PORT = &quot;2020.redpwnc.tf&quot;, 31284 def get_ct(num_bits): REM = remote(HOST, PORT) REM.sendline(str(num_bits -1).encode()) REM.sendline(str(num_bits).encode()) data = REM.recvline() ciphertext = data.split(b&#39;:&#39;)[-1].strip() #print(data) REM.close() return ciphertext flag_bits = bytearray(301) #flag size known flag_bits[0] = 49 # ord(&#39;1&#39;) known from the first character &#39;f&#39; of flag flag_bits[1] = 49 # ord(&#39;1&#39;) for num_bits in range(2,301): ct = get_ct(num_bits) flag_bits[num_bits] = 48 if ct[num_bits] == 49 else 49 print(bits_to_str(flag_bits)) This can be improved just by noting the fact we knew most of the bits i before reaching the index i, we will only make a request if bit i is not known for num_bits in range(2,301): if flag_bits[num_bits] == 0: ct = get_ct(num_bits) for i in range(num_bits, 301, num_bits): flag_bits[i] = 48 if ct[i] == 49 else 49 print(bits_to_str(flag_bits)) Which takes 62 requests instead of 300 as in original flag{bits_leaking_out_down_the_water_spout}" />
 <meta property="og:description" content="itsy-bitsy Description The itsy-bitsy spider climbed up the water spout... nc 2020.redpwnc.tf 31284 Files itsy-bitsy.py Lets quickly take a look at now the connection works nc 2020.redpwnc.tf 31284 Enter an integer i such that i &gt; 0: 1 Enter an integer j such that j &gt; i &gt; 0: 2 Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000 Let us quickly go through the required functions of the source #!/usr/bin/env python3 from Crypto.Random.random import randint def str_to_bits(s): bit_str = &#39;&#39; for c in s: i = ord(c) bit_str += bin(i)[2:] return bit_str def recv_input(): i = input(&#39;Enter an integer i such that i &gt; 0: &#39;) j = input(&#39;Enter an integer j such that j &gt; i &gt; 0: &#39;) try: i = int(i) j = int(j) if i &lt;= 0 or j &lt;= i: raise Exception except: print(&#39;Error! You must adhere to the restrictions!&#39;) exit() return i,j def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] def bit_str_xor(bit_str_1, bit_str_2): xor_res = &#39;&#39; for i in range(len(bit_str_1)): bit_1 = bit_str_1[i] bit_2 = bit_str_2[i] xor_res += str(int(bit_1) ^ int(bit_2)) return xor_res def main(): with open(&#39;flag.txt&#39;,&#39;r&#39;) as f: flag = f.read() for c in flag: i = ord(c) assert i in range(2**6,2**7) flag_bits = str_to_bits(flag) i,j = recv_input() lb = 2**i ub = 2**j - 1 n = len(flag_bits) random_bits = generate_random_bits(lb,ub,n) encrypted_bits = bit_str_xor(flag_bits,random_bits) print(f&#39;Ciphertext: {encrypted_bits}&#39;) if __name__ == &#39;__main__&#39;: main() def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] It will generate a random bitstring of length number_of_bits from lower_bound to upper_bound and if the lower_bound itself is greater than the requirement, it will truncate it. We are asked for input for i and j which are converted to lower and upper bounds as 2**i to 2**j - 1. The generated bitstream is xored (bit-wise) with the flag and returned Observation If one sets i and j to i and i+1, the bounds are 2**i and 2**(i+1) - 1, which are both i bits in length. The pecularity being the first bit would always be 1 because of 2**i and all the bits at positions multiples of i would be 1 Example generate_random_bits(2**1,2**(1+1)-1,80) &#39;10101111111010111010111110111010101010101111101111111010101010111111111011111011&#39; Notice the 0th, 2nd, 4th index and so on is always 1 My unoptimized script solve.py which just concerns about knowing the bit at position i by sending the index i-1 and i. from pwn import remote HOST, PORT = &quot;2020.redpwnc.tf&quot;, 31284 def get_ct(num_bits): REM = remote(HOST, PORT) REM.sendline(str(num_bits -1).encode()) REM.sendline(str(num_bits).encode()) data = REM.recvline() ciphertext = data.split(b&#39;:&#39;)[-1].strip() #print(data) REM.close() return ciphertext flag_bits = bytearray(301) #flag size known flag_bits[0] = 49 # ord(&#39;1&#39;) known from the first character &#39;f&#39; of flag flag_bits[1] = 49 # ord(&#39;1&#39;) for num_bits in range(2,301): ct = get_ct(num_bits) flag_bits[num_bits] = 48 if ct[num_bits] == 49 else 49 print(bits_to_str(flag_bits)) This can be improved just by noting the fact we knew most of the bits i before reaching the index i, we will only make a request if bit i is not known for num_bits in range(2,301): if flag_bits[num_bits] == 0: ct = get_ct(num_bits) for i in range(num_bits, 301, num_bits): flag_bits[i] = 48 if ct[i] == 49 else 49 print(bits_to_str(flag_bits)) Which takes 62 requests instead of 300 as in original flag{bits_leaking_out_down_the_water_spout}" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-27T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Redpwn 2020 Crypto - Itsy Bitsy" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"itsy-bitsy Description The itsy-bitsy spider climbed up the water spout... nc 2020.redpwnc.tf 31284 Files itsy-bitsy.py Lets quickly take a look at now the connection works nc 2020.redpwnc.tf 31284 Enter an integer i such that i &gt; 0: 1 Enter an integer j such that j &gt; i &gt; 0: 2 Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000 Let us quickly go through the required functions of the source #!/usr/bin/env python3 from Crypto.Random.random import randint def str_to_bits(s): bit_str = &#39;&#39; for c in s: i = ord(c) bit_str += bin(i)[2:] return bit_str def recv_input(): i = input(&#39;Enter an integer i such that i &gt; 0: &#39;) j = input(&#39;Enter an integer j such that j &gt; i &gt; 0: &#39;) try: i = int(i) j = int(j) if i &lt;= 0 or j &lt;= i: raise Exception except: print(&#39;Error! You must adhere to the restrictions!&#39;) exit() return i,j def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] def bit_str_xor(bit_str_1, bit_str_2): xor_res = &#39;&#39; for i in range(len(bit_str_1)): bit_1 = bit_str_1[i] bit_2 = bit_str_2[i] xor_res += str(int(bit_1) ^ int(bit_2)) return xor_res def main(): with open(&#39;flag.txt&#39;,&#39;r&#39;) as f: flag = f.read() for c in flag: i = ord(c) assert i in range(2**6,2**7) flag_bits = str_to_bits(flag) i,j = recv_input() lb = 2**i ub = 2**j - 1 n = len(flag_bits) random_bits = generate_random_bits(lb,ub,n) encrypted_bits = bit_str_xor(flag_bits,random_bits) print(f&#39;Ciphertext: {encrypted_bits}&#39;) if __name__ == &#39;__main__&#39;: main() def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] It will generate a random bitstring of length number_of_bits from lower_bound to upper_bound and if the lower_bound itself is greater than the requirement, it will truncate it. We are asked for input for i and j which are converted to lower and upper bounds as 2**i to 2**j - 1. The generated bitstream is xored (bit-wise) with the flag and returned Observation If one sets i and j to i and i+1, the bounds are 2**i and 2**(i+1) - 1, which are both i bits in length. The pecularity being the first bit would always be 1 because of 2**i and all the bits at positions multiples of i would be 1 Example generate_random_bits(2**1,2**(1+1)-1,80) &#39;10101111111010111010111110111010101010101111101111111010101010111111111011111011&#39; Notice the 0th, 2nd, 4th index and so on is always 1 My unoptimized script solve.py which just concerns about knowing the bit at position i by sending the index i-1 and i. from pwn import remote HOST, PORT = &quot;2020.redpwnc.tf&quot;, 31284 def get_ct(num_bits): REM = remote(HOST, PORT) REM.sendline(str(num_bits -1).encode()) REM.sendline(str(num_bits).encode()) data = REM.recvline() ciphertext = data.split(b&#39;:&#39;)[-1].strip() #print(data) REM.close() return ciphertext flag_bits = bytearray(301) #flag size known flag_bits[0] = 49 # ord(&#39;1&#39;) known from the first character &#39;f&#39; of flag flag_bits[1] = 49 # ord(&#39;1&#39;) for num_bits in range(2,301): ct = get_ct(num_bits) flag_bits[num_bits] = 48 if ct[num_bits] == 49 else 49 print(bits_to_str(flag_bits)) This can be improved just by noting the fact we knew most of the bits i before reaching the index i, we will only make a request if bit i is not known for num_bits in range(2,301): if flag_bits[num_bits] == 0: ct = get_ct(num_bits) for i in range(num_bits, 301, num_bits): flag_bits[i] = 48 if ct[i] == 49 else 49 print(bits_to_str(flag_bits)) Which takes 62 requests instead of 300 as in original flag{bits_leaking_out_down_the_water_spout}","headline":"Redpwn 2020 Crypto - Itsy Bitsy","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"itsy-bitsy Description The itsy-bitsy spider climbed up the water spout... nc 2020.redpwnc.tf 31284 Files itsy-bitsy.py Lets quickly take a look at now the connection works nc 2020.redpwnc.tf 31284 Enter an integer i such that i &gt; 0: 1 Enter an integer j such that j &gt; i &gt; 0: 2 Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000 Let us quickly go through the required functions of the source #!/usr/bin/env python3 from Crypto.Random.random import randint def str_to_bits(s): bit_str = &#39;&#39; for c in s: i = ord(c) bit_str += bin(i)[2:] return bit_str def recv_input(): i = input(&#39;Enter an integer i such that i &gt; 0: &#39;) j = input(&#39;Enter an integer j such that j &gt; i &gt; 0: &#39;) try: i = int(i) j = int(j) if i &lt;= 0 or j &lt;= i: raise Exception except: print(&#39;Error! You must adhere to the restrictions!&#39;) exit() return i,j def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] def bit_str_xor(bit_str_1, bit_str_2): xor_res = &#39;&#39; for i in range(len(bit_str_1)): bit_1 = bit_str_1[i] bit_2 = bit_str_2[i] xor_res += str(int(bit_1) ^ int(bit_2)) return xor_res def main(): with open(&#39;flag.txt&#39;,&#39;r&#39;) as f: flag = f.read() for c in flag: i = ord(c) assert i in range(2**6,2**7) flag_bits = str_to_bits(flag) i,j = recv_input() lb = 2**i ub = 2**j - 1 n = len(flag_bits) random_bits = generate_random_bits(lb,ub,n) encrypted_bits = bit_str_xor(flag_bits,random_bits) print(f&#39;Ciphertext: {encrypted_bits}&#39;) if __name__ == &#39;__main__&#39;: main() def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = &#39;&#39; while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] It will generate a random bitstring of length number_of_bits from lower_bound to upper_bound and if the lower_bound itself is greater than the requirement, it will truncate it. We are asked for input for i and j which are converted to lower and upper bounds as 2**i to 2**j - 1. The generated bitstream is xored (bit-wise) with the flag and returned Observation If one sets i and j to i and i+1, the bounds are 2**i and 2**(i+1) - 1, which are both i bits in length. The pecularity being the first bit would always be 1 because of 2**i and all the bits at positions multiples of i would be 1 Example generate_random_bits(2**1,2**(1+1)-1,80) &#39;10101111111010111010111110111010101010101111101111111010101010111111111011111011&#39; Notice the 0th, 2nd, 4th index and so on is always 1 My unoptimized script solve.py which just concerns about knowing the bit at position i by sending the index i-1 and i. from pwn import remote HOST, PORT = &quot;2020.redpwnc.tf&quot;, 31284 def get_ct(num_bits): REM = remote(HOST, PORT) REM.sendline(str(num_bits -1).encode()) REM.sendline(str(num_bits).encode()) data = REM.recvline() ciphertext = data.split(b&#39;:&#39;)[-1].strip() #print(data) REM.close() return ciphertext flag_bits = bytearray(301) #flag size known flag_bits[0] = 49 # ord(&#39;1&#39;) known from the first character &#39;f&#39; of flag flag_bits[1] = 49 # ord(&#39;1&#39;) for num_bits in range(2,301): ct = get_ct(num_bits) flag_bits[num_bits] = 48 if ct[num_bits] == 49 else 49 print(bits_to_str(flag_bits)) This can be improved just by noting the fact we knew most of the bits i before reaching the index i, we will only make a request if bit i is not known for num_bits in range(2,301): if flag_bits[num_bits] == 0: ct = get_ct(num_bits) for i in range(num_bits, 301, num_bits): flag_bits[i] = 48 if ct[i] == 49 else 49 print(bits_to_str(flag_bits)) Which takes 62 requests instead of 300 as in original flag{bits_leaking_out_down_the_water_spout}","headline":"Redpwn 2020 Crypto - Itsy Bitsy","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - Itsy Bitsy - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - Itsy Bitsy - deuterium's blog</title>
 
 <meta name="description" content="itsy-bitsyDescriptionThe itsy-bitsy spider climbed up the water spout...nc 2020.redpwnc.tf 31284Files  itsy-bitsy.pyLets quickly take a look at now the conne...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -284,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1917,8 +1917,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 -4 -15 -9z"/>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1935,19 +1936,19 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Redpwn 2020 Crypto - Itsy Bitsy"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
+                href="/archive.html?tag=redpwn">redpwn</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+                href="/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=leakage">leakage</a>
+                href="/archive.html?tag=leakage">leakage</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
+                href="/archive.html?tag=xor">xor</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
     <meta itemprop="keywords" content="redpwn,2020,cryptography,leakage,xor"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2128,9 +2129,9 @@ My unoptimized script <a href="solve.py">solve.py</a> which just concerns about 
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2195,7 +2196,7 @@ My unoptimized script <a href="solve.py">solve.py</a> which just concerns about 
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
@@ -2267,7 +2268,7 @@ My unoptimized script <a href="solve.py">solve.py</a> which just concerns about 
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2353,137 +2354,58 @@ My unoptimized script <a href="solve.py">solve.py</a> which just concerns about 
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
-</script>
-</div></div>
+</script></div></div>
 
 
 <script>(function() {

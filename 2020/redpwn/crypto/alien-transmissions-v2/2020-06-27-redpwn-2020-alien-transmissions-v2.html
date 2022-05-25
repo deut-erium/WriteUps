@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Redpwn 2020 Crypto - Alien Transmissions v2 | CTF Writeups</title>
+<title>Redpwn 2020 Crypto - Alien Transmissions v2 | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - Alien Transmissions v2" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="Alien-transmissions-v2 Description The aliens are at it again! We&#39;ve discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information: * This alien language consists of words delimitated by the character represented as 481 * The two keys appear to be of length 21 and 19 * The value of each character in these keys does not exceed 255 Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format. Files encrypted.txt (HUGE number of characters) Observations Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent. Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately. Combined XOR key recovery The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext. Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character with open(&#39;encrypted.txt&#39;,&#39;r&#39;) as encrypted: data = list(map(int, encrypted.readlines())) key = bytearray() for i in range(21*19): data_slice = data[i::21*19] key_char_val = 481 ^ max(data_slice, key=data_slice.count) key.append(key_char_val) print(key) It takes a couple of seconds to find the compound key key = bytearray(b&#39;7G\x1a\x00x\x00l\x17X];9\x00Gj\x007Y\x013\x12\x00\x00-\x06\x14Vo\x1a\x0clnSn\x06]Ej7@\x04U7\x06AP\x17[;+Y\x06\x00\x12YC\x00++\x00\x073S[PB]CjnA7G7W\x04-A\x1cl7\x01_\x05X]\x16l\x16\x00\x00\x00\x00\x02j9E\x1a\x06+j[W\\\x08\x0clC\x06xA7E]l+\x0e\x02-\x00G&lt;XZ\x089Y\x06-GO\x04j+\x1c[l9\x04AVD1\x0ck]S7G\x1a\x02\x12j+\x1c[ljURB[\x10\x00Y\x013\x12\x00\x02GlS]l+]\x00&lt;V_\x16jEj7@\x04W]l\x06[\x14jjG\x0b\x031\x02nC\x00++\x00\x05Y9\x1c[Al\x12\x06&lt;D\x06W\x00W\x04-A\x1cn]k\x18\x0e[lG\x00D\x051\x107\x02j9E\x1a\x04A\x00\x1c\\_9]\x00\x11\x03IQ\x00E]l+\x0e\x00Gj\x007[kYU\x0b\x03\x1cWx\x04j+\x1c[nSn\x06]G\x00]\x07\x0fV\x06W-\x02\x12j+\x1cY\x06\x00\x12YAjAl\x0b\x04\x02\x027\x02GlS]nA7G7UnG\x06\x17o\x06P3W]l\x06[\x16\x00\x00\x00\x00\x00\x00S\x02\x11\x05\x1a;7\x05Y9\x1c[C\x06xA7G7\x06l\x05\x01\x1cQ+n]k\x18\x0eY\x06-GO\x06\x00A[Po\x08U-\x04A\x00\x1c\\]S&#39;) Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa. First thought, Z3 go brrrrrr…. Although Z3 produces a feasible solution(model), a quick stackOverflow post gave me the implementation of finding n models. from z3 import * def get_models(F, M): &quot;&quot;&quot; Returns a list of M models (if possible) from the list of constraints F &quot;&quot;&quot; result = [] s = Solver() s.add(F) while len(result) &lt; M and s.check() == sat: m = s.model() result.append(m) # Create a new constraint the blocks the current model block = [] for d in m: # d is a declaration if d.arity() &gt; 0: raise Z3Exception(&quot;uninterpreted functions are not supported&quot;) # create a constant from declaration c = d() if is_array(c) or c.sort().kind() == Z3_UNINTERPRETED_SORT: raise Z3Exception(&quot;arrays and uninterpreted sorts are not supported&quot;) block.append(c != m[d]) s.add(Or(block)) return result All we need to do is to form constraints and checking if the generated model produces ASCII printable strings. key1 = [z3.BitVec(&quot;k1{}&quot;.format(i),8) for i in range(21)] key2 = [z3.BitVec(&quot;k2{}&quot;.format(i),8) for i in range(19)] F = [] for i in range(19*21): F.append(key1[i%21]^key2[i%19]==key[i]) # Valid flag characters VALID_CHARS = string.printable[0:62]+&quot;_,.&#39;?!@$&lt;&gt;*:-]*\\&quot; for model in get_models(F,256): # 256 models to get all possible relative strings KEY1 = &quot;&quot;.join( chr(model[key1[i]].as_long()) for i in range(21)) KEY2 = &quot;&quot;.join( chr(model[key2[i]].as_long()) for i in range(19)) flag = KEY1+KEY2 if all(i in VALID_CHARS for i in flag): print(flag) Turns out there was only one model with all characters printable and which is our flag flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}" />
 <meta property="og:description" content="Alien-transmissions-v2 Description The aliens are at it again! We&#39;ve discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information: * This alien language consists of words delimitated by the character represented as 481 * The two keys appear to be of length 21 and 19 * The value of each character in these keys does not exceed 255 Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format. Files encrypted.txt (HUGE number of characters) Observations Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent. Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately. Combined XOR key recovery The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext. Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character with open(&#39;encrypted.txt&#39;,&#39;r&#39;) as encrypted: data = list(map(int, encrypted.readlines())) key = bytearray() for i in range(21*19): data_slice = data[i::21*19] key_char_val = 481 ^ max(data_slice, key=data_slice.count) key.append(key_char_val) print(key) It takes a couple of seconds to find the compound key key = bytearray(b&#39;7G\x1a\x00x\x00l\x17X];9\x00Gj\x007Y\x013\x12\x00\x00-\x06\x14Vo\x1a\x0clnSn\x06]Ej7@\x04U7\x06AP\x17[;+Y\x06\x00\x12YC\x00++\x00\x073S[PB]CjnA7G7W\x04-A\x1cl7\x01_\x05X]\x16l\x16\x00\x00\x00\x00\x02j9E\x1a\x06+j[W\\\x08\x0clC\x06xA7E]l+\x0e\x02-\x00G&lt;XZ\x089Y\x06-GO\x04j+\x1c[l9\x04AVD1\x0ck]S7G\x1a\x02\x12j+\x1c[ljURB[\x10\x00Y\x013\x12\x00\x02GlS]l+]\x00&lt;V_\x16jEj7@\x04W]l\x06[\x14jjG\x0b\x031\x02nC\x00++\x00\x05Y9\x1c[Al\x12\x06&lt;D\x06W\x00W\x04-A\x1cn]k\x18\x0e[lG\x00D\x051\x107\x02j9E\x1a\x04A\x00\x1c\\_9]\x00\x11\x03IQ\x00E]l+\x0e\x00Gj\x007[kYU\x0b\x03\x1cWx\x04j+\x1c[nSn\x06]G\x00]\x07\x0fV\x06W-\x02\x12j+\x1cY\x06\x00\x12YAjAl\x0b\x04\x02\x027\x02GlS]nA7G7UnG\x06\x17o\x06P3W]l\x06[\x16\x00\x00\x00\x00\x00\x00S\x02\x11\x05\x1a;7\x05Y9\x1c[C\x06xA7G7\x06l\x05\x01\x1cQ+n]k\x18\x0eY\x06-GO\x06\x00A[Po\x08U-\x04A\x00\x1c\\]S&#39;) Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa. First thought, Z3 go brrrrrr…. Although Z3 produces a feasible solution(model), a quick stackOverflow post gave me the implementation of finding n models. from z3 import * def get_models(F, M): &quot;&quot;&quot; Returns a list of M models (if possible) from the list of constraints F &quot;&quot;&quot; result = [] s = Solver() s.add(F) while len(result) &lt; M and s.check() == sat: m = s.model() result.append(m) # Create a new constraint the blocks the current model block = [] for d in m: # d is a declaration if d.arity() &gt; 0: raise Z3Exception(&quot;uninterpreted functions are not supported&quot;) # create a constant from declaration c = d() if is_array(c) or c.sort().kind() == Z3_UNINTERPRETED_SORT: raise Z3Exception(&quot;arrays and uninterpreted sorts are not supported&quot;) block.append(c != m[d]) s.add(Or(block)) return result All we need to do is to form constraints and checking if the generated model produces ASCII printable strings. key1 = [z3.BitVec(&quot;k1{}&quot;.format(i),8) for i in range(21)] key2 = [z3.BitVec(&quot;k2{}&quot;.format(i),8) for i in range(19)] F = [] for i in range(19*21): F.append(key1[i%21]^key2[i%19]==key[i]) # Valid flag characters VALID_CHARS = string.printable[0:62]+&quot;_,.&#39;?!@$&lt;&gt;*:-]*\\&quot; for model in get_models(F,256): # 256 models to get all possible relative strings KEY1 = &quot;&quot;.join( chr(model[key1[i]].as_long()) for i in range(21)) KEY2 = &quot;&quot;.join( chr(model[key2[i]].as_long()) for i in range(19)) flag = KEY1+KEY2 if all(i in VALID_CHARS for i in flag): print(flag) Turns out there was only one model with all characters printable and which is our flag flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-27T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Redpwn 2020 Crypto - Alien Transmissions v2" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"Alien-transmissions-v2 Description The aliens are at it again! We&#39;ve discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information: * This alien language consists of words delimitated by the character represented as 481 * The two keys appear to be of length 21 and 19 * The value of each character in these keys does not exceed 255 Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format. Files encrypted.txt (HUGE number of characters) Observations Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent. Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately. Combined XOR key recovery The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext. Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character with open(&#39;encrypted.txt&#39;,&#39;r&#39;) as encrypted: data = list(map(int, encrypted.readlines())) key = bytearray() for i in range(21*19): data_slice = data[i::21*19] key_char_val = 481 ^ max(data_slice, key=data_slice.count) key.append(key_char_val) print(key) It takes a couple of seconds to find the compound key key = bytearray(b&#39;7G\\x1a\\x00x\\x00l\\x17X];9\\x00Gj\\x007Y\\x013\\x12\\x00\\x00-\\x06\\x14Vo\\x1a\\x0clnSn\\x06]Ej7@\\x04U7\\x06AP\\x17[;+Y\\x06\\x00\\x12YC\\x00++\\x00\\x073S[PB]CjnA7G7W\\x04-A\\x1cl7\\x01_\\x05X]\\x16l\\x16\\x00\\x00\\x00\\x00\\x02j9E\\x1a\\x06+j[W\\\\\\x08\\x0clC\\x06xA7E]l+\\x0e\\x02-\\x00G&lt;XZ\\x089Y\\x06-GO\\x04j+\\x1c[l9\\x04AVD1\\x0ck]S7G\\x1a\\x02\\x12j+\\x1c[ljURB[\\x10\\x00Y\\x013\\x12\\x00\\x02GlS]l+]\\x00&lt;V_\\x16jEj7@\\x04W]l\\x06[\\x14jjG\\x0b\\x031\\x02nC\\x00++\\x00\\x05Y9\\x1c[Al\\x12\\x06&lt;D\\x06W\\x00W\\x04-A\\x1cn]k\\x18\\x0e[lG\\x00D\\x051\\x107\\x02j9E\\x1a\\x04A\\x00\\x1c\\\\_9]\\x00\\x11\\x03IQ\\x00E]l+\\x0e\\x00Gj\\x007[kYU\\x0b\\x03\\x1cWx\\x04j+\\x1c[nSn\\x06]G\\x00]\\x07\\x0fV\\x06W-\\x02\\x12j+\\x1cY\\x06\\x00\\x12YAjAl\\x0b\\x04\\x02\\x027\\x02GlS]nA7G7UnG\\x06\\x17o\\x06P3W]l\\x06[\\x16\\x00\\x00\\x00\\x00\\x00\\x00S\\x02\\x11\\x05\\x1a;7\\x05Y9\\x1c[C\\x06xA7G7\\x06l\\x05\\x01\\x1cQ+n]k\\x18\\x0eY\\x06-GO\\x06\\x00A[Po\\x08U-\\x04A\\x00\\x1c\\\\]S&#39;) Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa. First thought, Z3 go brrrrrr…. Although Z3 produces a feasible solution(model), a quick stackOverflow post gave me the implementation of finding n models. from z3 import * def get_models(F, M): &quot;&quot;&quot; Returns a list of M models (if possible) from the list of constraints F &quot;&quot;&quot; result = [] s = Solver() s.add(F) while len(result) &lt; M and s.check() == sat: m = s.model() result.append(m) # Create a new constraint the blocks the current model block = [] for d in m: # d is a declaration if d.arity() &gt; 0: raise Z3Exception(&quot;uninterpreted functions are not supported&quot;) # create a constant from declaration c = d() if is_array(c) or c.sort().kind() == Z3_UNINTERPRETED_SORT: raise Z3Exception(&quot;arrays and uninterpreted sorts are not supported&quot;) block.append(c != m[d]) s.add(Or(block)) return result All we need to do is to form constraints and checking if the generated model produces ASCII printable strings. key1 = [z3.BitVec(&quot;k1{}&quot;.format(i),8) for i in range(21)] key2 = [z3.BitVec(&quot;k2{}&quot;.format(i),8) for i in range(19)] F = [] for i in range(19*21): F.append(key1[i%21]^key2[i%19]==key[i]) # Valid flag characters VALID_CHARS = string.printable[0:62]+&quot;_,.&#39;?!@$&lt;&gt;*:-]*\\\\&quot; for model in get_models(F,256): # 256 models to get all possible relative strings KEY1 = &quot;&quot;.join( chr(model[key1[i]].as_long()) for i in range(21)) KEY2 = &quot;&quot;.join( chr(model[key2[i]].as_long()) for i in range(19)) flag = KEY1+KEY2 if all(i in VALID_CHARS for i in flag): print(flag) Turns out there was only one model with all characters printable and which is our flag flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}","headline":"Redpwn 2020 Crypto - Alien Transmissions v2","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"Alien-transmissions-v2 Description The aliens are at it again! We&#39;ve discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information: * This alien language consists of words delimitated by the character represented as 481 * The two keys appear to be of length 21 and 19 * The value of each character in these keys does not exceed 255 Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format. Files encrypted.txt (HUGE number of characters) Observations Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent. Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately. Combined XOR key recovery The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext. Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character with open(&#39;encrypted.txt&#39;,&#39;r&#39;) as encrypted: data = list(map(int, encrypted.readlines())) key = bytearray() for i in range(21*19): data_slice = data[i::21*19] key_char_val = 481 ^ max(data_slice, key=data_slice.count) key.append(key_char_val) print(key) It takes a couple of seconds to find the compound key key = bytearray(b&#39;7G\\x1a\\x00x\\x00l\\x17X];9\\x00Gj\\x007Y\\x013\\x12\\x00\\x00-\\x06\\x14Vo\\x1a\\x0clnSn\\x06]Ej7@\\x04U7\\x06AP\\x17[;+Y\\x06\\x00\\x12YC\\x00++\\x00\\x073S[PB]CjnA7G7W\\x04-A\\x1cl7\\x01_\\x05X]\\x16l\\x16\\x00\\x00\\x00\\x00\\x02j9E\\x1a\\x06+j[W\\\\\\x08\\x0clC\\x06xA7E]l+\\x0e\\x02-\\x00G&lt;XZ\\x089Y\\x06-GO\\x04j+\\x1c[l9\\x04AVD1\\x0ck]S7G\\x1a\\x02\\x12j+\\x1c[ljURB[\\x10\\x00Y\\x013\\x12\\x00\\x02GlS]l+]\\x00&lt;V_\\x16jEj7@\\x04W]l\\x06[\\x14jjG\\x0b\\x031\\x02nC\\x00++\\x00\\x05Y9\\x1c[Al\\x12\\x06&lt;D\\x06W\\x00W\\x04-A\\x1cn]k\\x18\\x0e[lG\\x00D\\x051\\x107\\x02j9E\\x1a\\x04A\\x00\\x1c\\\\_9]\\x00\\x11\\x03IQ\\x00E]l+\\x0e\\x00Gj\\x007[kYU\\x0b\\x03\\x1cWx\\x04j+\\x1c[nSn\\x06]G\\x00]\\x07\\x0fV\\x06W-\\x02\\x12j+\\x1cY\\x06\\x00\\x12YAjAl\\x0b\\x04\\x02\\x027\\x02GlS]nA7G7UnG\\x06\\x17o\\x06P3W]l\\x06[\\x16\\x00\\x00\\x00\\x00\\x00\\x00S\\x02\\x11\\x05\\x1a;7\\x05Y9\\x1c[C\\x06xA7G7\\x06l\\x05\\x01\\x1cQ+n]k\\x18\\x0eY\\x06-GO\\x06\\x00A[Po\\x08U-\\x04A\\x00\\x1c\\\\]S&#39;) Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa. First thought, Z3 go brrrrrr…. Although Z3 produces a feasible solution(model), a quick stackOverflow post gave me the implementation of finding n models. from z3 import * def get_models(F, M): &quot;&quot;&quot; Returns a list of M models (if possible) from the list of constraints F &quot;&quot;&quot; result = [] s = Solver() s.add(F) while len(result) &lt; M and s.check() == sat: m = s.model() result.append(m) # Create a new constraint the blocks the current model block = [] for d in m: # d is a declaration if d.arity() &gt; 0: raise Z3Exception(&quot;uninterpreted functions are not supported&quot;) # create a constant from declaration c = d() if is_array(c) or c.sort().kind() == Z3_UNINTERPRETED_SORT: raise Z3Exception(&quot;arrays and uninterpreted sorts are not supported&quot;) block.append(c != m[d]) s.add(Or(block)) return result All we need to do is to form constraints and checking if the generated model produces ASCII printable strings. key1 = [z3.BitVec(&quot;k1{}&quot;.format(i),8) for i in range(21)] key2 = [z3.BitVec(&quot;k2{}&quot;.format(i),8) for i in range(19)] F = [] for i in range(19*21): F.append(key1[i%21]^key2[i%19]==key[i]) # Valid flag characters VALID_CHARS = string.printable[0:62]+&quot;_,.&#39;?!@$&lt;&gt;*:-]*\\\\&quot; for model in get_models(F,256): # 256 models to get all possible relative strings KEY1 = &quot;&quot;.join( chr(model[key1[i]].as_long()) for i in range(21)) KEY2 = &quot;&quot;.join( chr(model[key2[i]].as_long()) for i in range(19)) flag = KEY1+KEY2 if all(i in VALID_CHARS for i in flag): print(flag) Turns out there was only one model with all characters printable and which is our flag flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}","headline":"Redpwn 2020 Crypto - Alien Transmissions v2","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - Alien Transmissions v2 - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - Alien Transmissions v2 - deuterium's blog</title>
 
 <meta name="description" content="Alien-transmissions-v2DescriptionThe aliens are at it again! We've discovered that their communications are in base 512 and have transcribed them in base 10....">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -284,7 +284,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1917,8 +1917,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 -4 -15 -9z"/>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
+        <ul><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class="grid grid--reverse">
@@ -1935,19 +1936,19 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
             href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2.md">
             <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Redpwn 2020 Crypto - Alien Transmissions v2"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=redpwn">redpwn</a>
+                href="/archive.html?tag=redpwn">redpwn</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
+                href="/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+                href="/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
+                href="/archive.html?tag=xor">xor</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=z3">z3</a>
+                href="/archive.html?tag=z3">z3</a>
             </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 27, 2020</span>
             </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-27T00:00:00+05:30">
     <meta itemprop="keywords" content="redpwn,2020,cryptography,xor,z3"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
@@ -2085,9 +2086,9 @@ Find these two keys for me; concatenate their ASCII encodings and wrap it in the
 
     </div>
 </div>
-<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
 </div><div class="article__license"></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
 </div>
 
@@ -2152,7 +2153,7 @@ Find these two keys for me; concatenate their ASCII encodings and wrap it in the
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
@@ -2224,7 +2225,7 @@ Find these two keys for me; concatenate their ASCII encodings and wrap it in the
     $.fn.modal = modal;
   });
 })();
-</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>
+</script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal"><script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2310,137 +2311,58 @@ Find these two keys for me; concatenate their ASCII encodings and wrap it in the
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text" />
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
-</script>
-</div></div>
+</script></div></div>
 
 
 <script>(function() {

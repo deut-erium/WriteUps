@@ -1,34 +1,34 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>RACTF 2020 Crypto - Its as easy as access=0000 | CTF Writeups</title>
+<title>RACTF 2020 Crypto - Its as easy as access=0000 | deuterium’s blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="RACTF 2020 Crypto - Its as easy as access=0000" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="It’s as easy as access=0000 The challenge description reads Challenge instance ready at 95.216.233.106:57735. We found a strange service, it looks like you can generate an access token for the network service, but you shouldn&#39;t be able to read the flag... We think. And we are provided with server file access.py, whose contents read m Crypto.Util.Padding import pad, unpad from Crypto.Cipher import AES from Crypto.Random import get_random_bytes from datetime import datetime, timedelta challenge_description(&quot;You can generate an access token for my network service, but you shouldn&#39;t be able to read the flag... I think.&quot;) challenge_name = &quot;It&#39;s as easy as access=0000&quot; FLAG = &quot;ractf{XXX}&quot; KEY = get_random_bytes(16) def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} def start_challenge(): menu = &quot;Would you like to:\n[1] Create a guest token\n[2] Read the flag&quot; while True: print(menu) choice = str(input(&quot;Your choice: &quot;)) while choice != &quot;1&quot; and choice != &quot;2&quot;: choice = str(input(&quot;Please enter a valid choice. Try again: &quot;)) if choice == &quot;1&quot;: print(generate_token()) elif choice == &quot;2&quot;: token = input(&quot;Please enter your admin token: &quot;) while not token: token = input(&quot;Tokens can&#39;t be empty. Try again: &quot;) iv = input(&quot;Please enter your token&#39;s initialization vector: &quot;) while not iv: iv = input(&quot;Initialization vectors can&#39;t be empty. Try again: &quot;) print(get_flag(token, iv)) start_challenge() Without reading through whole bunch of code, we can start analyzing from the last, start_challenge() is called, which is an infite loop while True, asks for two choices 1 and 2. Choice 1 would invoke generate_token function and generate a token Choice 2 would invoke get_flag function, after asking for iv and encrypted token. Now quickly running through generate_token line-by-line def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} It creates an expire time of one day Creates a token string starting with access=9999 specifying guest by 9999 and expiry time Generates random IV Pads the token to AES block size i.e. 16 bytes creates new AES cipher instance encyrpt the padded token in encrypted generates the ciphertext as concatenation of hex of iv and hex of encrypted padded message returns the hex concatenation Running through get_flag, one could read def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} converts user input token and iv to their bytes representation Tries decrypting the token with provided iv and its key if access=0000 appears somewhere in message, it must be an admin and returs the flag Says FO otherwise Reading through the above stuff, one could realise what must be done to read the flag :wink: We need to make the server generate a token for access=9999 and somehow change it to access=0000 and fool it into believing that we are admin, and hence the name of the challenge. This is an instance of all time classic bit flipping attack. We can modify the IV such that the decryption at server would read access=0000 at server instead of access=9999 Lets see how CBC mode works, just focus on decryption of first block The output of Block cipher decryption of AES is XORed with the IV to give the plaintext. But hey, It is us who are providing IV, So we must be able to “control” the plaintext with our IV, and hence can make server read whatever we wish. Lets see how would we do it. We know Decrypt(token) ^ IV_server = access=9999;&lt;timestamp&gt;, where IV_server is the iv provided by default by the server and token is the generated guest token. To change b&#39;9999&#39; to b&#39;0000&#39;, we need to xor something to we b&#39;9999&#39; ^ something = b&#39;0000&#39;, here ^ is byte-wise xor something = b&#39;9999&#39; ^ b&#39;0000&#39; Now lets try xoring something on both sides, (NOTE : I am xoring only the bytes at corresponding position, for the ease of explaination) Decrypt(token) ^ IV_server ^ something= access=9999;&lt;timestamp&gt; ^ something Decrypt(token) ^ IV_server ^ something = access=9999;&lt;timestamp&gt; ^ b&#39;9999&#39; ^ b&#39;0000&#39; Decrypt(token) ^ IV_server ^ something = access=0000;&lt;timestamp&gt; VOILA! we did it. Lets write a script. One could do that manually, as time is not constrained, but automating stuff is quite a satisfaction. from pwn import remote, xor import json HOST, PORT = &quot;95.216.233.106&quot;, 58891 REM = remote(HOST, PORT) print(REM.recvuntil(b&#39;Your choice: &#39;).decode()) REM.sendline(b&#39;1&#39;) #get a guest token data = REM.recvline().replace(b&quot;&#39;&quot;,b&#39;&quot;&#39;) # badly formatted json token = json.loads(data)[&#39;token&#39;] admin_token = token[32:] # first 32 is iv iv = bytes.fromhex(token[:32]) iv_xor = b&#39;\x00&#39;*7 + xor(b&#39;9&#39;,&#39;0&#39;)*4 + b&#39;\x00&#39;*5 iv_for_admin = xor(iv_xor, iv).hex() REM.sendline(b&#39;2&#39;) REM.sendline(admin_token.encode()) REM.sendline(iv_for_admin.encode()) print(REM.recvlines(4)) # ractf{cbc_b17_fl1pp1n6_F7W!} How to make the challenge more difficult The challenge would be more ~difficult~ interesting if timestamps were modified, and we have to modify the timestamps too to get access :wink:. Nevertheless, awesome work ReallyAwesomeCTF" />
 <meta property="og:description" content="It’s as easy as access=0000 The challenge description reads Challenge instance ready at 95.216.233.106:57735. We found a strange service, it looks like you can generate an access token for the network service, but you shouldn&#39;t be able to read the flag... We think. And we are provided with server file access.py, whose contents read m Crypto.Util.Padding import pad, unpad from Crypto.Cipher import AES from Crypto.Random import get_random_bytes from datetime import datetime, timedelta challenge_description(&quot;You can generate an access token for my network service, but you shouldn&#39;t be able to read the flag... I think.&quot;) challenge_name = &quot;It&#39;s as easy as access=0000&quot; FLAG = &quot;ractf{XXX}&quot; KEY = get_random_bytes(16) def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} def start_challenge(): menu = &quot;Would you like to:\n[1] Create a guest token\n[2] Read the flag&quot; while True: print(menu) choice = str(input(&quot;Your choice: &quot;)) while choice != &quot;1&quot; and choice != &quot;2&quot;: choice = str(input(&quot;Please enter a valid choice. Try again: &quot;)) if choice == &quot;1&quot;: print(generate_token()) elif choice == &quot;2&quot;: token = input(&quot;Please enter your admin token: &quot;) while not token: token = input(&quot;Tokens can&#39;t be empty. Try again: &quot;) iv = input(&quot;Please enter your token&#39;s initialization vector: &quot;) while not iv: iv = input(&quot;Initialization vectors can&#39;t be empty. Try again: &quot;) print(get_flag(token, iv)) start_challenge() Without reading through whole bunch of code, we can start analyzing from the last, start_challenge() is called, which is an infite loop while True, asks for two choices 1 and 2. Choice 1 would invoke generate_token function and generate a token Choice 2 would invoke get_flag function, after asking for iv and encrypted token. Now quickly running through generate_token line-by-line def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} It creates an expire time of one day Creates a token string starting with access=9999 specifying guest by 9999 and expiry time Generates random IV Pads the token to AES block size i.e. 16 bytes creates new AES cipher instance encyrpt the padded token in encrypted generates the ciphertext as concatenation of hex of iv and hex of encrypted padded message returns the hex concatenation Running through get_flag, one could read def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} converts user input token and iv to their bytes representation Tries decrypting the token with provided iv and its key if access=0000 appears somewhere in message, it must be an admin and returs the flag Says FO otherwise Reading through the above stuff, one could realise what must be done to read the flag :wink: We need to make the server generate a token for access=9999 and somehow change it to access=0000 and fool it into believing that we are admin, and hence the name of the challenge. This is an instance of all time classic bit flipping attack. We can modify the IV such that the decryption at server would read access=0000 at server instead of access=9999 Lets see how CBC mode works, just focus on decryption of first block The output of Block cipher decryption of AES is XORed with the IV to give the plaintext. But hey, It is us who are providing IV, So we must be able to “control” the plaintext with our IV, and hence can make server read whatever we wish. Lets see how would we do it. We know Decrypt(token) ^ IV_server = access=9999;&lt;timestamp&gt;, where IV_server is the iv provided by default by the server and token is the generated guest token. To change b&#39;9999&#39; to b&#39;0000&#39;, we need to xor something to we b&#39;9999&#39; ^ something = b&#39;0000&#39;, here ^ is byte-wise xor something = b&#39;9999&#39; ^ b&#39;0000&#39; Now lets try xoring something on both sides, (NOTE : I am xoring only the bytes at corresponding position, for the ease of explaination) Decrypt(token) ^ IV_server ^ something= access=9999;&lt;timestamp&gt; ^ something Decrypt(token) ^ IV_server ^ something = access=9999;&lt;timestamp&gt; ^ b&#39;9999&#39; ^ b&#39;0000&#39; Decrypt(token) ^ IV_server ^ something = access=0000;&lt;timestamp&gt; VOILA! we did it. Lets write a script. One could do that manually, as time is not constrained, but automating stuff is quite a satisfaction. from pwn import remote, xor import json HOST, PORT = &quot;95.216.233.106&quot;, 58891 REM = remote(HOST, PORT) print(REM.recvuntil(b&#39;Your choice: &#39;).decode()) REM.sendline(b&#39;1&#39;) #get a guest token data = REM.recvline().replace(b&quot;&#39;&quot;,b&#39;&quot;&#39;) # badly formatted json token = json.loads(data)[&#39;token&#39;] admin_token = token[32:] # first 32 is iv iv = bytes.fromhex(token[:32]) iv_xor = b&#39;\x00&#39;*7 + xor(b&#39;9&#39;,&#39;0&#39;)*4 + b&#39;\x00&#39;*5 iv_for_admin = xor(iv_xor, iv).hex() REM.sendline(b&#39;2&#39;) REM.sendline(admin_token.encode()) REM.sendline(iv_for_admin.encode()) print(REM.recvlines(4)) # ractf{cbc_b17_fl1pp1n6_F7W!} How to make the challenge more difficult The challenge would be more ~difficult~ interesting if timestamps were modified, and we have to modify the timestamps too to get access :wink:. Nevertheless, awesome work ReallyAwesomeCTF" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000" />
-<meta property="og:site_name" content="CTF Writeups" />
+<link rel="canonical" href="https://deut-erium.github.io/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000" />
+<meta property="og:url" content="https://deut-erium.github.io/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000" />
+<meta property="og:site_name" content="deuterium’s blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-09T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="RACTF 2020 Crypto - Its as easy as access=0000" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"It’s as easy as access=0000 The challenge description reads Challenge instance ready at 95.216.233.106:57735. We found a strange service, it looks like you can generate an access token for the network service, but you shouldn&#39;t be able to read the flag... We think. And we are provided with server file access.py, whose contents read m Crypto.Util.Padding import pad, unpad from Crypto.Cipher import AES from Crypto.Random import get_random_bytes from datetime import datetime, timedelta challenge_description(&quot;You can generate an access token for my network service, but you shouldn&#39;t be able to read the flag... I think.&quot;) challenge_name = &quot;It&#39;s as easy as access=0000&quot; FLAG = &quot;ractf{XXX}&quot; KEY = get_random_bytes(16) def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} def start_challenge(): menu = &quot;Would you like to:\\n[1] Create a guest token\\n[2] Read the flag&quot; while True: print(menu) choice = str(input(&quot;Your choice: &quot;)) while choice != &quot;1&quot; and choice != &quot;2&quot;: choice = str(input(&quot;Please enter a valid choice. Try again: &quot;)) if choice == &quot;1&quot;: print(generate_token()) elif choice == &quot;2&quot;: token = input(&quot;Please enter your admin token: &quot;) while not token: token = input(&quot;Tokens can&#39;t be empty. Try again: &quot;) iv = input(&quot;Please enter your token&#39;s initialization vector: &quot;) while not iv: iv = input(&quot;Initialization vectors can&#39;t be empty. Try again: &quot;) print(get_flag(token, iv)) start_challenge() Without reading through whole bunch of code, we can start analyzing from the last, start_challenge() is called, which is an infite loop while True, asks for two choices 1 and 2. Choice 1 would invoke generate_token function and generate a token Choice 2 would invoke get_flag function, after asking for iv and encrypted token. Now quickly running through generate_token line-by-line def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} It creates an expire time of one day Creates a token string starting with access=9999 specifying guest by 9999 and expiry time Generates random IV Pads the token to AES block size i.e. 16 bytes creates new AES cipher instance encyrpt the padded token in encrypted generates the ciphertext as concatenation of hex of iv and hex of encrypted padded message returns the hex concatenation Running through get_flag, one could read def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} converts user input token and iv to their bytes representation Tries decrypting the token with provided iv and its key if access=0000 appears somewhere in message, it must be an admin and returs the flag Says FO otherwise Reading through the above stuff, one could realise what must be done to read the flag :wink: We need to make the server generate a token for access=9999 and somehow change it to access=0000 and fool it into believing that we are admin, and hence the name of the challenge. This is an instance of all time classic bit flipping attack. We can modify the IV such that the decryption at server would read access=0000 at server instead of access=9999 Lets see how CBC mode works, just focus on decryption of first block The output of Block cipher decryption of AES is XORed with the IV to give the plaintext. But hey, It is us who are providing IV, So we must be able to “control” the plaintext with our IV, and hence can make server read whatever we wish. Lets see how would we do it. We know Decrypt(token) ^ IV_server = access=9999;&lt;timestamp&gt;, where IV_server is the iv provided by default by the server and token is the generated guest token. To change b&#39;9999&#39; to b&#39;0000&#39;, we need to xor something to we b&#39;9999&#39; ^ something = b&#39;0000&#39;, here ^ is byte-wise xor something = b&#39;9999&#39; ^ b&#39;0000&#39; Now lets try xoring something on both sides, (NOTE : I am xoring only the bytes at corresponding position, for the ease of explaination) Decrypt(token) ^ IV_server ^ something= access=9999;&lt;timestamp&gt; ^ something Decrypt(token) ^ IV_server ^ something = access=9999;&lt;timestamp&gt; ^ b&#39;9999&#39; ^ b&#39;0000&#39; Decrypt(token) ^ IV_server ^ something = access=0000;&lt;timestamp&gt; VOILA! we did it. Lets write a script. One could do that manually, as time is not constrained, but automating stuff is quite a satisfaction. from pwn import remote, xor import json HOST, PORT = &quot;95.216.233.106&quot;, 58891 REM = remote(HOST, PORT) print(REM.recvuntil(b&#39;Your choice: &#39;).decode()) REM.sendline(b&#39;1&#39;) #get a guest token data = REM.recvline().replace(b&quot;&#39;&quot;,b&#39;&quot;&#39;) # badly formatted json token = json.loads(data)[&#39;token&#39;] admin_token = token[32:] # first 32 is iv iv = bytes.fromhex(token[:32]) iv_xor = b&#39;\\x00&#39;*7 + xor(b&#39;9&#39;,&#39;0&#39;)*4 + b&#39;\\x00&#39;*5 iv_for_admin = xor(iv_xor, iv).hex() REM.sendline(b&#39;2&#39;) REM.sendline(admin_token.encode()) REM.sendline(iv_for_admin.encode()) print(REM.recvlines(4)) # ractf{cbc_b17_fl1pp1n6_F7W!} How to make the challenge more difficult The challenge would be more ~difficult~ interesting if timestamps were modified, and we have to modify the timestamps too to get access :wink:. Nevertheless, awesome work ReallyAwesomeCTF","headline":"RACTF 2020 Crypto - Its as easy as access=0000","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"},"url":"https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"It’s as easy as access=0000 The challenge description reads Challenge instance ready at 95.216.233.106:57735. We found a strange service, it looks like you can generate an access token for the network service, but you shouldn&#39;t be able to read the flag... We think. And we are provided with server file access.py, whose contents read m Crypto.Util.Padding import pad, unpad from Crypto.Cipher import AES from Crypto.Random import get_random_bytes from datetime import datetime, timedelta challenge_description(&quot;You can generate an access token for my network service, but you shouldn&#39;t be able to read the flag... I think.&quot;) challenge_name = &quot;It&#39;s as easy as access=0000&quot; FLAG = &quot;ractf{XXX}&quot; KEY = get_random_bytes(16) def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} def start_challenge(): menu = &quot;Would you like to:\\n[1] Create a guest token\\n[2] Read the flag&quot; while True: print(menu) choice = str(input(&quot;Your choice: &quot;)) while choice != &quot;1&quot; and choice != &quot;2&quot;: choice = str(input(&quot;Please enter a valid choice. Try again: &quot;)) if choice == &quot;1&quot;: print(generate_token()) elif choice == &quot;2&quot;: token = input(&quot;Please enter your admin token: &quot;) while not token: token = input(&quot;Tokens can&#39;t be empty. Try again: &quot;) iv = input(&quot;Please enter your token&#39;s initialization vector: &quot;) while not iv: iv = input(&quot;Initialization vectors can&#39;t be empty. Try again: &quot;) print(get_flag(token, iv)) start_challenge() Without reading through whole bunch of code, we can start analyzing from the last, start_challenge() is called, which is an infite loop while True, asks for two choices 1 and 2. Choice 1 would invoke generate_token function and generate a token Choice 2 would invoke get_flag function, after asking for iv and encrypted token. Now quickly running through generate_token line-by-line def generate_token(): expires_at = (datetime.today() + timedelta(days=1)).strftime(&quot;%s&quot;) token = f&quot;access=9999;expiry={expires_at}&quot;.encode() iv = get_random_bytes(16) padded = pad(token, 16) cipher = AES.new(KEY, AES.MODE_CBC, iv) encrypted = cipher.encrypt(padded) ciphertext = iv.hex() + encrypted.hex() return {&quot;token&quot;: ciphertext} It creates an expire time of one day Creates a token string starting with access=9999 specifying guest by 9999 and expiry time Generates random IV Pads the token to AES block size i.e. 16 bytes creates new AES cipher instance encyrpt the padded token in encrypted generates the ciphertext as concatenation of hex of iv and hex of encrypted padded message returns the hex concatenation Running through get_flag, one could read def get_flag(token, iv): token = bytes.fromhex(token) iv = bytes.fromhex(iv) try: cipher = AES.new(KEY, AES.MODE_CBC, iv) decrypted = cipher.decrypt(token) unpadded = unpad(decrypted, 16) except ValueError as e: return {&quot;error&quot;: str(e)} if b&quot;access=0000&quot; in unpadded: return {&quot;flag&quot;: FLAG} else: return {&quot;error&quot;: &quot;not authorized to read flag&quot;} converts user input token and iv to their bytes representation Tries decrypting the token with provided iv and its key if access=0000 appears somewhere in message, it must be an admin and returs the flag Says FO otherwise Reading through the above stuff, one could realise what must be done to read the flag :wink: We need to make the server generate a token for access=9999 and somehow change it to access=0000 and fool it into believing that we are admin, and hence the name of the challenge. This is an instance of all time classic bit flipping attack. We can modify the IV such that the decryption at server would read access=0000 at server instead of access=9999 Lets see how CBC mode works, just focus on decryption of first block The output of Block cipher decryption of AES is XORed with the IV to give the plaintext. But hey, It is us who are providing IV, So we must be able to “control” the plaintext with our IV, and hence can make server read whatever we wish. Lets see how would we do it. We know Decrypt(token) ^ IV_server = access=9999;&lt;timestamp&gt;, where IV_server is the iv provided by default by the server and token is the generated guest token. To change b&#39;9999&#39; to b&#39;0000&#39;, we need to xor something to we b&#39;9999&#39; ^ something = b&#39;0000&#39;, here ^ is byte-wise xor something = b&#39;9999&#39; ^ b&#39;0000&#39; Now lets try xoring something on both sides, (NOTE : I am xoring only the bytes at corresponding position, for the ease of explaination) Decrypt(token) ^ IV_server ^ something= access=9999;&lt;timestamp&gt; ^ something Decrypt(token) ^ IV_server ^ something = access=9999;&lt;timestamp&gt; ^ b&#39;9999&#39; ^ b&#39;0000&#39; Decrypt(token) ^ IV_server ^ something = access=0000;&lt;timestamp&gt; VOILA! we did it. Lets write a script. One could do that manually, as time is not constrained, but automating stuff is quite a satisfaction. from pwn import remote, xor import json HOST, PORT = &quot;95.216.233.106&quot;, 58891 REM = remote(HOST, PORT) print(REM.recvuntil(b&#39;Your choice: &#39;).decode()) REM.sendline(b&#39;1&#39;) #get a guest token data = REM.recvline().replace(b&quot;&#39;&quot;,b&#39;&quot;&#39;) # badly formatted json token = json.loads(data)[&#39;token&#39;] admin_token = token[32:] # first 32 is iv iv = bytes.fromhex(token[:32]) iv_xor = b&#39;\\x00&#39;*7 + xor(b&#39;9&#39;,&#39;0&#39;)*4 + b&#39;\\x00&#39;*5 iv_for_admin = xor(iv_xor, iv).hex() REM.sendline(b&#39;2&#39;) REM.sendline(admin_token.encode()) REM.sendline(iv_for_admin.encode()) print(REM.recvlines(4)) # ractf{cbc_b17_fl1pp1n6_F7W!} How to make the challenge more difficult The challenge would be more ~difficult~ interesting if timestamps were modified, and we have to modify the timestamps too to get access :wink:. Nevertheless, awesome work ReallyAwesomeCTF","headline":"RACTF 2020 Crypto - Its as easy as access=0000","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"},"url":"https://deut-erium.github.io/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - Its as easy as access=0000 - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - Its as easy as access=0000 - deuterium's blog</title>
 
 <meta name="description" content="It’s as easy as access=0000The challenge description readsChallenge instance ready at 95.216.233.106:57735.We found a strange service, it looks like you can ...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<link rel="canonical" href="https://deut-erium.github.io/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000"><link rel="alternate" type="application/rss+xml" title="deuterium's blog" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
-<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
 <meta name="theme-color" content="#ffffff">
-<!-- end favicons snippet --><link rel="stylesheet" href="/WriteUps/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
+<!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
 <script>(function() {
@@ -264,7 +264,7 @@
         }
       },
       paths: {
-        search_js: '/WriteUps/assets/search.js'
+        search_js: '/assets/search.js'
       }
     };
     window.TEXT_VARIABLES = TEXT_VARIABLES;
@@ -289,9 +289,9 @@
 <li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li>
 <li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li>
 <li class="toc-h1">CTFs</li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li>
-<li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2022">CTFs-2022</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2021">CTFs-2021</a></li>
+<li class="toc-h2"><a href="/archive.html?tag=2020">CTFs-2020</a></li>
 </ul></div></div>
 <div class="page__main js-page-main has-aside cell cell--auto">
 
@@ -1925,14 +1925,15 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 -4 -15 -9z"></path>
 </g>
 </svg>
-<a title="" href="/WriteUps/">CTF Writeups</a>
+<a title="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
+" href="/">deuterium's blog</a>
 </div>
 <button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button>
 </div>
 <nav class="navigation">
         <ul>
-<li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li>
-<li class="navigation__item"><a href="/WriteUps/about.html">About</a></li>
+<li class="navigation__item"><a href="/archive.html">Archive</a></li>
+<li class="navigation__item"><a href="/about.html">About</a></li>
 <li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li>
 </ul>
       </nav>
@@ -1957,25 +1958,25 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 <div class="article__info clearfix">
 <ul class="left-col menu">
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=RACTF">RACTF</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=2020">2020</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=2020">2020</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=cryptography">cryptography</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=netcat">netcat</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=netcat">netcat</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=AES">AES</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=AES">AES</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=CBC">CBC</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=CBC">CBC</a>
             </li>
 <li>
-              <a class="button button--secondary button--pill button--sm" href="/WriteUps/archive.html?tag=bit_flipping">bit_flipping</a>
+              <a class="button button--secondary button--pill button--sm" href="/archive.html?tag=bit_flipping">bit_flipping</a>
             </li>
 </ul>
 <ul class="right-col menu">
@@ -2224,12 +2225,12 @@ Nevertheless, awesome work ReallyAwesomeCTF</p>
 </div>
 <div class="article__subscribe">
 <div class="subscribe">
-<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a>
+<i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a>
 </div>
 </div>
 <div class="article__license"></div></footer>
 <div class="article__section-navigator clearfix"><div class="previous">
-<span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a>
+<span>PREVIOUS</span><a href="/archive.html?tag=2020">CTFs-2020</a>
 </div></div>
 </div>
 
@@ -2313,7 +2314,7 @@ Nevertheless, awesome work ReallyAwesomeCTF</p>
 </div>
     </div>
 <div class="site-info mt-2">
-      <div>© CTF Writeups 2022,
+      <div>© deuterium's blog 2022,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
     </div>
@@ -2389,7 +2390,7 @@ Nevertheless, awesome work ReallyAwesomeCTF</p>
   });
 })();
 </script><div class="modal modal--overflow page__search-modal d-print-none js-page-search-modal">
-<script>
+<script>window.useDefaultSearchBox = false;</script><script>
 (function () {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
@@ -2475,134 +2476,56 @@ Nevertheless, awesome work ReallyAwesomeCTF</p>
     }
   });
 })();
-</script><div class="search search--dark">
-  <div class="main">
-    <div class="search__header">Search</div>
-    <div class="search-bar">
-      <div class="search-box js-search-box">
-        <div class="search-box__icon-search"><i class="fas fa-search"></i></div>
-        <input type="text">
-        <div class="search-box__icon-clear js-icon-clear">
-          <a><i class="fas fa-times"></i></a>
-        </div>
+</script><div class="search search--dark search--google-custom-search-engine">
+    <div class="main">
+      <div class="content js-gcse">
+        <!-- <gcse:search enableAutoComplete="true" gname="search-box"></gcse:search>
+        <gcse:searchresults-only gname="results"></gcse:searchresults-only> -->
       </div>
-      <button class="button button--theme-dark button--pill search__cancel js-search-toggle">
-        Cancel</button>
     </div>
-    <div class="search-result js-search-result"></div>
   </div>
-</div>
-<script>var SOURCES = window.TEXT_VARIABLES.sources;
-var PAHTS = window.TEXT_VARIABLES.paths;
-window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
+  <script>
+    var gcse = document.getElementsByClassName('js-gcse')[0];
+    var gcseSearch = document.createElement('gcse:search');
+    gcseSearch.setAttribute('enableAutoComplete', 'true');
+    gcseSearch.setAttribute('gname', 'search-box');
+    var gcseSearchresults = document.createElement('gcse:searchresults-only');
+    gcseSearchresults.setAttribute('gname', 'results');
+    gcse.appendChild(gcseSearch);
+    gcse.appendChild(gcseSearchresults);
+  </script>
+  <script>var SOURCES = window.TEXT_VARIABLES.sources;
+window.Lazyload.js(SOURCES.jquery, function() {
+  /* global google */
   var search = (window.search || (window.search = {}));
-  var searchData = window.TEXT_SEARCH_DATA || {};
+  var searchBox, searchInput, clearIcon, searchModal;
 
-  function memorize(f) {
-    var cache = {};
-    return function () {
-      var key = Array.prototype.join.call(arguments, ',');
-      if (key in cache) return cache[key];
-      else return cache[key] = f.apply(this, arguments);
-    };
-  }
-
-  /// search
-  function searchByQuery(query) {
-    var i, j, key, keys, cur, _title, result = {};
-    keys = Object.keys(searchData);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      for (j = 0; j < searchData[key].length; j++) {
-        cur = searchData[key][j], _title = cur.title;
-        if ((result[key] === undefined || result[key] && result[key].length < 4 )
-          && _title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          if (result[key] === undefined) {
-            result[key] = [];
-          }
-          result[key].push(cur);
-        }
-      }
-    }
-    return result;
-  }
-
-  var renderHeader = memorize(function(header) {
-    return $('<p class="search-result__header">' + header + '</p>');
-  });
-
-  var renderItem = function(index, title, url) {
-    return $('<li class="search-result__item" data-index="' + index + '"><a class="button" href="' + url + '">' + title + '</a></li>');
+  search.clear = function() {
+    searchBox && searchBox.clearAllResults();
+  };
+  search.onShow = function() {
+    searchInput && searchInput.focus();
+  };
+  search.onHide = function() {
+    searchInput && searchInput.blur();
   };
 
-  function render(data) {
-    if (!data) { return null; }
-    var $root = $('<ul></ul>'), i, j, key, keys, cur, itemIndex = 0;
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      key = keys[i];
-      $root.append(renderHeader(key));
-      for (j = 0; j < data[key].length; j++) {
-        cur = data[key][j];
-        $root.append(renderItem(itemIndex++, cur.title, cur.url));
-      }
+  window.__gcse = {
+    callback: function() {
+      searchBox = google.search.cse.element.getElement('search-box');
+      searchInput = document.getElementById('gsc-i-id1');
+      clearIcon = document.getElementById('gs_cb50');
+      searchModal = search.searchModal;
+      searchModal && searchModal.$el && searchModal.$el.on('click', function(e) {
+        (e.target === this || e.target === clearIcon || e.target.className === 'gs-title') && searchModal.hide();
+      });
     }
-    return $root;
-  }
-
-  // search box
-  var $result = $('.js-search-result'), $resultItems;
-  var lastActiveIndex, activeIndex;
-
-  function clear() {
-    $result.html(null);
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-  }
-  function onInputNotEmpty(val) {
-    $result.html(render(searchByQuery(val)));
-    $resultItems = $('.search-result__item'); activeIndex = 0;
-    $resultItems.eq(0).addClass('active');
-  }
-
-  search.clear = clear;
-  search.onInputNotEmpty = onInputNotEmpty;
-
-  function updateResultItems() {
-    lastActiveIndex >= 0 && $resultItems.eq(lastActiveIndex).removeClass('active');
-    activeIndex >= 0 && $resultItems.eq(activeIndex).addClass('active');
-  }
-
-  function moveActiveIndex(direction) {
-    var itemsCount = $resultItems ? $resultItems.length : 0;
-    if (itemsCount > 1) {
-      lastActiveIndex = activeIndex;
-      if (direction === 'up') {
-        activeIndex = (activeIndex - 1 + itemsCount) % itemsCount;
-      } else if (direction === 'down') {
-        activeIndex = (activeIndex + 1 + itemsCount) % itemsCount;
-      }
-      updateResultItems();
-    }
-  }
-
-  // Char Code: 13  Enter, 37  ⬅, 38  ⬆, 39  ➡, 40  ⬇
-  $(window).on('keyup', function(e) {
-    var modalVisible = search.getModalVisible && search.getModalVisible();
-    if (modalVisible) {
-      if (e.which === 38) {
-        modalVisible && moveActiveIndex('up');
-      } else if (e.which === 40) {
-        modalVisible && moveActiveIndex('down');
-      } else if (e.which === 13) {
-        modalVisible && $resultItems && activeIndex >= 0 && $resultItems.eq(activeIndex).children('a')[0].click();
-      }
-    }
-  });
-
-  $result.on('mouseover', '.search-result__item > a', function() {
-    var itemIndex = $(this).parent().data('index');
-    itemIndex >= 0 && (lastActiveIndex = activeIndex, activeIndex = itemIndex, updateResultItems());
-  });
+  };
+  var cx = '416a5de1e771f1814'; // Insert your own Custom Search Engine ID here
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+    '//cse.google.com/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
 });
 </script>
 </div>
