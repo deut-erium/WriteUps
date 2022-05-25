@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"12-shades-of-redpwn Description Everyone&#39;s favorite guess god Tux just sent me a flag that he somehow encrypted with a color wheel! I don&#39;t even know where to start, the wheel looks more like a clock than a cipher... can you help me crack the code? Files color-wheel.jpg ciphertext.jpg “Text” XD Lets think like a clock, and start numbering colors from 0-11 And if we map the corresponding numbers, we get 86 90 81 87 a3 49 99 43 97 97 41 92 49 7b 41 97 7b 44 92 7b 44 96 98 a5 Now, we know that the flag begins with the prefix flag{, which helps us easily guess what it is, since &#39;f&#39; and &#39;l&#39; differ by 4, here the ciphertext also differs by 4 i.e 90-86. Also, &#39;l&#39; and &#39;a&#39; differ by 11, which confirms, that it is base 12 encoding. Voila, here we go EXTRACTED = &#39;86 90 81 87 a3 49 99 43 97 97 41 92 49 7b 41 97 7b 44 92 7b 44 96 98 a5&#39; flag = &#39;&#39;.join([chr(int(i,12)) for i in EXTRACTED.split()]) print(flag) flag = flag{9u3ss1n9_1s_4n_4rt}","headline":"Redpwn 2020 Crypto - 12 Shades of Redpwn","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/12-shades-of-redpwn/2020-06-27-redpwn-2020-12-shades-of-redpwn"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/12-shades-of-redpwn/2020-06-27-redpwn-2020-12-shades-of-redpwn"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - 12 Shades of Redpwn - deuterium's blog</title>
 

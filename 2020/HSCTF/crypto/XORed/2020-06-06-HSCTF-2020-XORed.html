@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-06T00:00:00+05:30","datePublished":"2020-06-06T00:00:00+05:30","description":"XORed I was given the following equations. Can you help me decode the flag? Key 1 = 5dcec311ab1a88ff66b69ef46d4aba1aee814fe00a4342055c146533 Key 1 ^ Key 3 = 9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b Key 2 ^ Key 3 ^ Key 5 = 557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05 Key 1 ^ Key 4 ^ Key 5 = 7b33428eb14e4b54f2f4a3acaeab1c2733e4ab6bebc68436177128eb Key 3 ^ Key 4 = 996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a Flag ^ Key 1 ^ Key 2 ^ Key 3 ^ Key 4 ^ Key 5 = 306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139 We know XOR has the following properties Commutative: A ⊕ B = B ⊕ A Associative: A ⊕ (B ⊕ C) = (A ⊕ B) ⊕ C Identity: A ⊕ 0 = A Self-Inverse: A ⊕ A = 0 So if we want to recover Flag from Flag ^ Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5, we need to XOR each of Key1, Key2, Key3, Key4 and Key5 exactly once so that we end up only with flag Notice that we dont need to recover each of the Key value. We can extract Flag (a bit) smartly. All we need is Key1 ^ Key2 ^ Key3 ^ Key4 ^ Key5 We can get it by XORing (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4) Which is equvalent to Key1 ^Key3^ Key2 ^ Key3 ^ Key5 ^ Key4 ^Key3 Hence we get Flag as (Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4)) Here are multiple ways of doing it in python from pwn import xor K13 = bytes.fromhex(&#39;9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b&#39;) K235 = bytes.fromhex(&#39;557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05&#39;) K34 = bytes.fromhex(&#39;996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a&#39;) F12345 = bytes.fromhex(&#39;306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139&#39;) #1 xor from pwntools flag = xor(K13, K235, K34, F12345) print(flag.decode()) #2 Doing shit yourself flag = &quot;&quot;.join([ chr(K13[i] ^ K235[i] ^ K34[i] ^ F12345[i]) for i in range(len(K13) ]) print(flag) #flag{n0t_t00_h4rD_h0p3fully} YES","headline":"HSCTF 2020 Crypto - XORed","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed"},"url":"https://deut-erium.github.io/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HSCTF 2020 Crypto - XORed - deuterium's blog</title>
 

@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"4k-rsa Description Only n00bz use 2048-bit RSA. True gamers use keys that are at least 4k bits long, no matter how many primes it takes... Files 4k-rsa-public-key.txt which contains a n, e, c triple Seems like there are a lot of primes in the factorization of n, since the factorization process is influenced directly by the size of prime factors and not the size of the number being factored itself, it should be fairly doable by alpetron.ar It took about half an hour to factor, one may engage to other activities or alternatively try if the factors are available on factordb. Anyways, once finished factoring, alpetron produces both the factors and the Euler’s totient phi which will be used to compute d d = pow(e,-1,phi) # on python3.8 # or gmpy2.invert(e,phi) m = pow(c,d,n) print(bytes.fromhex(hex(m)[2:]).decode()) And hurray, we have our flag flag{t0000_m4nyyyy_pr1m355555}","headline":"Redpwn 2020 Crypto - 4k-rsa","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - 4k-rsa - deuterium's blog</title>
 

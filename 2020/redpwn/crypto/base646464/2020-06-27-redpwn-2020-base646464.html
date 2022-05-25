@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-27T00:00:00+05:30","datePublished":"2020-06-27T00:00:00+05:30","description":"base646464 Description Encoding something multiple times makes it exponentially more secure! Files cipher.txt generate.js Lets take a look at generate.js, which reads const btoa = str =&gt; Buffer.from(str).toString(&#39;base64&#39;); const fs = require(&quot;fs&quot;); const flag = fs.readFileSync(&quot;flag.txt&quot;, &quot;utf8&quot;).trim(); let ret = flag; for(let i = 0; i &lt; 25; i++) ret = btoa(ret); fs.writeFileSync(&quot;cipher.txt&quot;, ret); The function btoa is basically string to its base64 encoding. The flag is encoded repetitively 25 times in a for loop. We just need to base64 decode it 25 times and we will get the flag. from base64 import b64decode with open(&#39;cipher.txt&#39;,&#39;r&#39;) as cipher_file: data = cipher_file.read() for i in range(25): data = b64decode(data) print(data) A cool sarcasm on bad crypto challenges in CTFs :) flag{l00ks_l1ke_a_l0t_of_64s}","headline":"Redpwn 2020 Crypto - base646464","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464"},"url":"https://deut-erium.github.io/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Redpwn 2020 Crypto - base646464 - deuterium's blog</title>
 

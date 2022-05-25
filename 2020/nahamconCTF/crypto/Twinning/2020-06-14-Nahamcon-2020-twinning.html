@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-14T00:00:00+05:30","datePublished":"2020-06-14T00:00:00+05:30","description":"Twinning The name of the challenge is a subtle hint towards Twin primes, i.e. the RSA primes p and q being twin primes, at a difference of two. How does that help? We can now easily factor n since we have another relation, namely q = p + 2 and p*q = N q^2 - q*p = N ( q - 1 )^2 = N + 1 q = sqrt( N + 1 ) + 1 p = sqrt( N + 1 ) - 1 One can easily solve a quadratic equation to find p Once p and q are found, rest is a piece of cake Although the time was not a concern, I still wrote a small script from pwn import remote import gmpy2 import re HOST, PORT = &quot;jh2i.com&quot;, 50013 REM = remote(HOST, PORT) data = REM.recvuntil(b&#39;What is the PIN?&#39;) print(data.decode()) e_n = re.search(b&#39;(\\d+),(\\d+)&#39;,data) e = int(e_n[1]) n = int(e_n[2]) PIN = int(re.search(b&#39;is (\\d+)&#39;,data)[1]) def factor(n,e): a = gmpy2.iroot(n+1,2)[0] phi = (a-2)*(a) return gmpy2.invert(e,phi) # returns d DECRYPTED_PIN = pow(PIN, factor(n,e), n) REM.sendline(str(DECRYPTED_PIN).encode()) print(REM.recvline().decode()) print(REM.recvline().decode()) print(REM.recvline().decode()) flag{thats_the_twinning_pin_to_win}","headline":"Nahamcon 2020 Crypto - Twinning","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning"},"url":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Nahamcon 2020 Crypto - Twinning - deuterium's blog</title>
 

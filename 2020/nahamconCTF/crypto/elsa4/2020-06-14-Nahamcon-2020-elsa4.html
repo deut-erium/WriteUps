@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-14T00:00:00+05:30","datePublished":"2020-06-14T00:00:00+05:30","description":"Elsa4 Apparently, its an instance of LC4 cipher. We are provided with a subtle hint Frozen in time which could mean random is seeded with the present time, confirmed by the fact that time is provided at the start of the challenge. Now, all we need to figure out is the length of nonce, however it is implemented. I also wrote encrypt, decryption_challenge, send_decryption utilities, which would encrypt a given message from server, ask for a decryption challenge and send the decryption of given decryption challenge respectively to the server. from pwn import remote import re import datetime import random import lc4 HOST, PORT = &quot;jh2i.com&quot;, 50014 REM = remote(HOST, PORT) initial_data = REM.recvuntil(b&#39;&gt;&#39;) print(initial_data.decode()) def get_timestamp(): hms = re.search(rb&#39;(\\d{2}):(\\d{2}):(\\d{2})&#39;, initial_data) ymd = re.search(rb&#39;(\\d{4})\\/(\\d{2})\\/(\\d{2})&#39;, initial_data) h, m, s = hms[1], hms[2], hms[3] y, mn, d = ymd[1], ymd[2], ymd[3] return map(int, tuple((y, mn, d, h, m, s))) timestamp = datetime.datetime(*get_timestamp()).timestamp() random.seed(int(timestamp)) nonce_length = 100 # some big number alphabet = &quot;#_23456789abcdefghijklmnopqrstuvwxyz&quot; nonce_chars = [] for _ in range(nonce_length): nonce_chars.extend(random.sample(alphabet, 1)) def encrypt(plaintext): REM.sendline(b&#39;1&#39;) REM.sendline(plaintext) data = REM.recvuntil(b&#39;&gt;&#39;) key = re.search( b&#39;Key = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)&#39;, data)[1] encrypted = re.search( b&#39;Encrypted = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)&#39;, data)[1] return key, encrypted def decryption_challenge(): REM.sendline(b&#39;2&#39;) data = REM.recvuntil(b&#39;Decrypted =&#39;) key = re.search( b&#39;Key = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)&#39;, data)[1] encrypted = re.search( b&#39;Encrypted = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)&#39;, data)[1] return key, encrypted def send_decryption(dec): REM.sendline(dec) data = REM.recvuntil(b&#39;&gt;&#39;) print(data.decode()) The only concern I am left with is HOW IS THE NONCE USED!!? To be honest, I am fed up of all the snake oil in ctf challenges. Take the challenge, give out the source, make it challenging :smile:","headline":"Nahamcon 2020 Crypto - elsa4","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4"},"url":"https://deut-erium.github.io/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Nahamcon 2020 Crypto - elsa4 - deuterium's blog</title>
 

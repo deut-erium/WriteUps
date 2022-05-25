@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-06T00:00:00+05:30","datePublished":"2020-06-06T00:00:00+05:30","description":"Affina and the Quadratics We are given this image, and hinted towards the name Affina. With a description reading Affina was struggling with her graphing quadratics homework. Bored, she decided to cheat by using Desmos to graph the given quadratic, and then realized that she could use it to send messages to her best friend without anyone noticing! She sent the following message to her friend: 7rr4p6_4e_4ph6bo8hap2? Can you decrypt it using the image of the quadratic Affina used? Note: the flag should make relative sense. The task is to GUESS how Affine cipher is used with respect to the quadratic (x+1)*(x+2) = 0 After having many GUESSES, I GUESSED that it could be simple affine cipher with mapping 3x+2 mod 26 as (x+1)*(x+2) = x^2 + 3x + 2 as hey!, why should it be quadratic right? But dont we have letters too? So I GUESSED we shouldnt care about them for now. What about underscores? GUESS that they are just word-delimiters. c = 3x + 2 mod 26 c - 2 = 3x mod 26 3^-1 * (c - 2) = x mod 26 9c - 18 = x mod 26 x = 9c + 8 mod 26 ct = &quot;7rr4p6_4e_4ph6bo8hap2&quot; alpha = &quot;rrpephbohap&quot; ct26 = [ chr(i) - 97 for i in alpha] pt = [ chr((9*c + 8)%26 + 97) for c in ct26 ] putting it in places, we get 7ff4n6_4s_4nt6re8tin2 Now why GUESS that number are encoded with the same affine cipher modulo when you can easily GUESS the flag is 4ff1n3_1s_1nt3re5tin6 :smile:","headline":"HSCTF 2020 Crypto - Affina and the quadratics","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics"},"url":"https://deut-erium.github.io/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>HSCTF 2020 Crypto - Affina and the quadratics - deuterium's blog</title>
 

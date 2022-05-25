@@ -18,7 +18,16 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-14T00:00:00+05:30","datePublished":"2020-06-14T00:00:00+05:30","description":"Docxor Getting hints from the name, one could tell, it is XOR and its about a doc. Still, first thing to consider is running the file command to see whats the homework file is about file homework homework: data Cool! this means, the homework file is simply XOR encryption of a .doc file with 4 byte key. But hey that should ring bells since the first few bytes are file signature also called magic bytes sometimes. Using the magic bytes, we can recover the xor key and hence the full document after xoring with the xor key. The magic bytes we seek are 50 4B 03 04. The first four bytes of the homework are 0a0a 9abf, the xor key should be 0a0a9abf ^ 504b0304 = 5a4199bb Lets write a quick script. from pwn import xor with open(&#39;homework&#39;, &#39;rb&#39;) as homework_file: homework_data = homework_file.read() HEADER = homework_data[0:4] MAGIC = b&quot;\\x50\\x4B\\x03\\x04&quot; XOR_KEY = xor(HEADER, MAGIC) with open(&#39;decrypted.doc&#39;, &#39;wb&#39;) as decrypted: decrypted.write(xor(XOR_KEY, homework_data)) This produces decrypted.doc which when opened looks like flag{xor_is_not_for_security}","headline":"Nahamcon 2020 Crypto - Docxor","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Docxor/2020-06-14-Nahamcon-2020-Docxor"},"url":"https://deut-erium.github.io/2020/nahamconCTF/crypto/Docxor/2020-06-14-Nahamcon-2020-Docxor"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <head><meta charset="utf-8">
+  <head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161905683-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-161905683-1');
+		
+	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Nahamcon 2020 Crypto - Docxor - deuterium's blog</title>
 
