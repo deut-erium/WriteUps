@@ -36,7 +36,7 @@ header:
 
   - titles:
       # @start locale config
-      en      : &EN       About
+      en      : &EN       About WriteUps
       en-GB   : *EN
       en-US   : *EN
       en-CA   : *EN
