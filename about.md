@@ -1,66 +1,69 @@
 ---
-layout: article
-tags: welcome introduction
-excerpt_separator: <!--more-->
-titles:
-  # @start locale config
-  en      : &EN       About
-  en-GB   : *EN
-  en-US   : *EN
-  en-CA   : *EN
-  en-AU   : *EN
-  zh-Hans : &ZH_HANS  关于
-  zh      : *ZH_HANS
-  zh-CN   : *ZH_HANS
-  zh-SG   : *ZH_HANS
-  zh-Hant : &ZH_HANT  關於
-  zh-TW   : *ZH_HANT
-  zh-HK   : *ZH_HANT
-  ko      : &KO       소개
-  ko-KR   : *KO
-  fr      : &FR       À propos
-  fr-BE   : *FR
-  fr-CA   : *FR
-  fr-CH   : *FR
-  fr-FR   : *FR
-  fr-LU   : *FR
-  # @end locale config
-key: page-about
+title: "About WriteUps"
+tags: writeups usage
+key: writeupsasdfasdf
 aside:
   toc: true
 sidebar:
   nav: aboutnav
+author: deuterium
+layout: article
+full_width: false
+mathjax: false
+mathjax_autoNumber: false
+mermaid: false
+chart: false
+show_edit_on_github: true
+comment: false
+show_author_profile: true
+excerpt_separator: <!--more-->
 ---
 
-<div class="item">
-  <div class="item__image">
-    <img class="image image--lg" src="https://deut-erium.github.io/Circle-limit-IV.jpg"/>
-  </div>
-  <div class="item__content">
-    <p>
-      Hi, I am Himanshu Sheoran (alias deuterium), I am currently a senior undergradute at Indian Institute Of Technology, Bombay pursuing
-      Bachelor's Of Technology in Computer Science and Engineering with a major crush on cybersecurity.
-    </p>
-    <p>
-      I have been playing a lot of <a href="https://deut-erium.github.io/ctf-tutorials/2021/04/04/What-Are-CTFs.html">CTFs</a>, nowadays with <a href="https://ctftime.org/team/116018">zh3r0</a> 
-      where I can be found doing crypto tasks. My areas of interests include Cryptography, Reverse Engineering, Binary Exploitation, SMT/SAT solvers and programming in general.
-    </p>
-    <p>
-        In case you find some deuterium with a profile picture, with the same love for escher, <a href="https://deut-erium.github.io/pyfractal/">fractals</a>) and metal, its probably me.
-    </p>
-  </div>
-</div>
+<!--more-->
 
-This personal blog is aimed towards documenting my interests, research and interesting finds.
+This page is concerned about explaining how to use the writeups
 
-## CV
-Enthusiastic employer with interest evoking challenging problems? [Hire Me]()
+## [GitHub Repo](https://github.com/deut-erium/WriteUps)
+I try to make all my writeups with love, if you loved them too, I would be
+glad if you left some stars :D
 
-## Contact
-Always feel free to DM(direct message) on [discord](https://discord.com/new), Username: deuterium#1689.
-Or any other convenient medium of choice linked below.
 
-HACK THE PLANET :metal: :metal: :metal:
+All the blogs (and after a lot of pain, links too!) here are in-sync with the 
+### [GitHub repo _posts](https://github.com/deut-erium/WriteUps/tree/master/_posts)
 
-## PS: [DO NOT CLICK](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+The content is organised in the hierarchy
+- year (2020, 2021 etc)
+    - ctf_name (e.g. cyber_apocalypse)
+      - category (e.g. crypto)
+        - challenge_name
+          - description.md
+          - DATE-challenge_name.md
+          - solve.py (mostly or whatever solve code)
+          - source files
+
+And so will be a path to writeup  
+`https://deut-erium.github.io/WriteUps/year/ctf_name/category/challenge_name/link`  
+
+I will try to make all the solve scripts and challenge files downloadable  
+by clicking in the links on the writeup so as to ease setup and testing the  
+solution scripts!  
+
+### [GitHub repo _drafts](https://github.com/deut-erium/WriteUps/tree/master/_drafts)  
+Should contain the same hierarchy as the writeups post. This path should  
+contain all the files I worked with in a CTF, including solved an unsolved  
+challenges.
+
+If you are in luck, you can definitely find my dirty scripts and solutions  
+which I wanted to but felt too lazy writing up!
+
+- year (2020, 2021 etc)
+    - ctf_name (e.g. cyber_apocalypse)
+      - category (e.g. crypto)
+        - challenge_name
+          - description.md
+          - DATE-challenge_name.md (most probably not)
+          - solve.py (typically trash script)
+          - source files
+
+
 
