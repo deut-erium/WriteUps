@@ -1,261 +1,1172 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>1.00</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/about.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=2022</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=2021</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=2020</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/ctf-tutorials/</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/ramblings/</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/pyfractal/</loc>
+  <lastmod>2021-08-11T11:37:24+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/Mal-det-cal/</loc>
+  <lastmod>2020-08-09T06:51:51+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95</loc>
-<lastmod>2020-06-06T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/hacking_tools/</loc>
+  <lastmod>2020-06-14T10:03:38+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/Cryptographer/2020-06-08-BATPWN-2020-Cryptographer</loc>
-<lastmod>2020-06-08T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/04/08/contributions.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/2020-06-08-BATPWN-Mick-Maybe</loc>
-<lastmod>2020-06-08T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes</loc>
-<lastmod>2020-06-08T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=challenges</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/01/2020-06-09-RACTF-2020-01</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/07/25/wiki-mersenne.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/02/2020-06-09-RACTF-2020-02</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=mersenne_twister</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/03/2020-06-09-RACTF-2020-03</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=zh3r0_ctf2</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/04/2020-06-09-RACTF-2020-04</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=crypto</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/05/2020-06-09-RACTF-2020-05</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/07/25/untwist-me.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/06/2020-06-09-RACTF-2020-06</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/07/25/mersenne-seed-recovery.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/B007L36%20CRYP70/.%204641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/07/25/injection.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/BOO7l3G%20CRYP70/2020-06-09-RACTF-2020-BOO7l3G-CRYP70</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=injection</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/04/08/welcome.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/Mysterious%20Masquerading%20Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=welcome</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/Really%20Secret%20Algorithm/2020-06-09-RACTF-2020-Really-Secret-Algorithm</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=introduction</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/Really%20Simple%20Algorithm/2020-06-09-RACTF-2020-Really-Simple-Algorithm</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/archive.html?tag=contribution</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/Really%20Small%20Algorithm/2020-06-09-RACTF-2020-Really-Small-Algorithm</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/2021/04/08/challenges.html</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/ractf/crypto/Really%20Speedy%20Algorithm/2020-06-09-RACTF-2020-Really-Speedy-Algorithm</loc>
-<lastmod>2020-06-09T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/ctf-tutorials/2021/04/04/What-Are-CTFs.html</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/December/2020-06-14-Nahamcon-2020-December</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/assets/resume.pdf</loc>
+  <lastmod>2022-05-25T22:45:32+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Docxor/2020-06-14-Nahamcon-2020-Docxor</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/about.html</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Ooo-la-la/2020-06-14-Nahamcon-2020-Ooo-la-la</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Raspberry/2020-06-14-Nahamcon-2020-Raspberry</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=HTB</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=cyber_apocalypse</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/Unvreakable%20Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=cryptography</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4</loc>
-<lastmod>2020-06-14T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=hashcollision</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/Analyse%20Me/2020-06-18-zh3r0-2020-Analyze-Me</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=z3</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/Double%20Fish/2020-06-18-zh3r0-2020-Double-Fish</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=cryptanalysis</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/Hastad's%20message/2020-06-18-zh3r0-2020-Hastads-Message</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=netcat</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2022/sdctf/crypto/tasty_crypto_roll/2022-05-10-SDCTF-2022-Tasty-Crypto-Roll</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/RSA-Warmup/2020-06-18-zh3r0-2020-RSA-warmup</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=SDCTF</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/2020-06-18-zh3r0-2020-Uncipher-Me</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=AES</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related</loc>
-<lastmod>2020-06-18T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=substitution</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/zh3r0/crypto/gboad%20maddy/2020-06-19-zh3r0-2020-gboad-maddy</loc>
-<lastmod>2020-06-19T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=permutation</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/12-shades-of-redpwn/2020-06-27-redpwn-2020-12-shades-of-redpwn</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/N-AES/2020-07-13-rgbCTF-2020-N-AES</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=rgbCTF</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=python_bytes</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=bruteforce</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2020/tctf/crypto/babyring/2020-06-30-TCTF-2020-Quals-babyring</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/pseudo-key/2020-06-27-redpwn-2020-pseudo-key</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=0CTF</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/redpwn/crypto/worst-pw-manager/2020-06-27-redpwn-2020-worst-pw-manager</loc>
-<lastmod>2020-06-27T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=sagemath</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/tctf/crypto/babyring/2020-06-30-TCTF-2020-Quals-babyring</loc>
-<lastmod>2020-06-30T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=rc4</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/Adequate%20Encryption%20Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard</loc>
-<lastmod>2020-07-13T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=PoW</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2020/rgbctf/crypto/N-AES/2020-07-13-rgbCTF-2020-N-AES</loc>
-<lastmod>2020-07-13T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=gaussian_elimination</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2022/sdctf/crypto/tasty_crypto_roll/2022-05-10-SDCTF-2022-Tasty-Crypto-Roll</loc>
-<lastmod>2022-05-10T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=GF2</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration</loc>
-<lastmod>2022-05-21T00:00:00+05:30</lastmod>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/worst-pw-manager/2020-06-27-redpwn-2020-worst-pw-manager</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/about</loc>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=redpwn</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/archive</loc>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=xor</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/pseudo-key/2020-06-27-redpwn-2020-pseudo-key</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page2/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=vignere</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page3/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/primimity/2020-06-27-redpwn-2020-primimity</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page4/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=rsa</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page5/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=close_primes</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page6/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/page2/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page7/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/page3/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-<loc>https://deut-erium.github.io/WriteUps/WriteUps/page8/</loc>
+  <loc>https://deut-erium.github.io/WriteUps/page4/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/page8/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/12-shades-of-redpwn/2020-06-27-redpwn-2020-12-shades-of-redpwn</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/4k-rsa/2020-06-27-redpwn-2020-4k-rsa</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/base646464/2020-06-27-redpwn-2020-base646464</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/gboad%20maddy/2020-06-19-zh3r0-2020-gboad-maddy</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Analyse%20Me/2020-06-18-zh3r0-2020-Analyze-Me</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Double%20Fish/2020-06-18-zh3r0-2020-Double-Fish</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Hastad's%20message/2020-06-18-zh3r0-2020-Hastads-Message</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/RSA-Warmup/2020-06-18-zh3r0-2020-RSA-warmup</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/2020-06-18-zh3r0-2020-Uncipher-Me</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/We%20are%20related/2020-06-18-zh3r0-2020-We-Are-Related</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/December/2020-06-14-Nahamcon-2020-December</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Docxor/2020-06-14-Nahamcon-2020-Docxor</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Homecooked/2020-06-14-Nahamcon-2020-Homecooked</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Ooo-la-la/2020-06-14-Nahamcon-2020-Ooo-la-la</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Raspberry/2020-06-14-Nahamcon-2020-Raspberry</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Unvreakable%20Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/01/2020-06-09-RACTF-2020-01</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/02/2020-06-09-RACTF-2020-02</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/03/2020-06-09-RACTF-2020-03</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/04/2020-06-09-RACTF-2020-04</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/05/2020-06-09-RACTF-2020-05</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/06/2020-06-09-RACTF-2020-06</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/BOO7l3G%20CRYP70/2020-06-09-RACTF-2020-BOO7l3G-CRYP70</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/It's%20as%20easy%20as%20access=0000/2020-06-09-RACTF-2020-Its-as-easy-as-access-0000</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious%20Masquerading%20Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Really%20Secret%20Algorithm/2020-06-09-RACTF-2020-Really-Secret-Algorithm</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Really%20Simple%20Algorithm/2020-06-09-RACTF-2020-Really-Simple-Algorithm</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Really%20Small%20Algorithm/2020-06-09-RACTF-2020-Really-Small-Algorithm</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Really%20Speedy%20Algorithm/2020-06-09-RACTF-2020-Really-Speedy-Algorithm</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/Cryptographer/2020-06-08-BATPWN-2020-Cryptographer</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/2020-06-08-BATPWN-Mick-Maybe</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/prefixes/2020-06-08-Batpwn-2020-Prefixes</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Affina%20and%20the%20Quadratics/2020-06-06-HSCTF-2020-Affina-and-the-quadratics</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Chonky%20E/2020-06-06-HSCTF-2020-Chonky-E</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Extremely%20Complex%20Challenge/2020-06-06-HSCTF-2020-Extremely-Complex-Challenge</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Morbid/2020-06-06-HSCTF-2020-Morbid</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Randomization%201/2020-06-06-HSCTF-2020-Randomization-1</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Randomization%202/2020-06-06-HSCTF-2020-Crypto-Randomization-2</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Smol%20E/2020-06-06-HSCTF-2020-Smol-E</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/Unexpected/2020-06-06-HSCTF-2020-unexpected</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/XORed/2020-06-06-HSCTF-2020-XORed</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/2020-06-06-HSCTF-2020-xkcd-2247-v2</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/miscellaneous/N-95/2020-06-06-HSCTF-2020-Misc-N95</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/2020/08/01/Hacking-Sites.html</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/2021/07/04/what-are-assignments.html</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/2021/04/04/contributions.html</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=introduction</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=assignment</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=contribution</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=ctf</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=wargames</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=ctfs</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=hacking</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ctf-tutorials/archive.html?tag=cybersecurity</loc>
+  <lastmod>2022-05-27T22:01:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/about.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/2022/02/05/using-whatsapp-as-notes.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=experiment</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/2022/02/04/randoblurry-update.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=wordgame</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=randoblurry</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=ponder</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/2022/02/03/randoblurry-test.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=testing</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=dialogue</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/2022/02/02/randoblurry0001.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/2022/02/01/welcome.html</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=poo-i-try</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/ramblings/archive.html?tag=short</loc>
+  <lastmod>2022-02-20T23:00:26+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/hacking_tools/features.html</loc>
+  <lastmod>2020-06-14T10:03:38+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/pseudo-key/pseudo-key-output.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/primimity/primimity-public-key.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=leakage</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=javascript</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=base64</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=alpertron</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=ECM</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=RSA</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=known_plaintext</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=guess</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=base12</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=zh3r0</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=small_e</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=fernet</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=encoding</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=small_prime</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=hastad_broadcast</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=BlowFish</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=nahamcon</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=LC4</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=twin_prime</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=small_factors</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=prime</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=palindrome</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=magic</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=DES</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=weak_keys</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=RACTF</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/page5/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=HSCTF</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=affine</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=classical</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/page7/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/page6/</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/4k-rsa/4k-rsa-public-key.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/encrypted.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/base646464/cipher.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Double%20Fish/chall.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Mix/Mix/chall_encrypted.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Mix/Mix/flag.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/ct.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/key.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/key_2.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/zh3r0/crypto/Uncipher%20Me/key_3.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Docxor/decrypted.doc</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Ooo-la-la/prompt.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Raspberry/prompt.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/nahamconCTF/crypto/Unvreakable%20Vase/prompt.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=quipquip</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/01/decrypted.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/02/decrypted.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=railfence</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/03/decrypted.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=transposition</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=bifid</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=gromark</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=bootleg</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=choosen_plaintext</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=invariant</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=CBC</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=bit_flipping</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious%20Masquerading%20Message/id_rsa.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=python_walrus</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=BATPWN</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=timeseed</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=Bsides</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/Cryptographer/noob.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/solved.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/batpwn/crypto/M-ick%20Maybe/mobydick.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=golang</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=schmidtsamoa</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=bonehdurfee</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=big_e</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=ECC</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=ECDLP</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=morse</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=reversing</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=LCG</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=franklinreiter</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=coppersmith</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=GCD</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=hillcipher</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=matrixinverse</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/HillCT.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/2020/HSCTF/crypto/xkcd.com%202247%20v2/plaintext.txt</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=miscellaneous</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=QR</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://deut-erium.github.io/WriteUps/archive.html?tag=errorcorrection</loc>
+  <lastmod>2022-05-25T23:49:56+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
 </urlset>
