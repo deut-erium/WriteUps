@@ -1,0 +1,3 @@
+key = [2,1,3,5,4]
+
+ciphertext = RT1KC _YH43 3DRW_ T1HP_ R3M7U TA1N0
