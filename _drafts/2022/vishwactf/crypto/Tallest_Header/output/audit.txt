@@ -1,0 +1,23 @@
+Foremost version 1.5.7 by Jesse Kornblum, Kris Kendall, and Nick Mikus
+Audit File
+
+Foremost started at Sat Mar 19 20:11:07 2022
+Invocation: foremost file.extension 
+Output directory: /mnt/d/files/n00b/ctf-writeups-2022/CTFS-2022/vishwactf/crypto/Tallest_Header/output
+Configuration file: /etc/foremost.conf
+------------------------------------------------------------------
+File: file.extension
+Start: Sat Mar 19 20:11:07 2022
+Length: 263 KB (270112 bytes)
+ 
+Num	 Name (bs=512)	       Size	 File Offset	 Comment 
+
+0:	00000526.zip 	      468 B 	     269644 	 
+Finish: Sat Mar 19 20:11:07 2022
+
+1 FILES EXTRACTED
+	
+zip:= 1
+------------------------------------------------------------------
+
+Foremost finished at Sat Mar 19 20:11:07 2022

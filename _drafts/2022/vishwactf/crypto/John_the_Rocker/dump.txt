@@ -1,0 +1,7 @@
+Using default input encoding: UTF-8
+Loaded 25 password hashes with 25 different salts (cryptoSafe [AES-256-CBC])
+Will run 15 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+Warning: UTF-16 BOM seen in wordlist. File may not be read properly unless you re-encode it
+0g 0:00:00:00 DONE (2022-03-19 19:36) 0g/s 872116p/s 21802Kc/s 21802KC/s ã..á∞ÉÅΩÃ∑≠V
+Session completed. 
