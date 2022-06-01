@@ -193,7 +193,7 @@ REM.send(b'0') #v any v would do the job ;)
 REM.recv()
 #flag{babbbcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxby}
 ```
-Unorganized code in files [solve.py](solve.py), [part2.py](part2.py) and [test.py](test.py)
+Unorganized code in files [solve.py](solve.py), [part2.sage](part2.sage) and [test.py](test.py)
 
 ### flag{babbbcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxby}
 
