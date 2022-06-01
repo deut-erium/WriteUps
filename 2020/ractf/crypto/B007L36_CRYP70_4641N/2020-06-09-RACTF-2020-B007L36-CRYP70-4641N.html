@@ -1,22 +1,21 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Page 3 of 8 for CTF Writeups | Himanshu Sheoran’s blog on tech, security, CTFs and cryptography</title>
+<title>RACTF 2020 Crypto - B007L36 CRYP70 A641N | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.2.2" />
-<meta property="og:title" content="CTF Writeups" />
+<meta property="og:title" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and computer science in general." />
-<meta property="og:description" content="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and computer science in general." />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/page3/" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/page3/" />
+<meta name="description" content="B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\xc3\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\xc3\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\n\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!" />
+<meta property="og:description" content="B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\xc3\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\xc3\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\n\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!" />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N" />
 <meta property="og:site_name" content="CTF Writeups" />
-<meta property="og:type" content="website" />
-<link rel="prev" href="https://deut-erium.github.io/WriteUps/page2" />
-<link rel="next" href="https://deut-erium.github.io/WriteUps/page4" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-09T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="CTF Writeups" />
+<meta property="twitter:title" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and computer science in general.","headline":"CTF Writeups","url":"https://deut-erium.github.io/WriteUps/page3/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"B007L36 CRYP70… 4641N After finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:- As you continue your pentest of MEGACORP, you make your way to an admin-only subnet of the network. There, you find yet another custom crypto implementation. You also previously found this zip file on a user&#39;s desktop. Solving this may be the last step to gaining full access to the company&#39;s network And encryption_service.zip, the contents of which are :- ciphertext.txt w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6 rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5 xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc Odw6nDl8KP plaintext.txt To test the encryption service, encrypt this file with your company issued secret key and ensure that it results in the ciphertext.txt file. Aand a password.txt w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E= Lets first begin with by checking some stuff like we did in B007l3G CRYP70 with the encryption service Please enter the secret key to encrypt the data with: a Please enter the data that you would like to encrypt: a Your encrypted message is: w4I= Please enter the secret key to encrypt the data with: b Please enter the data that you would like to encrypt: a Your encrypted message is: w4M= Notice the encrypted message appears to be base64 encoded. Lets check the decoded values from base64 import b64decode as d64 d64(&#39;w4M=&#39;) # b&#39;\\xc3\\x83&#39; d64(&#39;w4I=&#39;) # b&#39;\\xc3\\x82&#39; EWW, looks odd probably because of unicode. Lets deal with string-objects instead of byte-objects by simply calling decode() from base64 import b64decode as d64 d64(&#39;w4M=&#39;).decode() # &#39;Ã&#39; d64(&#39;w4I=&#39;).decode() # &#39;Â&#39; ord(&#39;Ã&#39;) # 195 ord(&#39;Â&#39;) # 194 Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something Very Linear about the encryption. To help with encryption process, I created a small helper function encryptwhich calls encrypt on the server and return the ord values of base64 decoded string. from pwn import remote from base64 import b64decode as d64 from base64 import b64encode as e64 HOST, PORT = &quot;95.216.233.106&quot;, 60246 with open(&#39;password.txt&#39;, &#39;r&#39;) as password_file: password = d64(password_file.read().strip()).decode() with open(&#39;ciphertext.txt&#39;, &#39;r&#39;) as ciphertext_file: ct = d64(ciphertext_file.read().strip()).decode() with open(&#39;plaintext.txt&#39;, &#39;r&#39;) as plaintext_file: pt = plaintext_file.read().strip() REM = remote(HOST, PORT) print(REM.recvline()) print(REM.recvline()) def encrypt(pt, key): REM.recvuntil(b&#39;data with:&#39;) REM.sendline(key) REM.sendline(pt) data = REM.recvuntil(b&#39;\\n\\n&#39;) encrypted = data.split(b&#39;message is: &#39;)[-1].strip() return [ord(i) for i in d64(encrypted).decode()] Lets play around a little bit more… &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;a&#39;) [194, 194, 194, 194] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;ab&#39;) [194, 195, 194, 195] &gt;&gt;&gt; encrypt(b&#39;aaaa&#39;,&#39;abcd&#39;) [194, 195, 196, 197] &gt;&gt;&gt; encrypt(b&#39;abcd&#39;,&#39;aaaa&#39;) [194, 195, 196, 197] We can make the following observations :- key is repeated if plaintext is longer than the key The encryption is changed only by 1 on varying either key or plaintext by 1 The key, plaintext and ciphertext are related just by an addition modulo 256 So, all we need to do now is to figure out what the provided files mean. Let us try checking the key with which ciphertext.txt and plaintext.txt are related. ct_arr = [ord(i) for i in ct] pt_arr = [ord(i) for i in pt] diff_arr = [ct_arr[i] - pt_arr[i] for i in range(len(ct_arr))] print(&quot;&quot;.join(chr(i) for i in diff_arr)) ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra YES, it indeed verifies all our hypothesis and we now know the company issued secret key is ractf{n0t_th3_fl49_y3t} Lets quickly decrypt the contents of password.txt with the key key = &quot;ractf{n0t_th3_fl49_y3t}&quot; flag = &quot;&quot;.join( chr(ord(password[i]) - ord(key[i%len(key)])) for i in range(len(password)) ) print(flag) And we finally get our flag ractf{f00l_m3_7w1c3_5h4m3_0n_m3} CHEERS YOU ALL!","headline":"RACTF 2020 Crypto - B007L36 CRYP70 A641N","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"},"url":"https://deut-erium.github.io/WriteUps/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><!-- Global site tag (gtag.js) - Google Analytics -->
@@ -39,11 +38,10 @@
 		
 	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>About - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - B007L36 CRYP70 A641N - CTF Writeups</title>
 
-<meta name="description" content="Himanshu Sheoran is a nerd typically writing about cryptography, Capture The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and  computer science in general.
-">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/page3/"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<meta name="description" content="B007L36 CRYP70… 4641NAfter finally solving B007l3G CRYP70, we are again presented with another variant. The description reads as follows:-As you continue you...">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
@@ -304,7 +302,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">About</li><li class="toc-h2"><a href="https://deut-erium.github.io/about.html">About Me</a></li><li class="toc-h2"><a href="https://deut-erium.github.io/">Blog Home</a></li><li class="toc-h1">CTFs</li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2022">CTFs-2022</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2021">CTFs-2021</a></li><li class="toc-h2"><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -1942,333 +1940,240 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
         <ul><li class="navigation__item"><a href="https://github.com/deut-erium/WriteUps/tree/master/_posts">GitHub</a></li><li class="navigation__item"><a href="/WriteUps/archive.html">Archive</a></li><li class="navigation__item"><a href="/WriteUps/about.html">About WriteUps</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
-</div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
+</div><div class="page__content"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>About</h1></header><meta itemprop="headline" content="About"><meta itemprop="author" content="deuterium"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/RSA-Warmup/2020-06-18-zh3r0-2020-RSA-warmup"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - RSA warmup</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">RSA-Warmup
-
-Description
-RSA is one of the first public-key cryptosystems and is widely used for secure data transmission. In such a cryptosystem, the encryption key is public and distinct from the decryption key which is kept secret.
-You all know this :p
-here is a warmup question.
-
-nc crypto.zh3r0.ml 8451
-
-Author : Finch
-
-
-Lets quickly net cat
-n...</div><p><a href="/WriteUps/2020/zh3r0/crypto/RSA-Warmup/2020-06-18-zh3r0-2020-RSA-warmup">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>RACTF 2020 Crypto - B007L36 CRYP70 A641N</h1></header><span class="split-space">&nbsp;</span>
+          <a class="edit-on-github"
+            title="Edit on Github"
+            href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/ractf/crypto/B007L36_CRYP70_4641N/2020-06-09-RACTF-2020-B007L36-CRYP70-4641N.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
+                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=2020">2020</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
+                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=bootleg">bootleg</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=netcat">netcat</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=small_prime">small_prime</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,RSA,netcat,small_prime"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Mix</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Mix
+                href="/WriteUps/archive.html?tag=choosen_plaintext">choosen_plaintext</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
+    <meta itemprop="keywords" content="RACTF,2020,cryptography,bootleg,netcat,choosen_plaintext"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-Description
-At the BASEment no. 65536, A man is irritated with SHIFT key in his KEYBOARD as it's a sticky key, A kid is having chocolate icecream with a SPOON.
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h1 id="b007l36-cryp70-4641n">B007L36 CRYP70… 4641N</h1>
 
-Author : Whit3_D3vi1
+<p>After finally solving <a href="https://github.com/deut-erium/WriteUps/tree/master/ractf/crypto/BOO7l3G%20CRYP70">B007l3G CRYP70</a>, we are again presented with another variant. The description reads as follows:-</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>As you continue your pentest of MEGACORP, you make your way to an 
+admin-only subnet of the network. There, you find yet another custom
+crypto implementation. You also previously found this zip file on a 
+user's desktop. Solving this may be the last step to gaining full 
+access to the company's network
+</code></pre></div></div>
+<p>And <a href="encryption_service.zip">encryption_service.zip</a>, the contents of which are :-</p>
 
-Challenge Files
+<p><a href="ciphertext.txt">ciphertext.txt</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>w4bDkMKDw6jDi8Ouw6JQw6jDh8OZwojCmMONw4nDnsKtwqnDk8OiwqLDosKdw6XDhsOVw6
+rDj8Oew5NcwpTDhMOiw4vCpcOYw5bDoFTCrcOHw6LCpsKUw6PDm8ONw4jClMOdw6TDosKY
+wpTDmMOjw53CpX/DicObwqHCqcOAw6fCrMKUw6bDpcOUw5jDmcOKwpvDocKVw5fDkcOZw5
+xTw4rDi8OlVMKaw43DnVPDmcOrw6XDlsOVw5nChsOvw5bCkcOof8Odw5xTw5HDi8OfwqnC
+pcOTw6xTw53Dq8KSw5XDi8OZwobDnsOXwqDDnMOEw6bDnMKYw5fDmsKawqjCscOTwpnCmc
+Odw6nDl8KP
+</code></pre></div></div>
+<p><a href="plaintext.txt">plaintext.txt</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>To test the encryption service, encrypt this file with your company 
+issued secret key and ensure that it results in the ciphertext.txt file.
+</code></pre></div></div>
+<p>Aand a <a href="password.txt">password.txt</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>w6TDgsOGw6jDjMO2w5RgwqTDi8OTw5Vmwr7CncOjZcKcwpLDmGjDnMKxw5/ClMOCwqTDlMOaw5tjw7E=
+</code></pre></div></div>
 
-  Mix.zip
-    
-      Mix/chall_encrypted.txt
-      Mix/flag.txt
-    
-  
+<p>Lets first begin with by checking some stuff like we did in <a href="">B007l3G CRYP70</a> with the encryption service</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Please enter the secret key to encrypt the data with: a
+Please enter the data that you would like to encrypt: a
+Your encrypted message is: w4I=
 
+Please enter the secret key to encrypt the data with: b
+Please enter the data that you would like to encrypt: a
+Your encrypted message is: w4M=
+</code></pre></div></div>
+<p>Notice the encrypted message appears to be base64 encoded.<br />
+Lets check the decoded values</p>
 
-flag.txt reads
-If you opened this then you are a n00b
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="n">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">)</span>
+<span class="c1"># b'\xc3\x83'
+</span><span class="n">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">)</span>
+<span class="c1"># b'\xc3\x82'
+</span></code></pre></div></div>
+<p>EWW, looks odd probably because of <a href="https://en.wikipedia.org/wiki/Unicode">unicode</a>. Lets deal with string-objects instead of byte-objects by simply calling <code class="language-plaintext highlighter-rouge">decode()</code></p>
 
-HAHA VERY FU...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Mix/2020-06-18-zh3r0-2020-Mix">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=encoding">encoding</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=guess">guess</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,encoding,guess"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Hastads_message/2020-06-18-zh3r0-2020-Hastads-Message"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Hastads Message</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Hastad’s message
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="n">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="c1"># 'Ã'
+</span><span class="n">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<span class="c1"># 'Â'
+</span><span class="nb">ord</span><span class="p">(</span><span class="s">'Ã'</span><span class="p">)</span>
+<span class="c1"># 195
+</span><span class="nb">ord</span><span class="p">(</span><span class="s">'Â'</span><span class="p">)</span>
+<span class="c1"># 194
+</span></code></pre></div></div>
 
-Description
-My friend Hastad send me a message but I am not able to read it. Only thing I know is its different each time.
+<p>Hehe, we start getting a hint already, changing the key by 1, encryption changes by 1. There is probably something <em>Very Linear</em> about the encryption.</p>
 
-nc crypto.zh3r0.ml 7419
+<p>To help with encryption process, I created a small helper function <code class="language-plaintext highlighter-rouge">encrypt</code>which calls encrypt on the server and return the <code class="language-plaintext highlighter-rouge">ord</code> values of base64 decoded string.</p>
 
-Author : Finch
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span> <span class="k">as</span> <span class="n">e64</span>
 
-Lets see what happens on netcatting the server
-nc crypto.zh3r0.ml 7419
-N: 239609496311365490105807093714474593207717229906416564692897157101422954951249486211586878...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Hastads_message/2020-06-18-zh3r0-2020-Hastads-Message">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=hastad_broadcast">hastad_broadcast</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,RSA,netcat,hastad_broadcast"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Double_fish/2020-06-18-zh3r0-2020-Double-Fish"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Double Fish</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Double Fish
+<span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"95.216.233.106"</span><span class="p">,</span> <span class="mi">60246</span>
 
-Description
-There two fishes in the Xander's Operative Register
-A flag is waiting for you when you catch both.
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'password.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">password_file</span><span class="p">:</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">d64</span><span class="p">(</span><span class="n">password_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span>
 
-_0m\K2!2%\ggrdups\vd~gq
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'ciphertext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ciphertext_file</span><span class="p">:</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">d64</span><span class="p">(</span><span class="n">ciphertext_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span>
 
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'plaintext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">plaintext_file</span><span class="p">:</span>
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">plaintext_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
 
-Author : Finch
+<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">())</span>
 
+<span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'data with:'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">)</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'message is: '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">d64</span><span class="p">(</span><span class="n">encrypted</span><span class="p">).</span><span class="n">decode</span><span class="p">()]</span>
+</code></pre></div></div>
 
-Challenge Files
+<p>Lets play around a little bit more…</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'a'</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'ab'</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'abcd'</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">197</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'abcd'</span><span class="p">,</span><span class="s">'aaaa'</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">197</span><span class="p">]</span>
+</code></pre></div></div>
+<p>We can make the following observations :-</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">key</code> is repeated if <code class="language-plaintext highlighter-rouge">plaintext</code> is longer than the <code class="language-plaintext highlighter-rouge">key</code></li>
+  <li>The encryption is changed only by 1 on varying either <code class="language-plaintext highlighter-rouge">key</code> or <code class="language-plaintext highlighter-rouge">plaintext</code> by 1</li>
+  <li>The <code class="language-plaintext highlighter-rouge">key</code>, <code class="language-plaintext highlighter-rouge">plaintext</code> and <code class="language-plaintext highlighter-rouge">ciphertext</code> are related just by an addition modulo 256</li>
+</ul>
 
-  chall.txt
+<p>So, all we need to do now is to figure out what the provided files mean.<br />
+Let us try checking the key with which <a href="ciphertext.txt">ciphertext.txt</a> and <a href="plaintext.txt">plaintext.txt</a> are related.</p>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">]</span>
+<span class="n">pt_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">]</span>
+<span class="n">diff_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct_arr</span><span class="p">))]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">diff_arr</span><span class="p">))</span>
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra</code></p>
 
-cat chall.txt
-xxkxxxxkxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxcddddddddddddddddddddddddddddddddddddddddddcxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Double_fish/2020-06-18-zh3r0-2020-Double-Fish">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=guess">guess</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=BlowFish">BlowFish</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,guess,BlowFish,xor"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/zh3r0/crypto/Analyze_me/2020-06-18-zh3r0-2020-Analyze-Me"><h2 itemprop="headline" class="item__header">zh3r0 2020 Crypto - Analyze Me</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Analyse Me
+<p>YES, it indeed verifies all our hypothesis and we now know the <code class="language-plaintext highlighter-rouge">company issued secret key</code> is <code class="language-plaintext highlighter-rouge">ractf{n0t_th3_fl49_y3t}</code></p>
 
-Description
-i have a server's ip which gives us the flag, 
-but i'm not so good in cracking it. Can you decode the flag for me?
-nc crypto.zh3r0.ml 3871
+<p>Lets quickly decrypt the contents of <a href="password.txt">password.txt</a> with the key</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">key</span> <span class="o">=</span> <span class="s">"ractf{n0t_th3_fl49_y3t}"</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">password</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">))</span> <span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</code></pre></div></div>
+<p>And we finally get our flag <code class="language-plaintext highlighter-rouge">ractf{f00l_m3_7w1c3_5h4m3_0n_m3}</code><br />
+CHEERS YOU ALL!</p>
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-06-09T00:00:00+05:30"><!-- start custom article footer snippet -->
 
-Author : Whit3_D3vi1
+<!-- end custom article footer snippet -->
+<div itemscope itemtype="http://schema.org/Person" class="author-profile card card--flat item"><a href="https://deut-erium.github.io" class="item__image"><img class="author-profile__avatar" itemprop="image" src="https://deut-erium.github.io/Circle-limit-IV.jpg" /></a><div class="item__content"><meta itemprop="name" content="deuterium">
+        <p class="author-profile__name"><meta itemprop="url" content="https://deut-erium.github.io">
+            <a href="https://deut-erium.github.io">deuterium</a></p><p itemprop="description">Some words for the nerds</p><div class="author-profile__links"><div class="author-links">
+  <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="https://deut-erium.github.io"><li title="Send me an Email.">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:farziemailid69@gmail.com" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a><li title="Follow me on Twitter.">
+        <a class="button button--circle twitter-button" itemprop="sameAs" href="https://twitter.com/0xdeuterium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1024.032 194.432c-37.664 16.704-78.176 28-120.672 33.088 43.36-26.016 76.672-67.168 92.384-116.224-40.608 24.064-85.568 41.568-133.408 50.976-38.336-40.832-92.928-66.336-153.344-66.336-116.032 0-210.08 94.048-210.08 210.08 0 16.48 1.856 32.512 5.44 47.872-174.592-8.768-329.408-92.416-433.024-219.52-18.08 31.04-28.448 67.104-28.448 105.632 0 72.896 37.088 137.184 93.472 174.88-34.432-1.088-66.816-10.528-95.168-26.272-0.032 0.864-0.032 1.76-0.032 2.656 0 101.792 72.416 186.688 168.512 205.984-17.632 4.8-36.192 7.36-55.36 7.36-13.536 0-26.688-1.312-39.52-3.776 26.72 83.456 104.32 144.192 196.256 145.888-71.904 56.352-162.496 89.92-260.928 89.92-16.96 0-33.664-0.992-50.112-2.944 92.96 59.616 203.392 94.4 322.048 94.4 386.432 0 597.728-320.128 597.728-597.76 0-9.12-0.192-18.176-0.608-27.168 41.056-29.632 76.672-66.624 104.832-108.736z" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Linkedin.">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/himanshu-sheoran" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260.096 155.648c0 27.307008-9.899008 50.516992-29.696 69.632-19.796992 19.115008-45.396992 28.672-76.8 28.672-30.036992 0-54.612992-9.556992-73.728-28.672-19.115008-19.115008-28.672-42.324992-28.672-69.632 0-28.672 9.556992-52.224 28.672-70.656 19.115008-18.432 44.372992-27.648 75.776-27.648 31.403008 0 56.32 9.216 74.752 27.648 18.432 18.432 28.331008 41.984 29.696 70.656 0 0 0 0 0 0m-202.752 808.96c0 0 0-632.832 0-632.832 0 0 196.608 0 196.608 0 0 0 0 632.832 0 632.832 0 0-196.608 0-196.608 0 0 0 0 0 0 0m313.344-430.08c0-58.708992-1.364992-126.292992-4.096-202.752 0 0 169.984 0 169.984 0 0 0 10.24 88.064 10.24 88.064 0 0 4.096 0 4.096 0 40.96-68.267008 105.812992-102.4 194.56-102.4 68.267008 0 123.220992 22.868992 164.864 68.608 41.643008 45.739008 62.464 113.664 62.464 203.776 0 0 0 374.784 0 374.784 0 0-196.608 0-196.608 0 0 0 0-350.208 0-350.208 0-91.476992-33.451008-137.216-100.352-137.216-47.787008 0-81.236992 24.576-100.352 73.728-4.096 8.192-6.144 24.576-6.144 49.152 0 0 0 364.544 0 364.544 0 0-198.656 0-198.656 0 0 0 0-430.08 0-430.08 0 0 0 0 0 0" />
+</svg>
+</div>
+        </a>
+      </li><li title="Follow me on Github.">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/deut-erium" target="_blank">
+          <div class="icon"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path class="svgpath" data-index="path_0" fill="#272636" d="M0 525.2c0 223.6 143.3 413.7 343 483.5 26.9 6.8 22.8-12.4 22.8-25.4l0-88.7c-155.3 18.2-161.5-84.6-172-101.7-21.1-36-70.8-45.2-56-62.3 35.4-18.2 71.4 4.6 113.1 66.3 30.2 44.7 89.1 37.2 119 29.7 6.5-26.9 20.5-50.9 39.7-69.6C248.8 728.2 181.7 630 181.7 513.2c0-56.6 18.7-108.7 55.3-150.7-23.3-69.3 2.2-128.5 5.6-137.3 66.5-6 135.5 47.6 140.9 51.8 37.8-10.2 80.9-15.6 129.1-15.6 48.5 0 91.8 5.6 129.8 15.9 12.9-9.8 77-55.8 138.8-50.2 3.3 8.8 28.2 66.7 6.3 135 37.1 42.1 56 94.6 56 151.4 0 117-67.5 215.3-228.8 243.7 26.9 26.6 43.6 63.4 43.6 104.2l0 128.8c0.9 10.3 0 20.5 17.2 20.5C878.1 942.4 1024 750.9 1024 525.3c0-282.9-229.3-512-512-512C229.1 13.2 0 242.3 0 525.2L0 525.2z" />
+</svg>
+</div>
+        </a>
+      </li></ul>
+</div>
+</div>
 
-
-Challenge files
-
-  server.py earlier analyse.py which is quite unsolvable according to me
-
-
-Lets take a look at contents of server.py
-from Crypto.Util.number im...</div><p><a href="/WriteUps/2020/zh3r0/crypto/Analyze_me/2020-06-18-zh3r0-2020-Analyze-Me">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=zh3r0">zh3r0</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=encoding">encoding</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=xor">xor</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=substitution">substitution</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+05:30">
-    <meta itemprop="keywords" content="zh3r0,2020,cryptography,encoding,base64,netcat,xor,substitution"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - elsa4</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Elsa4
-
-
-
-Apparently, its an instance of LC4 cipher.
-We are provided with a subtle hint Frozen in time which could mean random is seeded with the present time, confirmed by the fact that time is provided at the start of the challenge.
-
-Now, all we need to figure out is the length of nonce, however it is implemented.
-
-I also wrote encrypt, decrypt...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/elsa4/2020-06-14-Nahamcon-2020-elsa4">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=LC4">LC4</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,cryptography,netcat,LC4"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/Unvreakable_Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - Unvreakable Vase</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Unvreakable Vase
-
-
-
-We are provided with prompt.txt, which reads
-zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30=
-
-This seems to be base64 encoded but I think all the letters are converted to lowercase as hinted by squished and flat
-
-import base64
-data = 'zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30='
-m1 = base64.b64decode(data)
-print...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/Unvreakable_Vase/2020-06-14-Nahamcon-2020-Unvreakable-Vase">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,cryptography,base64"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning"><h2 itemprop="headline" class="item__header">Nahamcon 2020 Crypto - Twinning</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Twinning
-
-
-
-The name of the challenge is a subtle hint towards Twin primes, i.e. the RSA primes p and q being twin primes, at a difference of two.
-
-How does that help?
-We can now easily factor n since we have another relation, namely
-q = p + 2 and  
-p*q = N  
-q^2 - q*p = N
-( q - 1 )^2 = N + 1
-q = sqrt( N + 1 ) + 1
-p = sqrt( N + 1 ) - 1  
-
-
-One c...</div><p><a href="/WriteUps/2020/nahamconCTF/crypto/Twinning/2020-06-14-Nahamcon-2020-twinning">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=nahamcon">nahamcon</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=netcat">netcat</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=twin_prime">twin_prime</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RSA">RSA</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 14, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-14T00:00:00+05:30">
-    <meta itemprop="keywords" content="nahamcon,2020,netcat,twin_prime,RSA"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>57 post articles, 8 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/WriteUps/page2">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/WriteUps/"><span>1</span></a>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page2"><span>2</span></a>
-                </li><li>
-              <div class="button button--primary button--circle focus"><span>3</span></div>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page4"><span>4</span></a>
-                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/WriteUps/page8"><span>8</span></a>
-                </li><li><a class="button button--secondary button--circle" href="/WriteUps/page4">
-            <i class="fas fa-angle-right"></i>
-          </a></li></ul>
     </div>
-  </div></div>
-<script>/*(function () {
+</div>
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/WriteUps/feed.xml">Subscribe</a></div>
+</div><div class="article__license"></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/WriteUps/archive.html?tag=2020">CTFs-2020</a></div></div></div>
 
-})();*/
+</div>
+
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
+
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
-</div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
+</div></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
 </div>
-            </div></div></div><div class="page__footer d-print-none">
+            </div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
   <div class="main"><div itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="deuterium"><meta itemprop="url" content="https://deut-erium.github.io/"><meta itemprop="description" content="Some words for the nerds"><div class="footer__author-links"><div class="author-links">
@@ -2774,6 +2679,68 @@ window.Lazyload.js(SOURCES.jquery, function() {
     $sidebarHide.on('click', function() {
       stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
     });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
   });
 })();
 </script>
