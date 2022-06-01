@@ -23,10 +23,9 @@ baseurl : "/WriteUps"
 title   : "CTF Writeups"
 tagline : "Himanshu Sheoran's blog on tech, security, CTFs and cryptography"
 description: > # this means to ignore newlines until "Language & timezone"
-  Himanshu Sheoran is a nerd typically writing about cryptography, Capture
-  The Flag i.e CTF events, hacking, cybersecurity, SAT SMT solvers and 
-  computer science in general.
-  
+   Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag 
+   CTF hacking cybersecurity SAT SMT solvers and computer science
+     
 
 
 ## => Language and Timezone
