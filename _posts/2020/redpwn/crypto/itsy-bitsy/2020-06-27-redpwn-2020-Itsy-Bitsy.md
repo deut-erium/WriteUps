@@ -120,7 +120,7 @@ generate_random_bits(2**1,2**(1+1)-1,80)
 '10101111111010111010111110111010101010101111101111111010101010111111111011111011'
 ```
 Notice the 0th, 2nd, 4th index and so on is always `1`
-My unoptimized script [solve.py](solve.py) which just concerns about knowing the bit at position `i` by sending the index `i-1` and `i`. 
+My unoptimized script [solve.py](./solve.py) which just concerns about knowing the bit at position `i` by sending the index `i-1` and `i`. 
 
 ```python
 from pwn import remote

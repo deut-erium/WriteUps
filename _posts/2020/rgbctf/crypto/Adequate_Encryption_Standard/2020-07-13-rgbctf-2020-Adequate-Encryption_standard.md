@@ -30,7 +30,7 @@ hQWYogqLXUO+rePyWkNlBlaAX47/2dCeLFMLrmPKcYRLYZgFuqRC7EtwX4DRtG31XY4az+yOvJJ/pwWR
 ```
 
 ## Files
-- [adequate_encryption_standard.py](adequate_encryption_standard.py)
+- [adequate_encryption_standard.py](./adequate_encryption_standard.py)
 
 ```python
 from base64 import b64encode
@@ -207,7 +207,7 @@ for i in range(65536):
     if (a := decrypt(flag_enc, key)).startswith(b'rgbCTF'):
         print(a,key)
 ```
-Ugly solution in [solve.py](solve.py)
+Ugly solution in [solve.py](./solve.py)
 
 And boom! we have our flag  
 ### rgbCTF{brut3_f0rc3_is_4LW4YS_th3_4nsw3r(but_with_0ptimiz4ti0ns)}

@@ -28,9 +28,9 @@ excerpt_separator: <!--more-->
 > The end result is an encryption scheme that achieves both confusion and diffusion. The more layers of crypto you add, the better the security, right?  
 > 
 > Encrypter  
-> [encrypt.py](encrypt.py)  
+> [encrypt.py](./encrypt.py)  
 > Encrypted file  
-> [enc.bin](enc.bin)  
+> [enc.bin](./enc.bin)  
 > Note  
 > The intended solution requires very little brute force and runs under 5 seconds on our machine.  
 > By k3v1n  
@@ -338,7 +338,7 @@ Turns out if there were repeated characters in the flag, we will get multiple
 possible satisfying values. So the admins have not been so cheeky afterall 
 
 
-## Full [script](solve.py)
+## Full [script](./solve.py)
 Note that it takes a couple of seconds to find the z3 model  
 
 ```python
