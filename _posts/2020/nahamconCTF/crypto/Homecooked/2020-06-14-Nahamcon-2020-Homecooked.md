@@ -137,6 +137,6 @@ while(count < len(cipher)):
 
 print()
 ```
-Now running [solve.py](solve.py) spews the flag instantly
+Now running [solve.py](./solve.py) spews the flag instantly
 
 ### flag{pR1m3s_4re_co0ler_Wh3n_pal1nDr0miC}

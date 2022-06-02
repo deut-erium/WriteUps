@@ -21,7 +21,7 @@ excerpt_separator: <!--more-->
 
 ![](Capture.PNG)
 
-We are provided with [source.py](source.py), which reads
+We are provided with [source.py](./source.py), which reads
 ```python
 #!/usr/bin/env python
 

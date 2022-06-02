@@ -25,7 +25,7 @@ nc pwnable.org 10001
 ```
 ## Files
 - [ring.tar.gz](ring_1f0f741fcfdfc52519d7b09b78c97b43.tar.gz)
-  - [release/task.py](release/task.py)
+  - [release/task.py](./release/task.py)
 
 task.py reads (trimming most part)
 ```python
@@ -192,7 +192,7 @@ REM.send(b'0') #v any v would do the job ;)
 REM.recv()
 #flag{babbbcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxby}
 ```
-Unorganized code in files [solve.py](solve.py), [part2.sage](part2.sage) and [test.py](test.py)
+Unorganized code in files [solve.py](./solve.py), [part2.sage](./part2.sage) and [test.py](./test.py)
 
 ### flag{babbbcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxby}
 

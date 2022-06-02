@@ -27,7 +27,7 @@ I found this in-progress password manager on a dead company's website. Seems nea
 ## Files
 - [worst-pw-manager.zip](worst-pw-manager.zip)
   - [worst-pw-manager/worst-pw-manager.py](worst-pw-manager/worst_pw_manager.py)
-  - [worst-pw-manager/passwords/](worst-pw-manager/passwords)
+  - worst-pw-manager/passwords/
     - [worst-pw-manager/passwords/0_135791.enc](worst-pw-manager/passwords/0_135791.enc)
     - ...
 
