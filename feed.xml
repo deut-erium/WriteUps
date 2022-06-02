@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://deut-erium.github.io/WriteUps/feed.xml" rel="self" type="application/atom+xml" /><link href="https://deut-erium.github.io/WriteUps/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-06-02T06:07:22+05:30</updated><id>https://deut-erium.github.io/WriteUps/feed.xml</id><title type="html">CTF Writeups</title><subtitle>Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag  CTF hacking cybersecurity SAT SMT solvers and computer science
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://deut-erium.github.io/WriteUps/feed.xml" rel="self" type="application/atom+xml" /><link href="https://deut-erium.github.io/WriteUps/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-06-02T08:54:09+05:30</updated><id>https://deut-erium.github.io/WriteUps/feed.xml</id><title type="html">CTF Writeups</title><subtitle>Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag  CTF hacking cybersecurity SAT SMT solvers and computer science
   
 </subtitle><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><entry><title type="html">Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration</title><link href="https://deut-erium.github.io/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration" rel="alternate" type="text/html" title="Cyber Apocalypse HTB 2022 Crypto - Memory Acceleration" /><published>2022-05-21T00:00:00+05:30</published><updated>2022-05-21T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/HTB-Cyber-Apcalypse-2022-Memory-Acceleration</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2022/cyber_apocalypse/crypto/memory_acceleration/2022-05-21-HTB-Cyber-Apcalypse-2022-Memory-Acceleration"><![CDATA[<!--more-->
 
@@ -1189,7 +1189,341 @@ b'sdctf{r0l1-LR~pWn.c6yPtO_wi7h,ECB:I5*b8d!cQvJmLxgX95saANMFSeU}'
 </code></pre></div>  </div>
 </blockquote>
 
-<p>full script in <a href="./solve2.py">solve2.py</a></p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="SDCTF" /><category term="2022" /><category term="cryptography" /><category term="AES" /><category term="z3" /><category term="substitution" /><category term="permutation" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">rgbCTF 2020 Crypto - Adequate Encryption Standard</title><link href="https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard" rel="alternate" type="text/html" title="rgbCTF 2020 Crypto - Adequate Encryption Standard" /><published>2020-07-13T00:00:00+05:30</published><updated>2020-07-13T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/rgbctf-2020-Adequate-Encryption_standard</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"><![CDATA[<h1 id="aedquate-encryption-standard">Aedquate Encryption Standard</h1>
+<p>full script in <a href="./solve2.py">solve2.py</a></p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="SDCTF" /><category term="2022" /><category term="cryptography" /><category term="AES" /><category term="z3" /><category term="substitution" /><category term="permutation" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Google CTF 2021 Crypto - Pythia</title><link href="https://deut-erium.github.io/WriteUps/2021/google_ctf/crypto/pythia/2021-07-21-google-ctf-2021-pythia" rel="alternate" type="text/html" title="Google CTF 2021 Crypto - Pythia" /><published>2021-07-21T00:00:00+05:30</published><updated>2021-07-21T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2021/google_ctf/crypto/pythia/google-ctf-2021-pythia</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2021/google_ctf/crypto/pythia/2021-07-21-google-ctf-2021-pythia"><![CDATA[<!--more-->
+
+<h1 id="pythia">Pythia</h1>
+
+<h2 id="challenge-description">Challenge Description</h2>
+<blockquote>
+  <p>Yet another oracle, but the queries are costly and limited so be frugal
+with them.
+<code class="language-plaintext highlighter-rouge">pythia.2021.ctfcompetition.com 1337</code></p>
+</blockquote>
+
+<h2 id="source">Source</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">max_queries</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">query_delay</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">passwords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">)</span> \
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s">'UTF-8'</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"flag.txt"</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">menu</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"What you wanna do?"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"1- Set key"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"2- Read flag"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"3- Decrypt text"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"4- Exit"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Welcome!</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">key_used</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_queries</span><span class="p">):</span>
+    <span class="n">option</span> <span class="o">=</span> <span class="n">menu</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Which key you want to use [0-2]?"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+          <span class="n">key_used</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">print</span><span class="p">(</span><span class="s">"Please select a valid key."</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Password?"</span><span class="p">)</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">),</span> <span class="s">'UTF-8'</span><span class="p">)</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"Checking..."</span><span class="p">)</span>
+        <span class="c1"># Prevent bruteforce attacks...
+</span>        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">passwd</span> <span class="o">==</span> <span class="p">(</span><span class="n">passwords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">passwords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">passwords</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"ACCESS GRANTED: "</span> <span class="o">+</span> <span class="n">flag</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'UTF-8'</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"ACCESS DENIED!"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Send your ciphertext "</span><span class="p">)</span>
+
+        <span class="n">ct</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Decrypting..."</span><span class="p">)</span>
+        <span class="c1"># Prevent bruteforce attacks...
+</span>        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">ct</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+            <span class="n">nonce</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">nonce</span><span class="p">)</span>
+            <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"ERROR: Ciphertext has invalid format. </span><span class="se">\
+</span><span class="s">            Must be of the form </span><span class="se">\"</span><span class="s">nonce,ciphertext</span><span class="se">\"</span><span class="s">, where </span><span class="se">\
+</span><span class="s">            nonce and ciphertext are base64 strings."</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="n">derive</span><span class="p">(</span><span class="n">passwords</span><span class="p">[</span><span class="n">key_used</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cipher</span> <span class="o">=</span> <span class="n">AESGCM</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span><span class="p">,</span> <span class="n">associated_data</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"ERROR: Decryption failed. Key was not correct."</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"Decryption successful"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Invalid option!"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"You have "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">max_queries</span> <span class="o">-</span> <span class="n">query</span><span class="p">)</span> <span class="o">+</span> <span class="s">" trials left...</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="recon">Recon</h2>
+
+<p>Taking a look at the source, we have a few observations</p>
+<ul>
+  <li>The server generates 3 passwords of 3 lower case ASCII each and uses Scrypt (a <a href="https://en.wikipedia.org/wiki/Key_derivation_function">Password based key derivation function</a>) on it to derive a 16 byte encryption key from each of the 3 byte passwords, which can be treated as deriving 3 16-byte keys from a set of $26^3 = 17576$ known randomly generated keys.</li>
+  <li>It provides us 3 options to work with. Option 1 to set 1 of the 3 unknown randomly generated keys</li>
+  <li>Option 3 provides as a decryption oracle, allowing us to check whether any arbitrary ciphertext of our choice decrypts successfully. (Why would it fail? more details in <a href="#how-decryption-works">How decryption works</a>)</li>
+  <li>Option 2 is the option we dig, give the server all three passwords (hence keys) correctly, it gives back the flag.</li>
+  <li>There are 150 queries for all 3 options, which means we have effectively 147 decryption oracles to work with, which indicates we need an average case key recovery in &lt;49 queries.</li>
+</ul>
+
+<h2 id="thinking-methodology-ideas-to-reject">Thinking Methodology/ Ideas to reject</h2>
+<h3 id="1-bruteforcing-luck">1. Bruteforcing/ luck</h3>
+<p>Since the number of keys is quite small, one might be tempted to bruteforce the keys and be optimistic that he/she gets all three keys in 150 attempts.<br />
+But the fact that guessing 3 keys consecutively within 150 attempts has probability as low as $\approx 10^{-7}$ which is already out of practical server-bruteforcing further enforced by 10 s delay between each guess taking 25 mins for each bruteforce, its clearly crossed out.</p>
+<h3 id="2-the-challenge-is-not-about-scrypt">2. The challenge is not about Scrypt</h3>
+<p>Again, one would be tempted to think that it could be some weakness of Scrypt or the given configuration, or some relation between the derived keys which renders GCM ez. This hypothesis can also countered easily looking at the amount of stuff going inside Scrypt :P</p>
+<h3 id="3-famous-attacks-on-aes-gcm">3. Famous attacks on AES-GCM</h3>
+<p>Again, someone sees AESGCM, they get cryptopals <a href="https://toadstyle.org/cryptopals/">set 8</a> flashbacks.</p>
+<ol>
+  <li>Key recovery attacks on repeated nonces
+    - Again this is possible if the server <em>encrypts</em> stuff, not check its decryption. What the attacker recovers is $E(0,K)$ not the key itself, but since keyspace is small, they could recover it through. Although again, this is definitely not the challenge.</li>
+  <li>Key recovery attacks on truncated mac
+    - Clearly, I cant see any sort of truncation. So its out.</li>
+</ol>
+
+<h3 id="possible-approach">Possible approach</h3>
+<p>The only information we can extract from the oracle is whether the provided ciphertext forms the given tag under the key of the server. How would this help us reduce the number of queries required from $26^3$ to say 50. If it was possible to get it in one shot, the challenge authors would not give a slack of 50 :P<br />
+How about there exists a (ciphertext, tag) which decrypts successfully for more than one key?<br />
+This would reduce the number of queries by half! We will just need to keep on asking ciphertexts for a 2 pair till the key of server happens to lie in that pair.<br />
+That’s all, if we can get a (ciphertext, tag) which is valid for $n$ keys, we can reduce the search to a binary search, requiring $log_{2}(26^3) \approx 14.1 = 15$ queries at max making 45 queries in total. Then again why 150 and not 50?<br />
+More on it <a href="#performance-considerations">later</a>…</p>
+
+<h2 id="how-decryption-works">How decryption works</h2>
+<p>This little detour is for the people who may be confused about <a href="https://en.wikipedia.org/wiki/Authenticated_encryption">Authenticated Encryption with Associated Data</a>, and why would an arbitrary decryption of some ciphertext would fail under a given key as opposed to some other mode of AES say CBC.<br />
+So the whole idea here is that the ciphertext will comprise of three parts</p>
+<ol>
+  <li>The encrypted payload i.e the data we wish to communicate</li>
+  <li>Associated un-encrypted data which contains any additional metadata which needs to be preserved against any sort of tempering.</li>
+  <li>Tag which is essentially an attempt of proof that the given ciphertext was encrypted by someone who holds the secret key and the payload and additional associated data has not been tempered with.</li>
+</ol>
+
+<p>Whenever the server receives a ciphertext to decrypt, it will first try to verify that the received tag is actually corresponding to the received ciphertext encrypted with the secret key.<br />
+If the computation of tag on the ciphertext fails, the server would reject the proposal to decrypt the message.</p>
+
+<h3 id="how-aes-gcm-works">How AES-GCM works?</h3>
+<p>AES-GCM is, put simply, an authentication mechanism built upon AES in <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_(CTR)">CTR mode</a> (a stream cipher not necessary for our discussion), such that encrypted blocks of the ciphertext, additional authentication data, and lengths of those two put together in a GCM mac. This is whats all we will need to consider.
+Here comes the mandatory picture from Wikipedia. Just follow the components used in the <code class="language-plaintext highlighter-rouge">Auth tag</code> generation.<br />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/GCM-Galois_Counter_Mode_with_IV.svg/1000px-GCM-Galois_Counter_Mode_with_IV.svg.png" width="600" /><br />
+GCM is simply a polynomial (in $GF(2^{128})$) constructed using the blocks of authentication data, ciphertext, and two additional blocks, one constructed using the lengths of data and ciphertext and one using the encryption of 96 bit nonce $N$ appended with 31 bits of 0 and a single bit 1. i.e. $s = E(N||0^{31}1,K)$<br />
+This polynomial is evaluated at $h = E(0,K)$ to compute the <code class="language-plaintext highlighter-rouge">Auth tag</code><br />
+\(T = ((((((h*A_0) \oplus A_1)*h ...  \oplus  A_m)*h  \oplus  C_0)*h ...  \oplus  C_{n-1})*h \oplus L)*h  \oplus  s\)<br />
+Since there’s no additional data in the challenge, we get<br />
+\(T = ((((h*C_0) \oplus C_1)*h ...  \oplus  C_{n-1})*h  \oplus L)*h  \oplus  s\) or<br />
+\(T = C_0*h^{n+1} \oplus C_1*h^{n+1} ...  \oplus  C_{n-1}*h^{2}  \oplus  L*h  \oplus  s\)</p>
+
+<h2 id="attack">Attack</h2>
+<p>Continuing and exploring the idea <a href="#possible-approach">above</a> one would come across a recent paper titled <a href="https://eprint.iacr.org/2020/1491.pdf">Partitioning Oracle Attack</a> and what’s cherry on the top is that a quick CTRL+F for github in the paper reveals the <a href="https://github.com/julialen/key_multicollision">POC demo</a> of the same making it a lot easier to implement.</p>
+
+<h3 id="construction">Construction</h3>
+<p>Continuing from the expression of tag, the terms dependent on key for calculation of tag are $\textbf{h, s}$ only.<br />
+\(T = C_0*\textbf{h}^{n+1} \oplus C_1*\textbf{h}^{n} ...  \oplus  C_{n-1}*\textbf{h}^{2}  \oplus  L*\textbf{h}  \oplus  \textbf{s}\)<br />
+\(C_0*\textbf{h}^{n+1} \oplus C_1*\textbf{h}^{n} ...  \oplus  C_{n-1}*\textbf{h}^{2} = T \oplus L*\textbf{h}  \oplus  \textbf{s}\)<br />
+\(C_0*\textbf{h}^{n-1} \oplus C_1*\textbf{h}^{n-2} ...  \oplus  C_{n-1} = (T \oplus L*\textbf{h}  \oplus  \textbf{s})*\textbf{h}^{-2}\)<br />
+writing 
+\((T \oplus L*\textbf{h}  \oplus  \textbf{s})*\textbf{h}^{-2}\) as a key dependent quantity \(\textbf{B}\) we can write  it for $n$ keys \(K_0...K_{n-1}\) , we get<br />
+\(C_0*\textbf{h}^{n-1}_{0} \oplus C_1*\textbf{h}^{n-2}_{0} ...  \oplus  C_{n-1} = \textbf{B}_{0}\)<br />
+\(C_0*\textbf{h}^{n-1}_{1} \oplus C_1*\textbf{h}^{n-2}_{1} ...  \oplus  C_{n-1} = \textbf{B}_{1}\)<br />
+\(\vdots \qquad \qquad \vdots \qquad \qquad \vdots \qquad \qquad \vdots\)<br />
+\(C_0*\textbf{h}^{n-1}_{n-1} \oplus C_1*\textbf{h}^{n-2}_{n-1} ...  \oplus  C_{n-1} = \textbf{B}_{n-1}\)<br />
+\(\begin{bmatrix}
+1 &amp; \textbf{h}_{0} &amp; \textbf{h}_{0}^{2} &amp; \cdots &amp; \textbf{h}_{0}^{n-1}\\
+1 &amp; \textbf{h}_{0} &amp; \textbf{h}_{0}^{2}  &amp;  \cdots &amp; \textbf{h}_{0}^{n-1} \\
+ \vdots &amp; \vdots &amp;\vdots &amp; \ddots &amp; \vdots\\
+1 &amp; \textbf{h}_{0} &amp; \textbf{h}_{0}^{2}  &amp; \cdots &amp; \textbf{h}_{0}^{n-1}
+\end{bmatrix} .
+\begin{bmatrix}
+C_{n-1} \\
+C_{n-2}  \\
+ \vdots  \\
+ C_{0}
+\end{bmatrix} =
+\begin{bmatrix}
+\textbf{B}_{0} \\
+\textbf{B}_{1}  \\
+\vdots \\
+\textbf{B}_{n-1}
+\end{bmatrix}\)</p>
+
+<p>Now that we have all the required equations set up, we can find $C_{0}, C_{1} \ldots, C_{n-1}$ through <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">lagrange interpolation</a> in $O(n^2)$ time and $O(n)$ space.</p>
+
+<h3 id="performance-considerations">Performance considerations</h3>
+<p>Theoretically 15 searches would be enough to find the key, but it would require a multicollision for ~8000 keys.<br />
+What we can do is to first check for a few groups of smaller sizes, then proceeding with binary search on a given group.<br />
+If we form groups of size $k$, the total number of calls should be roughly (for worst case number of calls)
+$17576/k + \lceil log_{2}k \rceil= 49 \implies k\approx 367$
+Time taken to find a multicollision for $k=367$ keys,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">statistics</span>
+<span class="n">k</span><span class="o">=</span><span class="mi">367</span>
+<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="p">])</span>
+    <span class="n">times</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+<span class="c1">#4.06
+</span></code></pre></div></div>
+<p>It takes around 4 seconds on an i9 processor. For the binary search part the times for computation
+take quadratically shorter duration, adding to roughly 1.5s for 9 calls.<br />
+Overall it should take average case \((10+4)*(17576/367)*1/2 + 9*10 + 1.5 \approx 426s \approx 7mins\) to find a key and worst case to around 760s ~ 12.7 minutes</p>
+
+<p>Average case time to solve the challenge would be around 21 minutes and worst case to around 38 minutes :(</p>
+
+<p>Borrowing logic from <a href="https://github.com/julialen/key_multicollision/blob/main/collide_gcm.sage">collide_gcm.sage</a>, here is a dirty script</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.ciphers.aead</span> <span class="kn">import</span> <span class="n">AESGCM</span>
+<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.kdf.scrypt</span> <span class="kn">import</span> <span class="n">Scrypt</span>
+<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">bitstring</span> <span class="kn">import</span> <span class="n">BitArray</span><span class="p">,</span> <span class="n">Bits</span>
+<span class="kn">import</span> <span class="nn">pwn</span>
+
+<span class="n">derived_keys</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># keys derived from scrypt of password
+</span><span class="n">rev_keys</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># holds mapping from derived key to password
+</span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                 <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
+    <span class="n">derived_key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="n">derive</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">k</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
+    <span class="n">derived_keys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">derived_key</span><span class="p">)</span>
+    <span class="n">rev_keys</span><span class="p">[</span><span class="n">derived_key</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"pythia.2021.ctfcompetition.com"</span><span class="p">,</span> <span class="mi">1337</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="n">pwn</span><span class="p">.</span><span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="s">"""Converting a bytes object to an element in `field`"""</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="p">.</span><span class="n">fetch_int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bits</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">a</span><span class="o">**</span><span class="n">i</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="n">P</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">128</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">7</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">GFghash</span><span class="p">.</span><span class="o">&lt;</span><span class="n">a</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">128</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="n">modulus</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">GFghash</span><span class="p">,</span> <span class="s">'x'</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">multicollision</span><span class="p">(</span><span class="n">keyset</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span> <span class="o">*</span> <span class="mi">12</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="sa">b</span><span class="s">'</span><span class="se">\x01</span><span class="s">'</span> <span class="o">*</span> <span class="mi">16</span><span class="p">):</span>
+    <span class="s">"""main function to find multicollisions, Tag is kept a constant
+    and so is nonce for all the key encryptions
+    x_bf corresponds byte object x transformed to the field element
+    """</span>
+    <span class="n">L_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keyset</span><span class="p">)</span> <span class="o">*</span> <span class="mi">128</span><span class="p">).</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
+    <span class="n">L_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">L_bytes</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">nonce_plus</span> <span class="o">=</span> <span class="n">nonce</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">tag_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyset</span><span class="p">:</span>
+        <span class="c1"># compute H
+</span>        <span class="n">aes</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">h_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">nonce_plus</span><span class="p">)</span>
+        <span class="n">s_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="c1"># assign (lens * H) + s + T to b
+</span>        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">L_bf</span> <span class="o">*</span> <span class="n">h_bf</span><span class="p">)</span> <span class="o">+</span> <span class="n">s_bf</span> <span class="o">+</span> <span class="n">tag_bf</span>
+        <span class="c1"># get pair (H, b*(H^-2))
+</span>        <span class="n">y</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">h_bf</span><span class="o">**-</span><span class="mi">2</span>
+        <span class="n">pairs</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">h_bf</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="c1"># compute Lagrange interpolation
+</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="n">lagrange_polynomial</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="s">''</span>
+    <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">f</span><span class="p">.</span><span class="nb">list</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">ct_pad</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">coeff</span><span class="p">.</span><span class="n">polynomial</span><span class="p">().</span><span class="nb">list</span><span class="p">()))</span>
+        <span class="n">ct</span> <span class="o">+=</span> <span class="n">Bits</span><span class="p">(</span><span class="nb">bin</span><span class="o">=</span><span class="n">ct_pad</span><span class="p">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="s">'0'</span><span class="p">))</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span><span class="p">.</span><span class="nb">bytes</span>
+    <span class="k">return</span> <span class="n">ct</span> <span class="o">+</span> <span class="n">tag</span>
+
+
+<span class="k">def</span> <span class="nf">decrypt_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">'A'</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">+</span> <span class="s">','</span> <span class="o">+</span> <span class="n">pwn</span><span class="p">.</span><span class="n">b64e</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt; '</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s">'successful'</span> <span class="ow">in</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">367</span><span class="p">):</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">api_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">))</span>
+        <span class="n">api_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">])):</span>
+            <span class="k">break</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span>
+    <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">api_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
+            <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
+        <span class="n">keyindex</span> <span class="o">=</span> <span class="n">lo</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">keyindex</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">rev_keys</span><span class="p">[</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">keyindex</span><span class="p">]]</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"key:{} found in {} calls"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">api_count</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"time taken :"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">password</span>
+
+
+<span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">""</span>
+<span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>  <span class="c1"># option1
+</span>    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key_index</span><span class="p">))</span>
+    <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">+=</span> <span class="n">search</span><span class="p">()</span>
+
+
+<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'CTF{.*}'</span><span class="p">)</span>
+<span class="c1"># CTF{gCm_1s_n0t_v3ry_r0bust_4nd_1_sh0uld_us3_s0m3th1ng_els3_h3r3}
+</span></code></pre></div></div>
+
+<p>And we get our flag!</p>
+<h3 id="ctfgcm_1s_n0t_v3ry_r0bust_4nd_1_sh0uld_us3_s0m3th1ng_els3_h3r3">CTF{gCm_1s_n0t_v3ry_r0bust_4nd_1_sh0uld_us3_s0m3th1ng_els3_h3r3}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="googlectf" /><category term="2021" /><category term="cryptography" /><category term="AES" /><category term="GCM" /><category term="polynomialring" /><category term="oracle" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">rgbCTF 2020 Crypto - Adequate Encryption Standard</title><link href="https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard" rel="alternate" type="text/html" title="rgbCTF 2020 Crypto - Adequate Encryption Standard" /><published>2020-07-13T00:00:00+05:30</published><updated>2020-07-13T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/rgbctf-2020-Adequate-Encryption_standard</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2020/rgbctf/crypto/Adequate_Encryption_Standard/2020-07-13-rgbctf-2020-Adequate-Encryption_standard"><![CDATA[<h1 id="aedquate-encryption-standard">Aedquate Encryption Standard</h1>
 
 <h2 id="description">Description</h2>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I wrote my own AES! Can you break it?
@@ -2019,141 +2353,4 @@ We just need to base64 decode it 25 times and we will get the flag.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></div>
 <p>A cool sarcasm on bad crypto challenges in CTFs :)</p>
-<h3 id="flagl00ks_l1ke_a_l0t_of_64s">flag{l00ks_l1ke_a_l0t_of_64s}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="javascript" /><category term="base64" /><summary type="html"><![CDATA[base646464 Description Encoding something multiple times makes it exponentially more secure! Files cipher.txt generate.js Lets take a look at generate.js, which reads const btoa = str =&gt; Buffer.from(str).toString('base64'); const fs = require("fs"); const flag = fs.readFileSync("flag.txt", "utf8").trim(); let ret = flag; for(let i = 0; i &lt; 25; i++) ret = btoa(ret); fs.writeFileSync("cipher.txt", ret); The function btoa is basically string to its base64 encoding. The flag is encoded repetitively 25 times in a for loop. We just need to base64 decode it 25 times and we will get the flag. from base64 import b64decode with open('cipher.txt','r') as cipher_file: data = cipher_file.read() for i in range(25): data = b64decode(data) print(data) A cool sarcasm on bad crypto challenges in CTFs :) flag{l00ks_l1ke_a_l0t_of_64s}]]></summary></entry><entry><title type="html">Redpwn 2020 Crypto - Itsy Bitsy</title><link href="https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy" rel="alternate" type="text/html" title="Redpwn 2020 Crypto - Itsy Bitsy" /><published>2020-06-27T00:00:00+05:30</published><updated>2020-06-27T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/itsy-bitsy/redpwn-2020-Itsy-Bitsy</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/itsy-bitsy/2020-06-27-redpwn-2020-Itsy-Bitsy"><![CDATA[<h1 id="itsy-bitsy">itsy-bitsy</h1>
-
-<h2 id="description">Description</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The itsy-bitsy spider climbed up the water spout...
-
-nc 2020.redpwnc.tf 31284
-</code></pre></div></div>
-<h2 id="files">Files</h2>
-<ul>
-  <li><a href="./itsy-bitsy.py">itsy-bitsy.py</a></li>
-</ul>
-
-<p>Lets quickly take a look at now the connection works</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc 2020.redpwnc.tf 31284
-Enter an integer i such that i <span class="o">&gt;</span> 0: 1
-Enter an integer j such that j <span class="o">&gt;</span> i <span class="o">&gt;</span> 0: 2
-Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000
-
-</code></pre></div></div>
-<p>Let us quickly go through the required functions of the source</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span>
-<span class="kn">from</span> <span class="nn">Crypto.Random.random</span> <span class="kn">import</span> <span class="n">randint</span>
-
-<span class="k">def</span> <span class="nf">str_to_bits</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="n">bit_str</span>
-
-<span class="k">def</span> <span class="nf">recv_input</span><span class="p">():</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'Enter an integer i such that i &gt; 0: '</span><span class="p">)</span>
-    <span class="n">j</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'Enter an integer j such that j &gt; i &gt; 0: '</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="nb">Exception</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">'Error! You must adhere to the restrictions!'</span><span class="p">)</span>
-        <span class="nb">exit</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span>
-
-<span class="k">def</span> <span class="nf">generate_random_bits</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">):</span>
-    <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="n">bit_str</span><span class="p">[:</span><span class="n">number_of_bits</span><span class="p">]</span>
-
-<span class="k">def</span> <span class="nf">bit_str_xor</span><span class="p">(</span><span class="n">bit_str_1</span><span class="p">,</span> <span class="n">bit_str_2</span><span class="p">):</span>
-    <span class="n">xor_res</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bit_str_1</span><span class="p">)):</span>
-        <span class="n">bit_1</span> <span class="o">=</span> <span class="n">bit_str_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">bit_2</span> <span class="o">=</span> <span class="n">bit_str_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">xor_res</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bit_1</span><span class="p">)</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">bit_2</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">xor_res</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'flag.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">7</span><span class="p">)</span>
-    <span class="n">flag_bits</span> <span class="o">=</span> <span class="n">str_to_bits</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
-    <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">recv_input</span><span class="p">()</span>
-    <span class="n">lb</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">i</span>
-    <span class="n">ub</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">)</span>
-    <span class="n">random_bits</span> <span class="o">=</span> <span class="n">generate_random_bits</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">encrypted_bits</span> <span class="o">=</span> <span class="n">bit_str_xor</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">,</span><span class="n">random_bits</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Ciphertext: </span><span class="si">{</span><span class="n">encrypted_bits</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate_random_bits</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">):</span>
-    <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="n">bit_str</span><span class="p">[:</span><span class="n">number_of_bits</span><span class="p">]</span>
-</code></pre></div></div>
-<p>It will generate a random bitstring of length <code class="language-plaintext highlighter-rouge">number_of_bits</code> from <code class="language-plaintext highlighter-rouge">lower_bound</code> to <code class="language-plaintext highlighter-rouge">upper_bound</code> and if the <code class="language-plaintext highlighter-rouge">lower_bound</code> itself is greater than the requirement, it will truncate it.</p>
-
-<p>We are asked for input for <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">j</code> which are converted to lower and upper bounds as <code class="language-plaintext highlighter-rouge">2**i</code> to <code class="language-plaintext highlighter-rouge">2**j - 1</code>.<br />
-The generated bitstream is xored (bit-wise) with the flag and returned</p>
-
-<h2 id="observation">Observation</h2>
-<p>If one sets <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">j</code> to <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">i+1</code>, the bounds are <code class="language-plaintext highlighter-rouge">2**i</code> and <code class="language-plaintext highlighter-rouge">2**(i+1) - 1</code>, which are both <code class="language-plaintext highlighter-rouge">i</code> bits in length.<br />
-The pecularity being the first bit would always be <code class="language-plaintext highlighter-rouge">1</code> because of <code class="language-plaintext highlighter-rouge">2**i</code> and all the bits at positions multiples of <code class="language-plaintext highlighter-rouge">i</code> would be <code class="language-plaintext highlighter-rouge">1</code></p>
-
-<h4 id="example">Example</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">generate_random_bits</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
-<span class="s">'10101111111010111010111110111010101010101111101111111010101010111111111011111011'</span>
-</code></pre></div></div>
-<p>Notice the 0th, 2nd, 4th index and so on is always <code class="language-plaintext highlighter-rouge">1</code>
-My unoptimized script <a href="./solve.py">solve.py</a> which just concerns about knowing the bit at position <code class="language-plaintext highlighter-rouge">i</code> by sending the index <code class="language-plaintext highlighter-rouge">i-1</code> and <code class="language-plaintext highlighter-rouge">i</code>.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-
-<span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31284</span>
-
-<span class="k">def</span> <span class="nf">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
-    <span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
-    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">':'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">strip</span><span class="p">()</span>
-    <span class="c1">#print(data)
-</span>    <span class="n">REM</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">ciphertext</span>
-
-<span class="n">flag_bits</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">301</span><span class="p">)</span>  <span class="c1">#flag size known 
-</span><span class="n">flag_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">49</span>  <span class="c1"># ord('1') known from the first character 'f' of flag
-</span><span class="n">flag_bits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">49</span>  <span class="c1"># ord('1') 
-</span><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
-    <span class="n">ct</span> <span class="o">=</span> <span class="n">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
-    <span class="n">flag_bits</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">=</span> <span class="mi">48</span> <span class="k">if</span> <span class="n">ct</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">==</span> <span class="mi">49</span> <span class="k">else</span> <span class="mi">49</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
-</code></pre></div></div>
-
-<p>This can be improved just by noting the fact we knew most of the bits <code class="language-plaintext highlighter-rouge">i</code> before reaching the index <code class="language-plaintext highlighter-rouge">i</code>, we will only make a request if bit <code class="language-plaintext highlighter-rouge">i</code> is not known</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">flag_bits</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ct</span> <span class="o">=</span> <span class="n">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">301</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
-            <span class="n">flag_bits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">48</span> <span class="k">if</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">49</span> <span class="k">else</span> <span class="mi">49</span>
-<span class="k">print</span><span class="p">(</span><span class="n">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
-</code></pre></div></div>
-<p>Which takes 62 requests instead of 300 as in original</p>
-
-<h3 id="flagbits_leaking_out_down_the_water_spout">flag{bits_leaking_out_down_the_water_spout}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="leakage" /><category term="xor" /><summary type="html"><![CDATA[itsy-bitsy Description The itsy-bitsy spider climbed up the water spout... nc 2020.redpwnc.tf 31284 Files itsy-bitsy.py Lets quickly take a look at now the connection works nc 2020.redpwnc.tf 31284 Enter an integer i such that i &gt; 0: 1 Enter an integer j such that j &gt; i &gt; 0: 2 Ciphertext: 0010001001011101111000001100000010000011000111100100111100011000100001001001100111110011100100000001101101010101001100001100010010000001111000000010100001001100100001000000010101000101010101011010011011100110100000010001110000101000011011001001010110010101000000100001011110000100010100010010110100000 Let us quickly go through the required functions of the source #!/usr/bin/env python3 from Crypto.Random.random import randint def str_to_bits(s): bit_str = '' for c in s: i = ord(c) bit_str += bin(i)[2:] return bit_str def recv_input(): i = input('Enter an integer i such that i &gt; 0: ') j = input('Enter an integer j such that j &gt; i &gt; 0: ') try: i = int(i) j = int(j) if i &lt;= 0 or j &lt;= i: raise Exception except: print('Error! You must adhere to the restrictions!') exit() return i,j def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = '' while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] def bit_str_xor(bit_str_1, bit_str_2): xor_res = '' for i in range(len(bit_str_1)): bit_1 = bit_str_1[i] bit_2 = bit_str_2[i] xor_res += str(int(bit_1) ^ int(bit_2)) return xor_res def main(): with open('flag.txt','r') as f: flag = f.read() for c in flag: i = ord(c) assert i in range(2**6,2**7) flag_bits = str_to_bits(flag) i,j = recv_input() lb = 2**i ub = 2**j - 1 n = len(flag_bits) random_bits = generate_random_bits(lb,ub,n) encrypted_bits = bit_str_xor(flag_bits,random_bits) print(f'Ciphertext: {encrypted_bits}') if __name__ == '__main__': main() def generate_random_bits(lower_bound, upper_bound, number_of_bits): bit_str = '' while len(bit_str) &lt; number_of_bits: r = randint(lower_bound, upper_bound) bit_str += bin(r)[2:] return bit_str[:number_of_bits] It will generate a random bitstring of length number_of_bits from lower_bound to upper_bound and if the lower_bound itself is greater than the requirement, it will truncate it. We are asked for input for i and j which are converted to lower and upper bounds as 2**i to 2**j - 1. The generated bitstream is xored (bit-wise) with the flag and returned Observation If one sets i and j to i and i+1, the bounds are 2**i and 2**(i+1) - 1, which are both i bits in length. The pecularity being the first bit would always be 1 because of 2**i and all the bits at positions multiples of i would be 1 Example generate_random_bits(2**1,2**(1+1)-1,80) '10101111111010111010111110111010101010101111101111111010101010111111111011111011' Notice the 0th, 2nd, 4th index and so on is always 1 My unoptimized script solve.py which just concerns about knowing the bit at position i by sending the index i-1 and i. from pwn import remote HOST, PORT = "2020.redpwnc.tf", 31284 def get_ct(num_bits): REM = remote(HOST, PORT) REM.sendline(str(num_bits -1).encode()) REM.sendline(str(num_bits).encode()) data = REM.recvline() ciphertext = data.split(b':')[-1].strip() #print(data) REM.close() return ciphertext flag_bits = bytearray(301) #flag size known flag_bits[0] = 49 # ord('1') known from the first character 'f' of flag flag_bits[1] = 49 # ord('1') for num_bits in range(2,301): ct = get_ct(num_bits) flag_bits[num_bits] = 48 if ct[num_bits] == 49 else 49 print(bits_to_str(flag_bits)) This can be improved just by noting the fact we knew most of the bits i before reaching the index i, we will only make a request if bit i is not known for num_bits in range(2,301): if flag_bits[num_bits] == 0: ct = get_ct(num_bits) for i in range(num_bits, 301, num_bits): flag_bits[i] = 48 if ct[i] == 49 else 49 print(bits_to_str(flag_bits)) Which takes 62 requests instead of 300 as in original flag{bits_leaking_out_down_the_water_spout}]]></summary></entry></feed>
+<h3 id="flagl00ks_l1ke_a_l0t_of_64s">flag{l00ks_l1ke_a_l0t_of_64s}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="javascript" /><category term="base64" /><summary type="html"><![CDATA[base646464 Description Encoding something multiple times makes it exponentially more secure! Files cipher.txt generate.js Lets take a look at generate.js, which reads const btoa = str =&gt; Buffer.from(str).toString('base64'); const fs = require("fs"); const flag = fs.readFileSync("flag.txt", "utf8").trim(); let ret = flag; for(let i = 0; i &lt; 25; i++) ret = btoa(ret); fs.writeFileSync("cipher.txt", ret); The function btoa is basically string to its base64 encoding. The flag is encoded repetitively 25 times in a for loop. We just need to base64 decode it 25 times and we will get the flag. from base64 import b64decode with open('cipher.txt','r') as cipher_file: data = cipher_file.read() for i in range(25): data = b64decode(data) print(data) A cool sarcasm on bad crypto challenges in CTFs :) flag{l00ks_l1ke_a_l0t_of_64s}]]></summary></entry></feed>
