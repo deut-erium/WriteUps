@@ -7,7 +7,6 @@ aside:
 sidebar:
   nav: aboutnav
 author: deuterium
-full_width: false
 mathjax: true
 mathjax_autoNumber: true
 mermaid: false
@@ -20,15 +19,17 @@ excerpt_separator: <!--more-->
 <!--more-->
 
 
-
-# Pythia
-
 ## Challenge Description
 > Yet another oracle, but the queries are costly and limited so be frugal
 > with them.
 > `pythia.2021.ctfcompetition.com 1337`
 
-## Source
+## Files
+> [source.zip](./source.zip)  
+> - [server.py](./server.py)  
+> - [dummpy flag](./flag.txt)  
+
+## Server
 ```python
 max_queries = 150
 query_delay = 0
@@ -226,9 +227,9 @@ Average case time to solve the challenge would be around 21 minutes and worst ca
 
 
 
-Borrowing logic from [collide_gcm.sage](https://github.com/julialen/key_multicollision/blob/main/collide_gcm.sage), here is a dirty script
+Borrowing logic from [collide_gcm.sage](https://github.com/julialen/key_multicollision/blob/main/collide_gcm.sage), [local copy](./collide.sage) here is a dirty script
 
-
+### [Solve script](./solve.sage)
 ```python
 import random
 import string
