@@ -7,7 +7,6 @@ aside:
 sidebar:
   nav: aboutnav
 author: deuterium
-full_width: true
 mathjax: false
 mathjax_autoNumber: false
 mermaid: false
@@ -31,7 +30,7 @@ Find these two keys for me; concatenate their ASCII encodings and wrap it in the
 ```
 
 ## Files
-- [encrypted.txt](encrypted.txt)  (HUGE number of characters)
+- [encrypted.txt](./encrypted.txt)  (HUGE number of characters)
 
 ## Observations
 - Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent.  

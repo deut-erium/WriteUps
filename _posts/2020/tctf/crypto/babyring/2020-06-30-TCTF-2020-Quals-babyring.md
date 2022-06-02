@@ -7,7 +7,6 @@ aside:
 sidebar:
   nav: aboutnav
 author: deuterium
-full_width: true
 mathjax: false
 mathjax_autoNumber: false
 mermaid: false

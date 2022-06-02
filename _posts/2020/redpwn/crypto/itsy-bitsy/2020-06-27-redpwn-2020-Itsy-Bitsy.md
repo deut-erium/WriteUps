@@ -7,7 +7,6 @@ aside:
 sidebar:
   nav: aboutnav
 author: deuterium
-full_width: true
 mathjax: false
 mathjax_autoNumber: false
 mermaid: false
@@ -27,7 +26,7 @@ The itsy-bitsy spider climbed up the water spout...
 nc 2020.redpwnc.tf 31284
 ```
 ## Files
-- [itsy-bitsy.py](itsy-bitsy.py)
+- [itsy-bitsy.py](./itsy-bitsy.py)
 
 Lets quickly take a look at now the connection works  
 ```bash
