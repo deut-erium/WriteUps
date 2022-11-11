@@ -190,6 +190,7 @@ exclude:
   - CONTRIBUTING.md
   - directorize.py
   - jekyll-text-theme.gemspec
+  - .gitignore
 
 include:
   - README.md
