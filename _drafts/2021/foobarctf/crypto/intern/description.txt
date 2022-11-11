@@ -1,6 +1,0 @@
-
-
-Thomson and Rotenberg Trading solutions has a new intern who is trying to implment the most secure system to send messages. The prototype is running here. Can you do a testing for us?
-
-nc chall.nitdgplug.org 30205
-

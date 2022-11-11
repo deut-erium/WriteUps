@@ -1,1 +1,0 @@
-flag = b'lodalassanlodalassan'
