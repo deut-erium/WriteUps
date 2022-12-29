@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="dev">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="csrf-token" content="yNfOyu8f-L_VOVPGip2_2gZHFHWY5seaTgng">
+    
+    
+    <meta name="description" content="HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) ===  ## 美麗都大廈 / spyce (Web)  1. Open the website 2. Let&#39;s rand">
+    
+    <title>HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) - HackMD</title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+	<link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+    
+<script nonce="3af35c39-8abf-49a4-b0ab-623706b9585b">
+  window.domain = 'hackmd.io'
+  window.urlpath = ''
+  window.debug = false
+  window.version = '1.3.0'
+  window.brand = 'HackMD'
+
+  
+  window.NOTE_ID = '4ou0e_Q-R0S0czxcyMKw9w'
+  
+
+  window.GOOGLE_API_KEY = 'AIzaSyCjSrqWHhmWJnoI7JlD88XDSaBgiKbaenA'
+  window.GOOGLE_CLIENT_ID = '911617723593-drikdibvvn63slfd6kbqigo8ql1no55s.apps.googleusercontent.com'
+  window.DROPBOX_APP_KEY = 'rdoizrlnkuha23r'
+  
+  window.PLANTUML_SERVER = 'https://ptuml.hackmd.io'
+
+  window.ASSET_URL = 'https://assets.hackmd.io'
+
+  window.USER_CAN_CREATE_TEAM = true
+  window.USER_CAN_DELETE_ACCOUNT = true
+  window.USER_DELETE_ACCOUNT_VIA_EMAIL = true
+  window.PAYMENT_ENABLED = true
+  window.PAYMENT_PROMOTION_BANNER_ENABLED = false
+  window.GITHUB_SYNC_ENABLED = true
+  window.GITLAB_SYNC_ENABLED = false
+  window.GITLAB_SYNC_BASE_URL = ''
+  window.VCS_SYNC_MODE = 'github'
+  window.VCS_PROVIDER_NAME = 'GitHub'
+  window.FREE_TEAM_NUM = 20
+  window.FREE_TEAM_MEMBER_NUM = 3
+  window.FREE_PUBLIC_TEAM_NUM = 10
+  
+  window.EE_SITE_ENABLE = false
+  window.EE_SITE_NAME = 'false'
+  window.EE_SITE_LINK = 'false'
+  window.EESITE_INFO = false
+  window.ENTERPRISE_DISCOVERY_ENABLE = false
+  window.ENTERPRISE_DISCOVERY_TEAM = true
+  window.ENTERPRISE_DISCOVERY_NOTE = true
+  window.ENTERPRISE_DISCOVERY_VIEW_PERMISSION = 'guest'
+  
+  window.ALLOW_ANONYMOUS = true
+  window.ALLOW_ANONYMOUS_EDIT = false
+  window.PUBLIC_OVERVIEW = false
+  window.INTERNAL_PUBLIC_OVERVIEW = false
+  window.FULL_TEXT_SEARCH_ENABLE = false
+  window.ALGOLIA_SEARCH_ENABLE = true
+  window.MARKETING_EMAIL_ENABLE = true
+  
+  
+  window.API_MANAGEMENT_UI_ENABLE = true
+  window.FEEDBACK_UI_ENABLE = true
+
+  
+  window.SHOW_HOT_NOTES = false
+  
+
+  
+  window.HOT_NOTES_TIME_TYPE = 'week'
+  
+
+  
+  window.SHOW_OVERVIEW = false
+  
+
+  
+  window.MENTIONS = {}
+  
+
+  
+  window.MENTION_ANCHORS = []
+  
+
+  
+  window.COMMENT_ANCHORS = []
+  
+
+  
+  window.IS_OWNER = false
+  
+
+  
+  window.IS_TEAM_ADMIN = false
+  
+
+  
+  window.IS_INVITEE_ADMIN = false
+  
+
+  
+  window.USER_PROFILE = {"name":"Guest Douglas"}
+  
+
+  
+  window.VERSION_TIME = '1667905082934'
+  
+
+  
+  window.canEdit = false
+  
+
+  
+  window.canWriteComment = false
+  
+</script>
+
+
+    
+<!-- Google Tag Manager -->
+<script nonce="3af35c39-8abf-49a4-b0ab-623706b9585b">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KLW9Z3');</script>
+<!-- End Google Tag Manager -->
+
+
+    
+
+
+
+<meta property="fb:app_id" content="1436904003272070">
+
+
+    <meta name="twitter:image:src" content="https://i.imgur.com/A9xLM6k.png" />
+
+
+<meta name="twitter:site" content="@hackmdio" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) - HackMD" />
+
+
+    <meta name="twitter:description" content="HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) ===  ## 美麗都大廈 / spyce (Web)  1. Open the website 2. Let&#39;s rand" />
+
+
+
+    <meta property="og:image" content="https://i.imgur.com/A9xLM6k.png" />
+
+
+<meta property="og:site_name" content="HackMD" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) - HackMD" />
+
+
+    <meta property="og:description" content="HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I) ===  ## 美麗都大廈 / spyce (Web)  1. Open the website 2. Let&#39;s rand" />
+
+
+    <link rel="stylesheet" href='https://assets.hackmd.io/build/emojify.js/dist/css/basic/emojify.min.css'>
+     <link href="https://assets.hackmd.io/build/font-vendor.7f4927ef0ef55c7340a1.css" rel="stylesheet"><link href="https://assets.hackmd.io/build/common-vendor.017f3a98adc3881767cb.css" rel="stylesheet"><link href="https://assets.hackmd.io/build/pretty-vendor.163c8115660d5ee6132e.css" rel="stylesheet"><link href="https://assets.hackmd.io/build/pretty.cd105f9095d0ba078b61.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+<![endif]-->
+
+</head>
+
+<body style="display:none;">
+    <div class="ui-infobar container-fluid unselectable hidden-print">
+        <div class="row">
+            <div class="col-xs-12 ui-infobar-inner">
+                <div class="ui-infobar__user-info">
+                    <ul class="list-inline h-[28px] mb-0">
+                        <li>
+                            <div class="flex text-4 gap-[9px]">
+                                
+                                    <span class="flex items-center justify-center ui-owner-team" data-profile="blackb6a">
+                                        &thinsp;<a class="ui-user-icon m-0 inline-block w-[28px] h-[28px]" style="background-image: url(https://i.imgur.com/A9xLM6k.png);" target="_blank"></a>
+                                    </span>
+                                
+
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-gray-900">
+                                        
+                                            Black Bauhinia
+                                        
+                                    </span>
+
+                                    <div class="flex">
+                                        <div>
+                                            <span class="ui-status-lastchange"></span>
+                                            <span class="ui-lastchange" data-createtime="Sun Nov 06 2022 13:26:28 GMT+0000 (Coordinated Universal Time)" data-updatetime="Tue Nov 08 2022 10:58:02 GMT+0000 (Coordinated Universal Time)"></span>
+                                        </div>
+
+                                        
+
+                                        <span class="ml-1 text-gray-400 ui-more-info hmd-dn" data-toggle="popover">
+                                            &thinsp;<i class="fa fa-fw align-middle ui-connectedGithubIcon fa-github"></i>
+
+                                            <div class="more-info-raw hmd-dn">
+                                                <span class="ui-connectedGithub note-status-row hmd-dn">
+                                                    <i class="fa ui-connectedGithubIcon fa-github"></i>
+                                                    <a class="text-gray-600 ui-synced-text hover:text-gray-600 focus:text-gray-600">Linked with GitHub</a>
+
+                                                    
+                                                        <br>
+                                                        <a class="file-path" target="_blank"></a>
+                                                    
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="items-center hmd-text-right ui-infobar__actions">
+                    <ul class="mb-0 list-inline">
+                        <li>
+                            
+                                <a class="ui-signin community-button hidden-xs" href="#">
+                                    <span class="text">
+                                        <i class="fa fa-fw fa-heart-o"></i>
+                                        <span class="count"></span>
+                                    </span>
+                                </a>
+
+                                <a class="ui-signin community-button hidden-xs" href="#">
+                                    <span class="text">
+                                        <i class="fa fa-fw fa-bookmark-o"></i>
+                                    </span>
+                                </a>
+
+                                <a class="ui-signin community-button hidden-xs" href="#">
+                                    <span class="text">
+                                        <i class="fa fa-fw fa-bell-o"></i>
+                                    </span>
+                                </a>
+                            
+                        </li>
+
+                        
+                    </ul>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        
+        <div class="hidden ui-comment-app md:block" id="hackmd-app">
+            <div id="comment-app"></div>
+        </div>
+        
+    </div>
+
+    <!-- Markdown rendered container -->
+    <div id="doc" class="container-fluid markdown-body" data-hard-breaks="true">HKCERT CTF 2022: Writeup on ★☆☆☆☆ (I)
+===
+
+## 美麗都大廈 / spyce (Web)
+
+1. Open the website
+2. Let&#39;s randomly click on something on the page, say &#34;Hello, world&#34;
+3. The page shows &#34;Hello from Spyce version 2.1!&#34;, and there is a link called &#34;Source for this page&#34;, click on it.
+4. The URL shows `path=%2Fhome%2Fspwnce%2Fwww%2Fdocs%2Fexamples%2Fhello.spy` in the query string
+5. Change the query string to `path=/flag1`, and browse it
+6. You get the flag!
+
+## 海山樓 / Flawed ElGamal (Crypto)
+
+### Challenge Summary
+
+The server will be returning an encrypted flag, $(c_1, c_2)$, every time a player connects to the server. This is the public key used:
+
+```python
+p = 1444779821068309665607966047026245709114363505560724292470220924533941341173119282750461450104319554545087521581252757303050671443847680075401505584975539
+g = 2
+h = 679175474187312157096793918495021788380347146757928688295980599009809870413272456661249570962293053504169610388075260415234004679602069004959459298631976
+```
+
+Note that the ciphertext is computed by a flawed ElGamal such that $(c_1, c_2)$:
+
+1. Generating a random $y \in [1, p-1]$,
+2. Compute $s := h^y \ \text{mod}\ p$,
+3. Compute $c_1 := g^y\ \text{mod}\ p$,
+4. Compute $c_2 := m \cdot s$.
+
+The goal is to obtain the flag, $m$.
+
+### Solution
+
+An important observation is that $c_2 := m \cdot s$ is not taken modulo $p$, therefore it is a multiple of $m$. If we get many ciphertexts $(c_1, c_2)$, $(c_1&#39;, c_2&#39;)$, ... by connecting to the server for multiple times, eventually we have
+
+$$m = \gcd(c_2, c_2&#39;, ...).$$
+
+We can use the Euclidean algorithm to compute the GCD of two numbers, given below:
+
+```python
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+```
+
+To compute GCD of multiple numbers ($a, b, ..., c$), we can apply GCD pairwise:
+
+$$\gcd(a, b, ..., c) = \gcd(...\gcd(\gcd(a, b), ...), c).$$
+
+After getting the number $m$, we can convert it into a string. From `chall.py`, the flag string is converted to a number by `m = int.from_bytes(flag, &#39;big&#39;)`. You may want to look at how an reverse operation can be done using [`int.to_bytes`](https://docs.python.org/3/library/stdtypes.html#int.to_bytes) in Python.
+
+:::danger
+**🏁 I am not getting the flag!** That means the `m` you got is incorrect. It is likely that the GCD you obtained is a small multiple of the actual $m$ - go get more $c_2$&#39;s and compute GCDs further!
+:::
+
+## 沙田大會堂 / echo (Pwn)
+
+1. Understand the source code
+    - The program reads and prints out what the user had typed.
+    - Repeat until the user input &#34;--&#34; and the global variable `can_leave` is not 0 (but by reading the code, `can_leave` is always 0?)
+2. Find out the bug
+    - `scanf(&#34;%s&#34;, buf)` does not limit the length of user input, vulnerable to `Buffer overflow attack`.
+    - `printf(buf)` looks odd. Usually, printing out a string in c should be `printf(&#34;%s&#34;, buf)`.
+    - If a user has control of the content of the 1st argument of the printf function, the user can attack the program with the `Format string attack`.
+    - `Format string attack` can potentially achieve `arbitrary memory read` and `arbitrary memory write`.
+3. Check the protection
+    - Run `Checksec` in gef, find out what protection methods are enabled 
+    - Since PIE (Position Independent Executable) protection is enabled, the address of the `get_shell` function is randomized.
+    - Since Canary is enabled, `Buffer overflow attack` does not work unless we need the value of canary.
+4. Attack
+    - Perform a `Format string attack` to leak one PIE address (an address that is under the effect of PIE), then calculate the address of the `get_shell` function. (The offset between the leaked address and the `get_shell` function is fixed)
+    - Perform a `Format string attack` to leak the canary value.
+    - Perform a `Format string attack` to overwrite the value of `can_leave` so that we can leave the loop and return from the main function (to trigger the `Buffer overflow attack`).
+    - Perform a `Buffer overflow attack` to overwrite the return address to the `get_shell` function.
+5. Exploit
+    - Write a python solve script. Install the pwntools module that provides a lot of useful functions for playing pwn. (pwntools-related knowledge had mentioned in this/last year&#39;s hkcert ctf pre-competition workshop)
+    - Understand the attack mentioned in step 4, and then craft the corresponding payloads
+    - Try to call the `get_shell` function to get the shell and cat the flag.
+    - Here is the solve script for you to start with:
+
+```python
+from pwn import *
+
+host = ??
+port_number = ??
+io = remote(&#39;&lt;host&gt;&#39;, port_nubmer)
+elf = ELF(&#39;./chall&#39;)
+
+# leak canary
+payload0 = ??
+io.sendlineafter(b&#39;\nInput:\n&#39;, payload0)
+
+# now the canary is leak on screen, script to get the canary value
+canary = ??
+
+# leak address
+payload1 = ??
+io.sendlineafter(b&#39;\nInput:\n&#39;, payload1)
+
+# now the address is leak on screen, script to get the leaked address
+leaked_address = ??
+pie_base = leaked_address - fixed_offset
+canLeave = pie_base + elf.symbols[&#39;can_leave&#39;]
+getShell = pie_base + elf.symbols[&#39;get_shell&#39;]
+
+# overwrite canLeave to non-Zero
+payload2 = ??
+io.sendlineafter(b&#39;\nInput:\n&#39;, payload2)
+
+# Calling system (in get_shell function) requires stack be aligned.
+# Add ret_gadget (to add rsp by 8) before calling get_shell to align the stack.
+ret_gadget = getShell + 25
+len_of_input_before_canary = ??
+payload3 = b&#39;a&#39; * len_of_input_before_canary + p64(canary) + p64(0), + p64(ret_gadget), p64(getShell)
+io.sendlineafter(b&#39;:\n&#39;, payload3)
+io.sendlineafter(b&#39;:\n&#39;, b&#39;--&#39;)
+
+io.interactive()
+```
+
+## 米埔自然護理區 / Fiddler Crab (Reverse)
+
+So you can use many ways to do this, but maybe you want to look in the traffic first to get a feel of what it does.
+
+To do so, we can setup a proxy in between to stiff all the traffic, and possibly modify the content.
+
+What it means is that you setup an intermediate server (aka proxy) in between the game server, 
+so the game client interacts with the proxy, and the proxy interacts with the game server. By this way, the proxy view and modify the data sent by both sides.
+
+You can use whatever tools to do it, for HTTP request, you can use `mitmproxy`, but in here, a TCP proxy is better (with `mitmproxy` may be annoying to setup).
+
+One of the possible tools will be [tcpproxy](https://github.com/ickerwx/tcpproxy).
+
+It will be something like this:
+
+```
+python tcpproxy.py -ti &lt;ip&gt; -tp &lt;port&gt; -lp 8000 -im textdump -om textdump
+```
+
+Then you can connect your chess client to the local proxy instead:
+```
+./chess_client 127.0.0.1:8000
+```
+
+And you should see the traffic in between shown via the proxy.
+
+After seeing the traffic, you should be able to see what the client send to the server, and vise versa.
+
+You can also modify the data sent via some other module from tcpproxy, such as
+
+```
+python tcpproxy.py -ti &lt;ip&gt; -tp &lt;port&gt; -lp 8000 -im replace:search=&lt;SEARCH&gt;:replace=&lt;REPLACE&gt; -om textdump
+```
+
+You can see their source code on github to learn more about how it works.
+
+If you try more, you will note not every modification works. What is the condition that make the replacement works? (Maybe related to the first few weird bytes?)
+
+By this point you should be able to cheat by modifying the packets. Good luck!
+
+## 珍寶海鮮舫 / SD Card (Forensics)
+
+### Solution
+
+Download `sdcard.zip`, extract it and found `sdcard.dd`. Put it into any digital forensic tool.
+
+In the following writeup, I have used [Autopsy](https://www.autopsy.com/download/) for demostration. You will be able to find file named `f0000000.png` under `$CarvedFiles`. 
+![](https://i.imgur.com/J4ZYqND.png)
+
+In alternative, you may see that Autopsy can search files by entension. A file name `_lag.png` can be found.
+![](https://i.imgur.com/Nsz17Lb.png)
+
+Both `f0000000.png` and  `_lag.png` are the same picture but with different names. I have extracted `f0000000.png` to continue my investigation.
+
+:::info
+If you are not using Autopsy, the image name may varies depending on the tool you used.
+:::
+
+We found that the image can be opened but nothing show up.
+![](https://i.imgur.com/ltd47JX.png)
+
+And the EXIF seems does not match with the content size.
+![](https://i.imgur.com/21rgcK9.png)
+
+We may continue the investigation flow in either ways:
+* Steganography
+* Corrupted image
+
+The file extension in PNG, so we decided to investigate the file as an corrupted image. You may read some inforatmion on PNG chuncks.
+![](https://raw.githubusercontent.com/corkami/pics/master/binary/PNG.png)
+[PNG](https://github.com/corkami/pics/blob/master/binary/PNG.png) © corkami, CC BY-NC-SA 2.0
+
+We decided to put `f0000000.png` into [PNG file chunk inspector](https://www.nayuki.io/page/png-file-chunk-inspector) for investigation. Multiple IHDR chunk was found.
+![](https://i.imgur.com/vFhItMf.png)
+
+We know that a legal PNG image should contain only 1 IHDR chunck, we can open a Hex Editor to edit the image `f0000000.png`.
+
+I used [HexEd.it](https://hexed.it/) for editing. You may wish to use HxD for the modification.
+![](https://i.imgur.com/2nJUn3Y.png)
+
+From the information from PNG file chunk inspector, we know that there are 2 option of IHDR chunck to remove:
+* Byte 8 - 32 (0x00000008 - 0x00000020)
+* Byte 33 - 57 (0x00000021 - 0x00000039)
+
+The first check IHDR check (Byte 8 - 32) shows the image has 1 pixel. This is more spcious and we decided to remove it first. Note that an IHDR chunk should be exactly 25 bytes.
+
+![](https://i.imgur.com/8634bH8.png)
+
+Once you have the first IHDR chunk removed, save the image and open it. You will be able to open the image now.
+![](https://i.imgur.com/ARHFdtr.png)
+
+I have the partial image included in my writeup so that you should try the guide yourself.
+![](https://i.imgur.com/fr5OuKt.png)
+</div>
+
+    <div class="document-footer container-fluid hmd-pb-2 hidden-print">
+        <div class="flex items-center justify-end -mb-5 text-right text-gray-500 text-3">
+            <span>
+                Last changed by
+                &nbsp;
+            </span>
+
+            
+                <span class="ui-lastchangeuser h-[18px]" data-profile="mystiz" data-placement="left">
+                    <a class="ui-user-icon inline-block w-[18px] h-[18px] m-0" style="background-image: url(https://avatars.githubusercontent.com/u/10565444?s=96);" target="_blank"></a>
+                </span>
+            
+        </div>
+
+        <hr class="my-7.5">
+        <div class="flex flex-col-reverse footer hmd-items-center sm:flex-row gap-[25px] sm:gap-0">
+    <div class="flex-1 block h-full">
+        <div class="flex gap-3">
+    
+        <span class="flex items-center justify-center ui-owner-team" data-placement="top" data-profile="blackb6a">
+            &thinsp;<a class="inline-block w-10 h-10 m-0 min-w-10 ui-user-icon" style="background-image: url(https://i.imgur.com/A9xLM6k.png);" target="_blank"></a>
+        </span>
+    
+
+
+    <div class="flex flex-col max-w-[303px] gap-1.5 justify-center">
+        <span class="font-bold text-5 text-black-brand">
+            
+                Black Bauhinia
+            
+        </span>
+
+        
+            <span class="text-gray-600 text-3">
+                Black Bauhinia CTF Team
+            </span>
+        
+    </div>
+</div>
+
+    </div>
+
+    <div class="footer__views">
+        <span class="mr-4">
+            <i class="fa fa-eye"></i> <span class="ui-viewcount">1990</span>
+        </span>
+
+    
+        <a class="ui-signin community-button" href="#">
+            <span>
+                <i class="fa fa-fw fa-heart-o"></i>
+                <span class="count"></span>
+            </span>
+        </a>
+
+        <a class="ui-signin community-button" href="#">
+            <span>
+                <i class="fa fa-fw fa-bookmark-o"></i>
+            </span>
+        </a>
+
+        <a class="ui-signin community-button" href="#">
+            <span>
+                <i class="fa fa-fw fa-bell-o"></i>
+            </span>
+        </a>
+    
+    </div>
+</div>
+
+
+
+<hr class="mt-7.5 mb-3.5">
+
+<div class="footer text-[15px] text-gray-700 text-center">
+    <span>Published on</span> <strong><a href="https://hackmd.io/" target="_blank"><i class="fa fa-file-text"></i> <span class="brand">HackMD</span></a></strong>
+</div>
+
+    </div>
+
+    <div class="ui-community unselectable hidden-print hidden-xs" style="display: none;">
+        
+            <a class="ui-signin community-button" href="#" title="Like" data-toggle="tooltip" data-placement="right" data-offset="0,5"><span><i class="fa fa-fw fa-heart-o"></i><span class="count hmd-ml-2"></span></span></a>
+            <a class="ui-signin community-button" href="#" title="Bookmark" data-toggle="tooltip" data-placement="right" data-offset="0,5"><span><i class="fa fa-fw fa-bookmark-o"></i></span></a>
+            <a class="ui-signin community-button" href="#" title="Subscribe" data-toggle="tooltip" data-placement="right" data-offset="0,5"><span ><i class="fa fa-fw fa-bell-o"></i></span></a>
+        
+    </div>
+
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-left dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+            </ul>
+        </div>
+    </div>
+
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="display:none;"></div>
+    
+
+    <div class="clearfix"></div>
+
+    <!-- signin modal -->
+<div class="modal fade signin-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: 10px; right: 20px; position: absolute;"><span aria-hidden="true">&times;</span></button>
+            
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+<h3>Sign in</h3>
+
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="hmd-dn"><input type="hidden" name="_csrf" value="yNfOyu8f-L_VOVPGip2_2gZHFHWY5seaTgng"></div>
+    <div class="hmd-dn"><input type="hidden" name="create_team" value="false"></div>
+    <div class="hmd-dn"><input type="hidden" name="create_paid_team" value="false"></div>
+    <div class="form-group  ">
+        <label for="email" class="control-label">Email</label>
+        <label for="inputEmail" class="control-label pull-right errors">
+            
+        </label>
+        <span class="help-block control-label with-errors pull-right" style="display: inline;"></span>
+        <div class="input-block">
+            
+                <input type="email" class="form-control" name="email" placeholder="Your email" required autocomplete="email">
+            
+            <span class="error-sign"></span>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="password" class="control-label">Password</label>
+        <label for="inputPassword" class="control-label pull-right errors">
+            
+        </label>
+        <span class="help-block control-label with-errors pull-right" style="display: inline;"></span>
+        <div class="input-block">
+            <input type="password" class="form-control" name="password" placeholder="Your password" required autocomplete="current-password">
+            <span class="error-sign"></span>
+            
+                <span class="control-label pull-right" style="font-size: 13px; margin-top: 5px;"><a href="https://hackmd.io/settings/forgotPassword" style="text-decoration: underline;">Forgot password</a></span>
+            
+        </div>
+    </div>
+
+    <div style="text-align: center; padding-top: 15px; margin-bottom: 0px;">
+        
+            <input type="submit" class="btn btn-success btn-large" formaction="https://hackmd.io/login" value="Sign in">
+        
+
+        
+    </div>
+</form>
+
+
+
+
+
+
+
+
+    
+        <p class="separator">or</p>
+    
+
+    
+        <p>By clicking below, you agree to our <a href="https://hackmd.io/s/terms" target="_blank">terms of service</a>.</p>
+    
+
+    
+
+
+
+
+
+
+
+
+ 
+
+
+
+<script id="gsi-client" src="https://accounts.google.com/gsi/client" async defer nonce="3af35c39-8abf-49a4-b0ab-623706b9585b"></script>
+<script nonce="3af35c39-8abf-49a4-b0ab-623706b9585b">
+    function handleCredentialResponse(response) {
+        const form = document.getElementById('sign-in-with-google-form')
+        form.children.credential.value = response.credential
+        form.children.method.value = location.href.toLowerCase() === 'https://hackmd.io/settings#general' ? 'merge' : 'login'
+        form.submit()
+    }
+    var GSI_READY = new Promise(function (resolve) {
+        function initialize () {
+            google.accounts.id.initialize({
+                client_id: '911617723593-drikdibvvn63slfd6kbqigo8ql1no55s.apps.googleusercontent.com',
+                callback: handleCredentialResponse
+            })
+            const loginPath = 'https://hackmd.io/login'
+            const joinPath = 'https://hackmd.io/join'
+            const renderButton = function () {
+                google.accounts.id.renderButton(
+                    document.getElementById('sign-in-with-google-button'),
+                    { type: 'standard', width: 250 }
+                )
+            }
+            if (location.href.toLowerCase() === loginPath || location.href.toLowerCase() === joinPath) {
+                renderButton()
+            } else {
+                $('.signin-modal').one('shown.bs.modal', function () {
+                    renderButton()
+                })
+            }
+            resolve()
+        }
+
+        window.addEventListener('load', function () { initialize() })
+    })
+</script>
+<form class="hidden" id="sign-in-with-google-form" action="/auth/google" method="post">
+    <input type="hidden" name="credential">
+    <input type="hidden" name="method">
+</form>
+ 
+
+<div class="social-buttons-container">
+    
+    <div id="sign-in-with-google-button"></div>
+    
+    
+    <a href="https://hackmd.io/auth/facebook" class="btn btn-lg btn-block btn-social btn-facebook">
+        <i class="fa fa-facebook"></i> Sign in via Facebook
+    </a>
+    
+    
+    <a href="https://hackmd.io/auth/twitter" class="btn btn-lg btn-block btn-social btn-twitter">
+        <i class="fa fa-twitter"></i> Sign in via Twitter
+    </a>
+    
+    
+    <a href="https://hackmd.io/auth/github" class="btn btn-lg btn-block btn-social btn-github">
+        <i class="fa fa-github"></i> Sign in via GitHub
+    </a>
+    
+    
+    <a href="https://hackmd.io/auth/dropbox" class="btn btn-lg btn-block btn-social btn-dropbox">
+        <i class="fa fa-dropbox"></i> Sign in via Dropbox
+    </a>
+    
+    
+    
+</div>
+
+
+
+
+
+    <div >
+        <p>New to HackMD? <a href="https://hackmd.io/join">Sign up</a></p>
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+    
+    <script src="https://www.googletagmanager.com/gtag/js?id=UA-60728495-1"></script>
+    <script nonce="3af35c39-8abf-49a4-b0ab-623706b9585b">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        let userid = (document.cookie.match('(^|; )userid=([^;]*)')||0)[2];
+        gtag('config', 'UA-60728495-1', {'user_id': userid});
+        
+    </script>
+
+
+    
+<script src="https://browser.sentry-cdn.com/5.15.5/bundle.min.js" crossorigin="anonymous"></script>
+<script nonce="3af35c39-8abf-49a4-b0ab-623706b9585b">Sentry.init({ dsn: 'https://73410f1915d84abc8b2dd1f1aabd1c82@sentry.hackmd.dev/4', environment: 'production', integrations: function (intrus) { return intrus.filter(function (itr) { return itr.name !== 'TryCatch' }) } });</script>
+
+
+    
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KLW9Z3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+    <script src="https://hackmd.io/api/i18n.js"></script>
+     <script src="https://assets.hackmd.io/build/font-vendor.1fb25ee1747ae32ffe89.js" defer="defer"></script><script src="https://assets.hackmd.io/build/common-vendor.5fa67d7f53b925f0505d.js" defer="defer"></script><script src="https://assets.hackmd.io/build/pretty-vendor.1381a43d93da10075a02.js" defer="defer"></script><script src="https://assets.hackmd.io/build/pretty-common.f105045e756f7bd3d15c.js" defer="defer"></script><script src="https://assets.hackmd.io/build/pretty.6014ed313bdf373ac5bd.js" defer="defer"></script>
+
+    
+
+</body>
+</html>
