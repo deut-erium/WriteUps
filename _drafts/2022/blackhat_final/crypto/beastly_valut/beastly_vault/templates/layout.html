@@ -1,0 +1,73 @@
+<!doctype html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='page.css')}}">
+</head>
+
+<title>Beastly Vault</title>
+
+<div class="top">
+
+  <img src="{{url_for('static', filename='beastly_vault.png')}}" style="width: 1000px;">
+
+</div>
+
+<div class="bottom">
+
+  {% with messages = get_flashed_messages(category_filter=["error"]) %}
+
+    {% if messages %}
+
+      {% for message in messages %}
+
+        <div class="flash_error">
+
+          <strong>{{ message }}</strong>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+  {% endwith %}
+
+  {% with messages = get_flashed_messages(category_filter=["success"]) %}
+
+    {% if messages %}
+
+      {% for message in messages %}
+
+        <div class="flash_success">
+
+          <strong>{{ message }}</strong>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+  {% endwith %}
+
+  {% with messages = get_flashed_messages(category_filter=["warning"]) %}
+
+    {% if messages %}
+
+      {% for message in messages %}
+
+        <div class="flash_warning">
+
+          <strong>{{ message }}</strong>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+  {% endwith %}
+
+</div>
+
+{% block body %}{% endblock %}

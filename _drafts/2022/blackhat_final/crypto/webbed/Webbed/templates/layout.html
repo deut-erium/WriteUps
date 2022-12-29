@@ -1,0 +1,55 @@
+<!doctype html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='page.css')}}">
+</head>
+
+<title>Webbed</title>
+
+<div class="top">
+
+  <h1>Webbed</h1>
+
+</div>
+
+<div class="bottom">
+
+  {% with messages = get_flashed_messages(category_filter=["error"]) %}
+
+    {% if messages %}
+
+      {% for message in messages %}
+
+        <div class="flash_error">
+
+          <strong>{{ message }}</strong>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+  {% endwith %}
+
+  {% with messages = get_flashed_messages(category_filter=["success"]) %}
+
+    {% if messages %}
+
+      {% for message in messages %}
+
+        <div class="flash_success">
+
+          <strong>{{ message }}</strong>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+  {% endwith %}
+
+</div>
+
+{% block body %}{% endblock %}

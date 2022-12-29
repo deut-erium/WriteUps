@@ -1,0 +1,12 @@
+version: '2.4'
+services:
+  webbed:
+    build: .
+    image: bh-ctf-sa:webbed
+    environment:
+      - FLAG=$FLAG
+    ports:
+      - 5000:5000
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
