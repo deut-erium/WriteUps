@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - Affina and the quadratics | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - Affina and the quadratics" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2045,8 +2045,8 @@ x = 9c + 8 mod 26
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct</span> <span class="o">=</span> <span class="s">"7rr4p6_4e_4ph6bo8hap2"</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="s">"rrpephbohap"</span>
-<span class="n">ct26</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">97</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alpha</span><span class="p">]</span>
-<span class="n">pt</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">chr</span><span class="p">((</span><span class="mi">9</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span> <span class="o">+</span> <span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ct26</span> <span class="p">]</span>
+<span class="n">ct26</span> <span class="o">=</span> <span class="p">[</span> <span class="nf">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">97</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">alpha</span><span class="p">]</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="p">[</span> <span class="nf">chr</span><span class="p">((</span><span class="mi">9</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span> <span class="o">+</span> <span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ct26</span> <span class="p">]</span>
 </code></pre></div></div>
 
 <p>putting it in places, we get

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - Unvreakable Vase | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Unvreakable Vase" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2017,18 +2017,18 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 </code></pre></div></div>
 <p>This seems to be base64 encoded but I think all the letters are converted to lowercase as hinted by <code class="language-plaintext highlighter-rouge">squished and flat</code></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base64</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
 <span class="n">data</span> <span class="o">=</span> <span class="s">'zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30='</span>
-<span class="n">m1</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
 
 <span class="c1">#b'\xcela\xcf{dok\xf3\xc7z\xe8k\x19\xdf\xcf\x1c\xe5n_co{\xeeu\xffas_crypv\x0foo}'
 </span></code></pre></div></div>
 <p>Lets try captilizing the first ‘z’</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base64</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
 <span class="n">data</span> <span class="o">=</span> <span class="s">'zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30='</span>
-<span class="n">m1</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
 
 <span class="c1">#b'fla\xcf{dok\xf3\xc7z\xe8k\x19\xdf\xcf\x1c\xe5n_co{\xeeu\xffas_crypv\x0foo}'
 </span></code></pre></div></div>
@@ -2042,8 +2042,8 @@ In base64, we have 64 possible characters, which means each base64 letter can ho
 Which in turn means 4 base64 characters = 24 bits = 3 bytes<br>
 So instead of taking all 52 characters of <code class="language-plaintext highlighter-rouge">prompt</code> together and then checking <code class="language-plaintext highlighter-rouge">2**52</code> possibilities, we can simply take 4 characters at a time, and thenn checking <code class="language-plaintext highlighter-rouge">2**4</code> possibilites for output in the desired character set.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">decode</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">decode</span>
+<span class="kn">from</span> <span class="n">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="s">'zmxhz3tkb2vzx3roaxnfzxzlbl9jb3vudf9hc19jcnlwdg9vb30='</span>
 <span class="n">CHARSET</span> <span class="o">=</span> <span class="s">'abcdefghijklmnopqrstuvwxyz_{}'</span>
@@ -2052,22 +2052,22 @@ So instead of taking all 52 characters of <code class="language-plaintext highli
 <span class="k">def</span> <span class="nf">case_variations</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="n">possibilities</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
-        <span class="n">possibilities</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">char</span><span class="p">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">char</span><span class="p">.</span><span class="n">upper</span><span class="p">()])</span>
-    <span class="k">return</span> <span class="p">[</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span> <span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">possibilities</span><span class="p">)]</span>
+        <span class="n">possibilities</span><span class="p">.</span><span class="nf">append</span><span class="p">([</span><span class="n">char</span><span class="p">.</span><span class="nf">lower</span><span class="p">(),</span> <span class="n">char</span><span class="p">.</span><span class="nf">upper</span><span class="p">()])</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span> <span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="nf">product</span><span class="p">(</span><span class="o">*</span><span class="n">possibilities</span><span class="p">)]</span>
 
 
 <span class="n">flag</span> <span class="o">=</span> <span class="sa">b</span><span class="s">""</span>
 <span class="n">real_data</span> <span class="o">=</span> <span class="s">""</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="mi">4</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="mi">4</span><span class="p">):</span>
     <span class="n">crib</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">case_variation</span> <span class="ow">in</span> <span class="n">case_variations</span><span class="p">(</span><span class="n">crib</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="ow">in</span> <span class="n">CHARSET</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">decode</span><span class="p">(</span><span class="n">case_variation</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">case_variation</span> <span class="ow">in</span> <span class="nf">case_variations</span><span class="p">(</span><span class="n">crib</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nf">all</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="ow">in</span> <span class="n">CHARSET</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="nf">decode</span><span class="p">(</span><span class="n">case_variation</span><span class="p">)):</span>
             <span class="n">real_data</span> <span class="o">+=</span> <span class="n">case_variation</span>
-            <span class="n">flag</span> <span class="o">+=</span> <span class="n">decode</span><span class="p">(</span><span class="n">case_variation</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+            <span class="n">flag</span> <span class="o">+=</span> <span class="nf">decode</span><span class="p">(</span><span class="n">case_variation</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
             <span class="k">break</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
 </code></pre></div></div>
 <p>Which prints out stuff</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sa">b</span><span class="s">'fla'</span>

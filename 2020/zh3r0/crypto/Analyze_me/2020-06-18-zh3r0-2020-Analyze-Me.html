@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>zh3r0 2020 Crypto - Analyze Me | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - Analyze Me" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2037,33 +2037,33 @@ Author : Whit3_D3vi1
 </ul>
 
 <p>Lets take a look at contents of <a href="server.py">server.py</a></p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.strxor</span> <span class="kn">import</span> <span class="n">strxor</span>
-<span class="kn">from</span> <span class="nn">binascii</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">flags</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">string</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">Crypto.Util.number</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.strxor</span> <span class="kn">import</span> <span class="n">strxor</span>
+<span class="kn">from</span> <span class="n">binascii</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="n">flags</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="n">string</span>
 
 
-<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">==</span><span class="mi">80</span>
+<span class="k">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">==</span><span class="mi">80</span>
 
 <span class="n">msg1</span><span class="o">=</span><span class="n">msg</span>
 <span class="k">def</span> <span class="nf">from_the_bases</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="n">count</span><span class="p">):</span>
     <span class="n">count</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="o">%</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
-    <span class="n">msg</span><span class="o">=</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">=</span><span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
     <span class="k">elif</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">b32encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nf">b32encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
     <span class="k">elif</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">:</span>
-        <span class="k">return</span> <span class="n">b85encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nf">b85encode</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">hexlify</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nf">hexlify</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
 
 
 
-<span class="k">print</span><span class="p">(</span><span class="s">'''Hello!
+<span class="nf">print</span><span class="p">(</span><span class="s">'''Hello!
 Welcome to Xor analysis..
 There are two parts.
 All the best ;)
@@ -2072,28 +2072,28 @@ Here is the first part:
 
 '''</span><span class="p">)</span>
 <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">msg1</span><span class="p">),</span><span class="mi">4</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="n">msg1</span><span class="p">),</span><span class="mi">4</span><span class="p">):</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">bytes_to_long</span><span class="p">(</span><span class="n">from_the_bases</span><span class="p">(</span><span class="n">msg1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span><span class="n">count</span><span class="p">)),</span><span class="n">end</span><span class="o">=</span><span class="s">'|'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">bytes_to_long</span><span class="p">(</span><span class="nf">from_the_bases</span><span class="p">(</span><span class="n">msg1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span><span class="n">count</span><span class="p">)),</span><span class="n">end</span><span class="o">=</span><span class="s">'|'</span><span class="p">)</span>
     <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
 
-<span class="k">print</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">()</span>
 
-<span class="n">user_input</span><span class="o">=</span><span class="nb">input</span><span class="p">(</span><span class="s">'Enter the decoded message:'</span><span class="p">)</span>
+<span class="n">user_input</span><span class="o">=</span><span class="nf">input</span><span class="p">(</span><span class="s">'Enter the decoded message:'</span><span class="p">)</span>
 
-<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="o">==</span><span class="mi">80</span>
+<span class="k">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="o">==</span><span class="mi">80</span>
 
 <span class="k">if</span> <span class="n">user_input</span><span class="o">==</span><span class="n">msg</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'You have done well.'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'Here is the key: '</span><span class="p">,</span><span class="n">bytes_to_long</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">encode</span><span class="p">()))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'You have done well.'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'Here is the key: '</span><span class="p">,</span><span class="nf">bytes_to_long</span><span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="nf">encode</span><span class="p">()))</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'Try harder ;)'</span><span class="p">)</span>
-    <span class="n">quit</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'Try harder ;)'</span><span class="p">)</span>
+    <span class="nf">quit</span><span class="p">()</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">You completed the first part </span><span class="se">\n</span><span class="s"> Here is the second and final part ;) '</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">You completed the first part </span><span class="se">\n</span><span class="s"> Here is the second and final part ;) '</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s">'GOOD LUCK DECODING!!! </span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">'GOOD LUCK DECODING!!! </span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
 
 
 <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s">'0'</span><span class="p">:{</span><span class="s">'0'</span><span class="p">:</span><span class="s">'63'</span><span class="p">,</span><span class="s">'1'</span><span class="p">:</span><span class="s">'7c'</span><span class="p">,</span><span class="s">'2'</span><span class="p">:</span><span class="s">'77'</span><span class="p">,</span><span class="s">'3'</span><span class="p">:</span><span class="s">'7b'</span><span class="p">,</span><span class="s">'4'</span><span class="p">:</span><span class="s">'f2'</span><span class="p">,</span><span class="s">'5'</span><span class="p">:</span><span class="s">'6b'</span><span class="p">,</span><span class="s">'6'</span><span class="p">:</span><span class="s">'6f'</span><span class="p">,</span><span class="s">'7'</span><span class="p">:</span><span class="s">'c5'</span><span class="p">,</span><span class="s">'8'</span><span class="p">:</span><span class="s">'30'</span><span class="p">,</span><span class="s">'9'</span><span class="p">:</span><span class="s">'01'</span><span class="p">,</span><span class="s">'a'</span><span class="p">:</span><span class="s">'67'</span><span class="p">,</span><span class="s">'b'</span><span class="p">:</span><span class="s">'2b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">:</span><span class="s">'fe'</span><span class="p">,</span><span class="s">'d'</span><span class="p">:</span><span class="s">'d7'</span><span class="p">,</span><span class="s">'e'</span><span class="p">:</span><span class="s">'ab'</span><span class="p">,</span><span class="s">'f'</span><span class="p">:</span><span class="s">'76'</span><span class="p">},</span>
@@ -2117,11 +2117,11 @@ Here is the first part:
 </span>
 <span class="n">final_key</span><span class="o">=</span><span class="n">key</span><span class="c1">#key is a variable from my flags module, ohhh you have the key if you solved the first part
 </span>
-<span class="n">list_flag</span><span class="o">=</span><span class="p">[</span><span class="n">hexlify</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="n">encode</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span>
+<span class="n">list_flag</span><span class="o">=</span><span class="p">[</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="n">flag</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span>
 
 <span class="n">final_list</span><span class="o">=</span><span class="p">[]</span>
 
-<span class="n">rand_num</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">rand_num</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">list_flag</span><span class="p">:</span>
     <span class="nb">chr</span><span class="o">=</span><span class="n">c</span>
@@ -2129,22 +2129,22 @@ Here is the first part:
     <span class="k">while</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="n">rand_num</span><span class="p">:</span>
         <span class="nb">chr</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">4</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">6</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span>
         <span class="n">num</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="n">final_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
+    <span class="n">final_list</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
 
-<span class="n">key_list</span><span class="o">=</span><span class="p">[</span><span class="n">hexlify</span><span class="p">(</span><span class="n">final_key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="n">encode</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">),</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">key_list</span><span class="o">=</span><span class="p">[</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">final_key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">),</span><span class="mi">4</span><span class="p">)]</span>
 
-<span class="n">xor_list</span><span class="o">=</span><span class="p">[</span><span class="n">strxor</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">encode</span><span class="p">(),</span><span class="n">j</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">final_list</span><span class="p">,</span><span class="n">key_list</span><span class="p">)]</span>
+<span class="n">xor_list</span><span class="o">=</span><span class="p">[</span><span class="nf">strxor</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="nf">encode</span><span class="p">(),</span><span class="n">j</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">final_list</span><span class="p">,</span><span class="n">key_list</span><span class="p">)]</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">xor_list</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">xor_list</span><span class="p">)</span>
 
-<span class="n">user_input</span><span class="o">=</span><span class="nb">input</span><span class="p">(</span><span class="s">'Enter the flag:'</span><span class="p">)</span>
+<span class="n">user_input</span><span class="o">=</span><span class="nf">input</span><span class="p">(</span><span class="s">'Enter the flag:'</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">user_input</span><span class="o">==</span><span class="n">final_flag</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'Perfect you got the flag ;) </span><span class="se">\n</span><span class="s">Go submit it!!!'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'Perfect you got the flag ;) </span><span class="se">\n</span><span class="s">Go submit it!!!'</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'You must try harder!!!!!!!'</span><span class="p">)</span>
-    <span class="n">quit</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'You must try harder!!!!!!!'</span><span class="p">)</span>
+    <span class="nf">quit</span><span class="p">()</span>
 </code></pre></div></div>
 <p>Here we have two parts of the challenge, Only after solving the first, we can move forward to the second part.</p>
 
@@ -2164,22 +2164,22 @@ Enter the decoded message:^C
 
 <p>Lets see what we get after processing data from the network and converting it to strings</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span><span class="p">,</span> <span class="n">xor</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b32decode</span><span class="p">,</span> <span class="n">b64decode</span><span class="p">,</span> <span class="n">b85decode</span><span class="p">,</span> <span class="n">b16decode</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="c1">#to convert bigint to bytestring
-</span><span class="kn">import</span> <span class="nn">binascii</span> <span class="c1">#for binascii.Error which is raised when base decoding is not performed correctly
-</span><span class="kn">import</span> <span class="nn">string</span> <span class="c1"># for printable characters
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span><span class="p">,</span> <span class="n">xor</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b32decode</span><span class="p">,</span> <span class="n">b64decode</span><span class="p">,</span> <span class="n">b85decode</span><span class="p">,</span> <span class="n">b16decode</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span> <span class="c1">#to convert bigint to bytestring
+</span><span class="kn">import</span> <span class="n">binascii</span> <span class="c1">#for binascii.Error which is raised when base decoding is not performed correctly
+</span><span class="kn">import</span> <span class="n">string</span> <span class="c1"># for printable characters
 </span>
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"crypto.zh3r0.ml"</span><span class="p">,</span> <span class="mi">3871</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">chal1</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Enter the decoded message:'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">chal1</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">chal1</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Enter the decoded message:'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">chal1</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
-<span class="n">chal1_data</span> <span class="o">=</span> <span class="n">chal1</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n\n\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'|</span><span class="se">\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'|'</span><span class="p">)</span>
-<span class="n">chal1_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">long_to_bytes</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">chal1_data</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">chal1_data</span><span class="p">)</span>
+<span class="n">chal1_data</span> <span class="o">=</span> <span class="n">chal1</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n\n\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'|</span><span class="se">\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'|'</span><span class="p">)</span>
+<span class="n">chal1_data</span> <span class="o">=</span> <span class="p">[</span><span class="nf">long_to_bytes</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">chal1_data</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">chal1_data</span><span class="p">)</span>
 </code></pre></div></div>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[b'RzAwRA==', b'L5KEQMY=', b'Uq(q%', b'53545f50', b'NFJUXw==', b'JE2V6RA=', b'FitaH', b'48455233', b'X0k1Xw==', b'GRPUMMI=', b'G)G@X', b'30525f59', b'MFVfSA==', b'GRJEIXY=', b'S1?jb', b'5f3d5f7a', b'aDNyMA==', b'PNTDI2Y=', b'Ghb#g', b'34677d2e']
 </code></pre></div></div>
@@ -2237,41 +2237,41 @@ We will simply start from lower base, try to decode, if it results in error, mov
 But there’s one caveat, the string may actually decode on a lower base, and produce garbage decoding.<br>
 We may check for decoded string to be in printable domain and raise an error otherwise. This way we may ensure correctness.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PRINTABLE</span> <span class="o">=</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">.</span><span class="n">encode</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PRINTABLE</span> <span class="o">=</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">check_valid</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">PRINTABLE</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">string</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">all</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">PRINTABLE</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">string</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
             <span class="k">raise</span> <span class="nb">ValueError</span>
-        <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
     <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">b32decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nf">b32decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="nb">ValueError</span>
-            <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">ValueError</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="nf">except </span><span class="p">(</span><span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">ValueError</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nf">check_valid</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="nb">ValueError</span>
-                <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">ValueError</span><span class="p">):</span>
+                <span class="n">res</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="nf">except </span><span class="p">(</span><span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">ValueError</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">val</span> <span class="o">=</span> <span class="n">b85decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-                    <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="nf">b85decode</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                    <span class="n">res</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                 <span class="k">except</span> <span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">:</span>
                     <span class="k">pass</span>
     <span class="k">return</span> <span class="n">res</span>
 
-<span class="n">part_1</span> <span class="o">=</span> <span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="n">decode</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">chal1_data</span> <span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">part_1</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">part_1</span> <span class="o">=</span> <span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">decode</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">chal1_data</span> <span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">part_1</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 <p><code class="language-plaintext highlighter-rouge">G00D_TH3_FIRST_P4RT_I5_D0N3_HER3_I5_4_F14G_F0R_Y0U_H4RD_W0RK_=_zh3r0{f4k3_f14g}.</code><br>
 Awesome! We are now presented with the second part of the challenge</p>
@@ -2289,10 +2289,10 @@ Enter the flag:
 
 <p>Writing so much in this writeup, I can tell, this could have been easily two challenges. But anyways</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_flag</span><span class="o">=</span><span class="p">[</span><span class="n">hexlify</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="n">encode</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_flag</span><span class="o">=</span><span class="p">[</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="n">flag</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span>
 
 <span class="n">final_list</span><span class="o">=</span><span class="p">[]</span>
-<span class="n">rand_num</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">rand_num</span><span class="o">=</span><span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">list_flag</span><span class="p">:</span>
     <span class="nb">chr</span><span class="o">=</span><span class="n">c</span>
@@ -2300,13 +2300,13 @@ Enter the flag:
     <span class="k">while</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="n">rand_num</span><span class="p">:</span>
         <span class="nb">chr</span><span class="o">=</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">4</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span><span class="o">+</span><span class="n">table</span><span class="p">[</span><span class="nb">chr</span><span class="p">[</span><span class="mi">6</span><span class="p">]][</span><span class="nb">chr</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span>
         <span class="n">num</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="n">final_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
+    <span class="n">final_list</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
 
-<span class="n">key_list</span><span class="o">=</span><span class="p">[</span><span class="n">hexlify</span><span class="p">(</span><span class="n">final_key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="n">encode</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">),</span><span class="mi">4</span><span class="p">)]</span>
+<span class="n">key_list</span><span class="o">=</span><span class="p">[</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">final_key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">].</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">),</span><span class="mi">4</span><span class="p">)]</span>
 
-<span class="n">xor_list</span><span class="o">=</span><span class="p">[</span><span class="n">strxor</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">encode</span><span class="p">(),</span><span class="n">j</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">final_list</span><span class="p">,</span><span class="n">key_list</span><span class="p">)]</span>
+<span class="n">xor_list</span><span class="o">=</span><span class="p">[</span><span class="nf">strxor</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="nf">encode</span><span class="p">(),</span><span class="n">j</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">final_list</span><span class="p">,</span><span class="n">key_list</span><span class="p">)]</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">xor_list</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">xor_list</span><span class="p">)</span>
 </code></pre></div></div>
 <p>Now this is a really obfusticated way of doing things. It is basically</p>
 <ul>
@@ -2319,20 +2319,20 @@ Enter the flag:
 <p>For reversing this, we will need to reverse the <code class="language-plaintext highlighter-rouge">TABLE</code> and xor it with the provided <code class="language-plaintext highlighter-rouge">key</code>  <br>
 The <code class="language-plaintext highlighter-rouge">TABLE</code> itself was weird way of writing a table XD</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INV_TABLE</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">TABLE</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">v</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">TABLE</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">v</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
         <span class="n">INV_TABLE</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="n">key</span>
 
-<span class="n">flag_unxored</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">xor</span><span class="p">(</span><span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">),</span><span class="n">KEY</span><span class="p">.</span><span class="nb">hex</span><span class="p">().</span><span class="n">encode</span><span class="p">()).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">flag_unxored</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">xor</span><span class="p">(</span><span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">flag_enc</span><span class="p">),</span><span class="n">KEY</span><span class="p">.</span><span class="nf">hex</span><span class="p">().</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 <p>Now we need to do the de-substitution of the <code class="language-plaintext highlighter-rouge">flag_unxored</code> bytes, until we get the flag</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="n">flag</span> <span class="o">=</span> <span class="s">""</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">flag_unxored</span><span class="p">:</span>
-        <span class="n">flag</span><span class="o">+=</span><span class="n">INV_TABLE</span><span class="p">[</span><span class="nb">hex</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:].</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">flag</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+        <span class="n">flag</span><span class="o">+=</span><span class="n">INV_TABLE</span><span class="p">[</span><span class="nf">hex</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:].</span><span class="nf">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
     <span class="k">if</span> <span class="sa">b</span><span class="s">'zh3r0'</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
         <span class="k">break</span>
     <span class="n">flag_unxored</span> <span class="o">=</span> <span class="n">flag</span>
 </code></pre></div></div>

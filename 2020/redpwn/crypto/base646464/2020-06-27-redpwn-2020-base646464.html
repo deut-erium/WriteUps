@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Redpwn 2020 Crypto - base646464 | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - base646464" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1986,30 +1986,30 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 </ul>
 
 <p>Lets take a look at generate.js, which reads</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">btoa</span> <span class="o">=</span> <span class="nx">str</span> <span class="o">=&gt;</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">str</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">'</span><span class="s1">base64</span><span class="dl">'</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">btoa</span> <span class="o">=</span> <span class="nx">str</span> <span class="o">=&gt;</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nf">from</span><span class="p">(</span><span class="nx">str</span><span class="p">).</span><span class="nf">toString</span><span class="p">(</span><span class="dl">'</span><span class="s1">base64</span><span class="dl">'</span><span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">flag</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">flag.txt</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span><span class="p">).</span><span class="nx">trim</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">flag</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nf">readFileSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">flag.txt</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span><span class="p">).</span><span class="nf">trim</span><span class="p">();</span>
 
 <span class="kd">let</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">flag</span><span class="p">;</span>
-<span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">btoa</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
+<span class="nf">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nf">btoa</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
 
-<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">cipher.txt</span><span class="dl">"</span><span class="p">,</span> <span class="nx">ret</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nf">writeFileSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">cipher.txt</span><span class="dl">"</span><span class="p">,</span> <span class="nx">ret</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>The function <code class="language-plaintext highlighter-rouge">btoa</code> is basically string to its base64 encoding.<br />
 The flag is encoded repetitively 25 times in a for loop.<br />
 We just need to base64 decode it 25 times and we will get the flag.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'cipher.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">cipher_file</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">cipher_file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'cipher.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">cipher_file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cipher_file</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></div>
 <p>A cool sarcasm on bad crypto challenges in CTFs :)</p>
 <h3 id="flagl00ks_l1ke_a_l0t_of_64s">flag{l00ks_l1ke_a_l0t_of_64s}</h3>

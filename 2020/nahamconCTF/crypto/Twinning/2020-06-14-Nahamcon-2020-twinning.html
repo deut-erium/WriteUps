@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - Twinning | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Twinning" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1993,30 +1993,30 @@ p = sqrt( N + 1 ) - 1
 Once <code class="language-plaintext highlighter-rouge">p</code> and <code class="language-plaintext highlighter-rouge">q</code> are found, rest is a piece of cake</p>
 
 <p>Although the time was not a concern, I still wrote a small script</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">import</span> <span class="nn">gmpy2</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">import</span> <span class="n">gmpy2</span>
+<span class="kn">import</span> <span class="n">re</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"jh2i.com"</span><span class="p">,</span> <span class="mi">50013</span>
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'What is the PIN?'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
-<span class="n">e_n</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'(\d+),(\d+)'</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">e</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e_n</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e_n</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">PIN</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'is (\d+)'</span><span class="p">,</span><span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'What is the PIN?'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+<span class="n">e_n</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'(\d+),(\d+)'</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">e_n</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">e_n</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'is (\d+)'</span><span class="p">,</span><span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="k">def</span> <span class="nf">factor</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">e</span><span class="p">):</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">iroot</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="nf">iroot</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span> <span class="c1"># returns d
+    <span class="k">return</span> <span class="n">gmpy2</span><span class="p">.</span><span class="nf">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span> <span class="c1"># returns d
 </span>
-<span class="n">DECRYPTED_PIN</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">PIN</span><span class="p">,</span> <span class="n">factor</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">e</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DECRYPTED_PIN</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">DECRYPTED_PIN</span> <span class="o">=</span> <span class="nf">pow</span><span class="p">(</span><span class="n">PIN</span><span class="p">,</span> <span class="nf">factor</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">e</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">DECRYPTED_PIN</span><span class="p">).</span><span class="nf">encode</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <h3 id="flagthats_the_twinning_pin_to_win">flag{thats_the_twinning_pin_to_win}</h3>

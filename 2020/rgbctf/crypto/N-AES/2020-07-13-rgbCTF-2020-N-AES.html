@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>rgbCTF 2020 Crypto - N-AES | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="rgbCTF 2020 Crypto - N-AES" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1990,110 +1990,110 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
   <li><a href="./n_aes.py">n_aes.py</a></li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">binascii</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">urandom</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">binascii</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
+<span class="kn">from</span> <span class="n">os</span> <span class="kn">import</span> <span class="n">urandom</span>
+<span class="kn">from</span> <span class="n">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
 
 <span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 
 
-<span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="n">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
+    <span class="nf">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">([</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
 
 
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">):</span>
-    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">b64decode</span><span class="p">(</span><span class="n">plaintext</span><span class="p">),</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span>
+    <span class="n">ciphertext</span> <span class="o">=</span> <span class="nf">pad</span><span class="p">(</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">plaintext</span><span class="p">),</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span>
     <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seed_bytes</span><span class="p">:</span>
-        <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="n">encrypt</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
+        <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">):</span>
-    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="s">"rgbCTF 2020 Crypto - N-AES"</span>    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">):</span>
-        <span class="n">plaintext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="n">decrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+    <span class="n">plaintext</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="s">"rgbCTF 2020 Crypto - N-AES"</span>    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">):</span>
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">unpad</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="nf">unpad</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">gen_chall</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="n">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nf">pad</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">challenge</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">urandom</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">gen_chall</span><span class="p">(</span><span class="n">challenge</span><span class="p">).</span><span class="n">decode</span><span class="p">())</span>
+    <span class="n">challenge</span> <span class="o">=</span> <span class="nf">b64encode</span><span class="p">(</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">gen_chall</span><span class="p">(</span><span class="n">challenge</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"[1] Encrypt"</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"[2] Decrypt"</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"[3] Solve challenge"</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"[4] Give up"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"[1] Encrypt"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"[2] Decrypt"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"[3] Solve challenge"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"[4] Give up"</span><span class="p">)</span>
 
-        <span class="n">command</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"&gt; "</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"&gt; "</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s">'1'</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter text to encrypt, in base64: "</span><span class="p">)</span>
-                <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter key, in base64: "</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">))</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Enter text to encrypt, in base64: "</span><span class="p">)</span>
+                <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Enter key, in base64: "</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s">'2'</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter text to decrypt, in base64: "</span><span class="p">)</span>
-                <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter key, in base64: "</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">decrypt</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">))</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Enter text to decrypt, in base64: "</span><span class="p">)</span>
+                <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Enter key, in base64: "</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s">'3'</span><span class="p">:</span>
-                <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the decrypted challenge, in base64: "</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span> <span class="o">==</span> <span class="n">challenge</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s">"Correct!"</span><span class="p">)</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s">"Here's your flag:"</span><span class="p">)</span>
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"flag"</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
+                <span class="n">answer</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Enter the decrypted challenge, in base64: "</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span> <span class="o">==</span> <span class="n">challenge</span><span class="p">:</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="s">"Correct!"</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="s">"Here's your flag:"</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">"flag"</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="nf">print</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s">"Incorrect!"</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="s">"Incorrect!"</span><span class="p">)</span>
                 <span class="k">break</span>
             <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s">'4'</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">"Invalid command!"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="s">"Invalid command!"</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">binascii</span><span class="p">.</span><span class="n">Error</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"Base64 error!"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Base64 error!"</span><span class="p">)</span>
         <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"Error!"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Error!"</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="nf">main</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>On netcatting, we get get a base64 encoded encryption of a base64 encoded random string of 64 bytes.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">challenge</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">urandom</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">gen_chall</span><span class="p">(</span><span class="n">challenge</span><span class="p">).</span><span class="n">decode</span><span class="p">())</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">challenge</span> <span class="o">=</span> <span class="nf">b64encode</span><span class="p">(</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">gen_chall</span><span class="p">(</span><span class="n">challenge</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <p>Taking a look at <code class="language-plaintext highlighter-rouge">gen_chall</code></p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">gen_chall</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="n">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nf">pad</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div></div>
 <p>And</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="n">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
+    <span class="nf">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">([</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
 </code></pre></div></div>
 <p>This seems quite tricky, since <code class="language-plaintext highlighter-rouge">rand_block</code> will be presenting some random key and <code class="language-plaintext highlighter-rouge">gen_chall</code> is encrypting with some random key 128 times! right?<br />
 <strong>WRONG</strong>, There are some few caveats which we might exploit ;)</p>
@@ -2102,18 +2102,18 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
   <li>More importantly, once it gets called, <code class="language-plaintext highlighter-rouge">key_seed</code> is fixed! So all the random blocks would essentially be the same! One may test it out.</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">urandom</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">os</span> <span class="kn">import</span> <span class="n">urandom</span>
+<span class="kn">from</span> <span class="n">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
 
 <span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 
 
-<span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="n">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">key_seed</span><span class="o">=</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
+    <span class="nf">seed</span><span class="p">(</span><span class="n">key_seed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">([</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">)])</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">rand_block</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">())</span>
 
 <span class="c1">#b'h\xf5\x81o*\xce\x97\x90^9O\x96T9~w'
 #b'h\xf5\x81o*\xce\x97\x90^9O\x96T9~w'
@@ -2131,59 +2131,59 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 
 <h2 id="solution">Solution</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
+<span class="kn">from</span> <span class="n">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<span class="kn">import</span> <span class="n">re</span>
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"challenge.rgbsec.xyz"</span><span class="p">,</span> <span class="mi">34567</span>
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">CHALL</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">())</span>
+<span class="n">CHALL</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
 <span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">):</span>
     <span class="s">"""random block for given seed byte"""</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">])</span>
+    <span class="nf">seed</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">([</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">])</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">dec_serv</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">):</span>
     <span class="s">"""Requests decryption from the server"""</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">))</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">))</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">))</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
     <span class="k">if</span> <span class="sa">b</span><span class="s">'Error'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">decd</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'b</span><span class="se">\'</span><span class="s">([a-zA-Z0-9\+/]+)</span><span class="se">\'</span><span class="s">'</span><span class="p">,</span><span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">decd</span><span class="p">)</span>
+        <span class="n">decd</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'b</span><span class="se">\'</span><span class="s">([a-zA-Z0-9\+/]+)</span><span class="se">\'</span><span class="s">'</span><span class="p">,</span><span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">decd</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
-    <span class="n">decryption</span> <span class="o">=</span> <span class="n">dec_serv</span><span class="p">(</span><span class="n">CHALL</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mi">128</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="n">decryption</span> <span class="o">=</span> <span class="nf">dec_serv</span><span class="p">(</span><span class="n">CHALL</span><span class="p">,</span> <span class="nf">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mi">128</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">decryption</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">decryption</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">decryption</span><span class="p">)</span>
         <span class="k">break</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">decrypt</span><span class="p">(</span><span class="n">CHALL</span><span class="p">)))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'rgbCTF{.*}'</span><span class="p">).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">b64encode</span><span class="p">(</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">CHALL</span><span class="p">)))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'rgbCTF{.*}'</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <h3 id="wait-that-wont-work"><strong>WAIT! THAT WONT WORK!!</strong></h3>
 <p>Tbh, I expected that to work but it didnt! Why?<br />
 Because server uses this decryption routine</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span> <span class="n">seed_bytes</span><span class="p">):</span>
-    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
-    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">):</span>
-        <span class="n">plaintext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="n">decrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+    <span class="n">plaintext</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
+    <span class="n">seed_bytes</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">seed_bytes</span><span class="p">):</span>
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">unpad</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nf">b64encode</span><span class="p">(</span><span class="nf">unpad</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
 </code></pre></div></div>
 <p>Still cant spot it out?<br />
 All the devil is in <code class="language-plaintext highlighter-rouge">rand_block(byte)</code>. How? Because when byte objects are iterated upon, all the individual bytes are returned as int.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="sa">b</span><span class="s">'a'</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="nf">type</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
 <span class="c1">#97 &lt;class 'int'&gt;
 </span></code></pre></div></div>
@@ -2199,49 +2199,49 @@ We know the decryption is correct just by looking at correct padding, since len(
   <p>1 in AES initialization suggests <code class="language-plaintext highlighter-rouge">AES.MODE_ECB</code></p>
   <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">):</span>
     <span class="n">ct_orig</span> <span class="o">=</span> <span class="n">ct</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ct_orig</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
-            <span class="n">ct</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">])),</span><span class="mi">1</span><span class="p">).</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+            <span class="n">ct</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(</span><span class="nf">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">])),</span><span class="mi">1</span><span class="p">).</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">unpad</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">continue</span>
 </code></pre></div>  </div>
 </blockquote>
 
 <p>Putting the final script in <a href="./solve.py">solve.py</a></p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="kn">from</span> <span class="nn">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
+<span class="kn">from</span> <span class="n">random</span> <span class="kn">import</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<span class="kn">import</span> <span class="n">re</span>
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"challenge.rgbsec.xyz"</span><span class="p">,</span> <span class="mi">34567</span>
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">CHALL</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">())</span>
+<span class="n">CHALL</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
 <span class="k">def</span> <span class="nf">rand_block</span><span class="p">(</span><span class="n">byte</span><span class="p">):</span>
     <span class="s">"""random block for given seed byte"""</span>
-    <span class="n">seed</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">])</span>
+    <span class="nf">seed</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">([</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">])</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">&gt;'</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">):</span>
     <span class="n">ct_orig</span> <span class="o">=</span> <span class="n">ct</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ct_orig</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
-            <span class="n">ct</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">rand_block</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">])),</span><span class="mi">1</span><span class="p">).</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+            <span class="n">ct</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nf">rand_block</span><span class="p">(</span><span class="nf">bytes</span><span class="p">([</span><span class="n">i</span><span class="p">])),</span><span class="mi">1</span><span class="p">).</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">unpad</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">continue</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">decrypt</span><span class="p">(</span><span class="n">CHALL</span><span class="p">)))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'rgbCTF{.*}'</span><span class="p">).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">b64encode</span><span class="p">(</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">CHALL</span><span class="p">)))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'rgbCTF{.*}'</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <h3 id="rgbctfi_d0nt_7hink_7his_d03s_wh47_y0u_7hink_i7_d03s">rgbCTF{i_d0nt_7hink_7his_d03s_wh47_y0u_7hink_i7_d03s}</h3>

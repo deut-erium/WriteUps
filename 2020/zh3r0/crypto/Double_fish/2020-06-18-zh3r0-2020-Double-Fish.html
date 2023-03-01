@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>zh3r0 2020 Crypto - Double Fish | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - Double Fish" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2018,30 +2018,30 @@ xxkxxxxkxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxcddddddddddddddddddddddd
 
 <p>I wrote <a href="./solve.py">this script</a> to bruteforce the XOR</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cat</span> <span class="n">solve</span><span class="p">.</span><span class="n">py</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">import</span> <span class="n">string</span>
+<span class="kn">from</span> <span class="n">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="n">k</span> <span class="o">=</span> <span class="s">'_0m\K2!2%\ggrdups</span><span class="se">\v</span><span class="s">d~gq'</span>
 
 <span class="k">def</span> <span class="nf">xor</span><span class="p">(</span><span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">):</span>
     <span class="s">"""perform string xor on str1 and str2 and return string"""</span>
-    <span class="n">len_1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
-    <span class="n">len_2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">str2</span><span class="p">)</span>
+    <span class="n">len_1</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
+    <span class="n">len_2</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">str2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">len_1</span> <span class="o">&gt;=</span><span class="n">len_2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">^</span><span class="nb">ord</span><span class="p">(</span><span class="n">str2</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">len_2</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_1</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">^</span><span class="nf">ord</span><span class="p">(</span><span class="n">str2</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">len_2</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">len_1</span><span class="p">)</span> <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">len_1</span><span class="p">])</span><span class="o">^</span><span class="nb">ord</span><span class="p">(</span><span class="n">str2</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_2</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">str1</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">len_1</span><span class="p">])</span><span class="o">^</span><span class="nf">ord</span><span class="p">(</span><span class="n">str2</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">len_2</span><span class="p">)</span> <span class="p">)</span>
 
 
-<span class="k">for</span> <span class="n">keysize</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">keysize</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">possible_keys</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">key_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">keysize</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">key_pos</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">keysize</span><span class="p">):</span>
         <span class="n">current_keys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">[:</span><span class="mi">95</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xor</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">ch</span><span class="p">),</span> <span class="n">k</span><span class="p">[</span><span class="n">key_pos</span><span class="p">::</span><span class="n">keysize</span><span class="p">]</span> <span class="p">)):</span>
-                <span class="n">current_keys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span>
-        <span class="n">possible_keys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_keys</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">possible_keys</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">xor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nf">all</span><span class="p">(</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">[:</span><span class="mi">95</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">xor</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="n">ch</span><span class="p">),</span> <span class="n">k</span><span class="p">[</span><span class="n">key_pos</span><span class="p">::</span><span class="n">keysize</span><span class="p">]</span> <span class="p">)):</span>
+                <span class="n">current_keys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span>
+        <span class="n">possible_keys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">current_keys</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nf">product</span><span class="p">(</span><span class="o">*</span><span class="n">possible_keys</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nf">xor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
 </code></pre></div></div>
 <p><strong>No results are produced</strong><br />
 No reasonable results are produced with key size above 3 (there are too many valid decryptions)<br />
@@ -2064,37 +2064,37 @@ Which is clearly not the one I get. Moreover, no python module produced valid bl
 <p>It was not very evident which mode of blowfish was used. Spending some time, I found it was CBC mode and was just a matter of IV
 I tested out in two different modules <br />
 <a href="https://pypi.org/project/blowfish/">blowfish</a></p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">blowfish</span>
-<span class="kn">import</span> <span class="nn">base64</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">blowfish</span>
+<span class="kn">import</span> <span class="n">base64</span>
 <span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'K3y__1511_sdfgasg_bgjde'</span>
-<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="s">'pFvkylIBH33Qlu0t7rgPk98SrYGz5kt1pKe+2lCKxZ0='</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">blowfish</span><span class="p">.</span><span class="n">Cipher</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-<span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">decrypt_cbc</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span><span class="n">ct</span><span class="p">[:</span><span class="mi">8</span><span class="p">]))</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="s">'pFvkylIBH33Qlu0t7rgPk98SrYGz5kt1pKe+2lCKxZ0='</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">blowfish</span><span class="p">.</span><span class="nc">Cipher</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="sa">b</span><span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="nf">decrypt_cbc</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span><span class="n">ct</span><span class="p">[:</span><span class="mi">8</span><span class="p">]))</span>
 </code></pre></div></div>
 <p>Or alternatively using <a href="https://pycryptodome.readthedocs.io/en/latest/src/cipher/blowfish.html">pycryptodome</a></p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">Blowfish</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">Blowfish</span>
 <span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'K3y__1511_sdfgasg_bgjde'</span>
-<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="s">'pFvkylIBH33Qlu0t7rgPk98SrYGz5kt1pKe+2lCKxZ0='</span><span class="p">)</span>
-<span class="n">B</span> <span class="o">=</span> <span class="n">Blowfish</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">Blowfish</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span><span class="n">ct</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
-<span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="s">'pFvkylIBH33Qlu0t7rgPk98SrYGz5kt1pKe+2lCKxZ0='</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">Blowfish</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">Blowfish</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span><span class="n">ct</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 </code></pre></div></div>
 <p>Which produces correct plaintext!!<br />
 There is still something funky about blowfish, which needs to be figured out</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'zh3r0{B10w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="mi">8</span><span class="p">:])</span>
 <span class="sa">b</span><span class="s">'z</span><span class="se">\x94</span><span class="s">ib2</span><span class="se">\xf0\x98\xd1</span><span class="s">0w_7h3_Fish_!!}</span><span class="se">\x01</span><span class="s">'</span>
 </code></pre></div></div>
 <p>It produces correct decryption only once, the first block seems corrupted later on.<br />

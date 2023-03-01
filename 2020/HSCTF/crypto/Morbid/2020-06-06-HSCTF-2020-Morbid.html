@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - Morbid | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - Morbid" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2031,7 +2031,7 @@ CT: 27435 88151 28274 65679 378.
 Without thinking more about analyzing the problem statistically, one simple way to solve the problem is <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute-forcing</a>
 the key which is 9 different decimal characters i.e <strong>9! (362880)</strong> permutations to check, which is fairly easy.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">itertools</span>  <span class="c1"># creates iterators for efficient looping
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">itertools</span>  <span class="c1"># creates iterators for efficient looping
 </span>
 <span class="c1"># dictionary of mapping as on
 # https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-English_variants
@@ -2095,7 +2095,7 @@ the key which is 9 different decimal characters i.e <strong>9! (362880)</strong>
 <span class="p">}</span>
 
 <span class="n">revMorse</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Dictionary containing inverse mapping from morse code to its corresponding encoded character
-</span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">morse</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+</span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">morse</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
     <span class="n">revMorse</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
 
 
@@ -2104,26 +2104,26 @@ the key which is 9 different decimal characters i.e <strong>9! (362880)</strong>
     Finds the decryption of `message` encoded in morse with individual
     letters separated by x and words separated by xx
     """</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="n">message</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'x'</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">revMorse</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">message</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s">'x'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">revMorse</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
 
 
 <span class="c1"># Checking the example given in the pdf
-</span><span class="k">print</span><span class="p">(</span><span class="n">decrypt_morse</span><span class="p">(</span><span class="s">"---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x"</span><span class="p">))</span>
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">decrypt_morse</span><span class="p">(</span><span class="s">"---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x"</span><span class="p">))</span>
 <span class="n">ct</span> <span class="o">=</span> <span class="s">"118289293938434193849271464117429364476994241473157664969879696938145689474393647294392739247721652822414624317164228466"</span>
 
 <span class="n">substitution_token</span> <span class="o">=</span> <span class="p">[</span><span class="s">'..'</span><span class="p">,</span> <span class="s">'.-'</span><span class="p">,</span> <span class="s">'.x'</span><span class="p">,</span> <span class="s">'-.'</span><span class="p">,</span> <span class="s">'--'</span><span class="p">,</span> <span class="s">'-x'</span><span class="p">,</span> <span class="s">'x.'</span><span class="p">,</span> <span class="s">'x-'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">itertools</span><span class="p">.</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">)):</span>
+<span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">itertools</span><span class="p">.</span><span class="nf">permutations</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="mi">9</span><span class="p">)):</span>
     <span class="c1"># Iterate over permutations of substitution_tokens to find the
 </span>    <span class="c1"># permutations which finds the valid decryption
 </span>    <span class="n">ct1</span> <span class="o">=</span> <span class="n">ct</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
-        <span class="n">ct1</span> <span class="o">=</span> <span class="n">ct1</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">substitution_token</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+        <span class="n">ct1</span> <span class="o">=</span> <span class="n">ct1</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">substitution_token</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
         <span class="c1"># Replace digit in ciphertext with given permutation of substitutions
 </span>    <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s">'flag'</span> <span class="ow">in</span> <span class="n">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">'flag'</span> <span class="ow">in</span> <span class="nf">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">):</span>
             <span class="c1"># if the decyrpted strings containts flag, we get our string
-</span>            <span class="k">print</span><span class="p">(</span><span class="n">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">))</span>
+</span>            <span class="nf">print</span><span class="p">(</span><span class="nf">decrypt_morse</span><span class="p">(</span><span class="n">ct1</span><span class="p">))</span>
             <span class="k">break</span>
     <span class="k">except</span> <span class="nb">KeyError</span><span class="p">:</span>
         <span class="k">continue</span>
@@ -2137,9 +2137,9 @@ the key which is 9 different decimal characters i.e <strong>9! (362880)</strong>
 <p>Since I found the challenge interesting, here is some analysis</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">substitution</span> <span class="o">=</span> <span class="p">[</span><span class="n">substitution_token</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">]</span>
-<span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">digit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">digit</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"digit {0}: {1} {2}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">substitution</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">frequency</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">digit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">digit</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"digit {0}: {1} {2}"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">substitution</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">frequency</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
 </code></pre></div></div>
 
 <table>

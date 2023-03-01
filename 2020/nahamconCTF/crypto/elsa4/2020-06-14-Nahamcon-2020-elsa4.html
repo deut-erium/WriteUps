@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - elsa4 | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - elsa4" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2022,65 +2022,65 @@ We are provided with a subtle hint <code class="language-plaintext highlighter-r
 
 <p>I also wrote <code class="language-plaintext highlighter-rouge">encrypt</code>, <code class="language-plaintext highlighter-rouge">decryption_challenge</code>, <code class="language-plaintext highlighter-rouge">send_decryption</code> utilities, which would encrypt a given message from server, ask for a decryption challenge and send the decryption of given decryption challenge respectively to the server.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">lc4</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="n">lc4</span>
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"jh2i.com"</span><span class="p">,</span> <span class="mi">50014</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-<span class="n">initial_data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">initial_data</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">initial_data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">initial_data</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
 
 <span class="k">def</span> <span class="nf">get_timestamp</span><span class="p">():</span>
-    <span class="n">hms</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">rb</span><span class="s">'(\d{2}):(\d{2}):(\d{2})'</span><span class="p">,</span> <span class="n">initial_data</span><span class="p">)</span>
-    <span class="n">ymd</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">rb</span><span class="s">'(\d{4})\/(\d{2})\/(\d{2})'</span><span class="p">,</span> <span class="n">initial_data</span><span class="p">)</span>
+    <span class="n">hms</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">rb</span><span class="s">'(\d{2}):(\d{2}):(\d{2})'</span><span class="p">,</span> <span class="n">initial_data</span><span class="p">)</span>
+    <span class="n">ymd</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">rb</span><span class="s">'(\d{4})\/(\d{2})\/(\d{2})'</span><span class="p">,</span> <span class="n">initial_data</span><span class="p">)</span>
     <span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">hms</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hms</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hms</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">mn</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">ymd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ymd</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">ymd</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">mn</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="nf">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nf">tuple</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">mn</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)))</span>
 
 
-<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="o">*</span><span class="n">get_timestamp</span><span class="p">()).</span><span class="n">timestamp</span><span class="p">()</span>
-<span class="n">random</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">datetime</span><span class="p">(</span><span class="o">*</span><span class="nf">get_timestamp</span><span class="p">()).</span><span class="nf">timestamp</span><span class="p">()</span>
+<span class="n">random</span><span class="p">.</span><span class="nf">seed</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
 
 <span class="n">nonce_length</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># some big number
 </span><span class="n">alphabet</span> <span class="o">=</span> <span class="s">"#_23456789abcdefghijklmnopqrstuvwxyz"</span>
 <span class="n">nonce_chars</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nonce_length</span><span class="p">):</span>
-    <span class="n">nonce_chars</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">sample</span><span class="p">(</span><span class="n">alphabet</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">nonce_length</span><span class="p">):</span>
+    <span class="n">nonce_chars</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="nf">sample</span><span class="p">(</span><span class="n">alphabet</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">):</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span>
         <span class="sa">b</span><span class="s">'Key = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)'</span><span class="p">,</span>
         <span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span>
         <span class="sa">b</span><span class="s">'Encrypted = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)'</span><span class="p">,</span>
         <span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">key</span><span class="p">,</span> <span class="n">encrypted</span>
 
 
 <span class="k">def</span> <span class="nf">decryption_challenge</span><span class="p">():</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Decrypted ='</span><span class="p">)</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Decrypted ='</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span>
         <span class="sa">b</span><span class="s">'Key = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)'</span><span class="p">,</span>
         <span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span>
         <span class="sa">b</span><span class="s">'Encrypted = ([#_23456789abcdefghijklmnopqrstuvwxyz]+)'</span><span class="p">,</span>
         <span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">key</span><span class="p">,</span> <span class="n">encrypted</span>
 
 
 <span class="k">def</span> <span class="nf">send_decryption</span><span class="p">(</span><span class="n">dec</span><span class="p">):</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">dec</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'&gt;'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <p>The only concern I am left with is <strong>HOW IS THE NONCE USED!!?</strong><br>

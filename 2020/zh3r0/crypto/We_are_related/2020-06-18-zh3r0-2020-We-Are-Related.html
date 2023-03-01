@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>zh3r0 2020 Crypto - We are related | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - We are related" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2047,35 +2047,35 @@ If we have two linearly related messages, and their corresponding ciphertexts an
   <li>So we have two messages, <code class="language-plaintext highlighter-rouge">int(flag) and 256*int(flag)+ord('a')</code></li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">Crypto.PublicKey</span> <span class="kn">import</span> <span class="n">RSA</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">Crypto.PublicKey</span> <span class="kn">import</span> <span class="n">RSA</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
+<span class="kn">import</span> <span class="n">re</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"crypto.zh3r0.ml"</span><span class="p">,</span> <span class="mi">9841</span>
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'0.Exit'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'0.Exit'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>
-<span class="n">pub_key</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'-----END PUBLIC KEY-----</span><span class="se">\n</span><span class="s">'</span><span class="p">).</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>
+<span class="n">pub_key</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'-----END PUBLIC KEY-----</span><span class="se">\n</span><span class="s">'</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
 
-<span class="n">rsa</span> <span class="o">=</span> <span class="n">RSA</span><span class="p">.</span><span class="n">importKey</span><span class="p">(</span><span class="n">b64decode</span><span class="p">(</span><span class="n">pub_key</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">-----END PUBLIC KEY-----</span><span class="se">\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'-----BEGIN PUBLIC KEY-----'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">pub_key</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">rsa</span> <span class="o">=</span> <span class="n">RSA</span><span class="p">.</span><span class="nf">importKey</span><span class="p">(</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">pub_key</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n</span><span class="s">-----END PUBLIC KEY-----</span><span class="se">\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'-----BEGIN PUBLIC KEY-----'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">pub_key</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
 <span class="n">N</span> <span class="o">=</span> <span class="n">rsa</span><span class="p">.</span><span class="n">n</span>
 <span class="n">E</span> <span class="o">=</span> <span class="n">rsa</span><span class="p">.</span><span class="n">e</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">()</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'a'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'0'</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'BYE'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">()</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'a'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'0'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'BYE'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
-<span class="n">C1</span><span class="p">,</span> <span class="n">C2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">b</span><span class="s">'(\d+)</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="n">data</span><span class="p">))</span>
+<span class="n">C1</span><span class="p">,</span> <span class="n">C2</span> <span class="o">=</span> <span class="nf">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="nf">findall</span><span class="p">(</span><span class="sa">b</span><span class="s">'(\d+)</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="n">data</span><span class="p">))</span>
 </code></pre></div></div>
 <p>This part of the calculation I did it in sage</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff = ord('a')

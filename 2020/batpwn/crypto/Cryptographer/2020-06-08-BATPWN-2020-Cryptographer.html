@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>BATPWN 2020 Crypto - Cryptographer | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="BATPWN 2020 Crypto - Cryptographer" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2025,28 +2025,28 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 <p>and <a href="noob.py">noob.py</a> which contents read</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python2
 # I AM NOOB :)
-</span><span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">izip</span><span class="p">,</span> <span class="n">cycle</span>
-<span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">import</span> <span class="nn">time</span>
+</span><span class="kn">import</span> <span class="n">string</span>
+<span class="kn">from</span> <span class="n">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
+<span class="kn">from</span> <span class="n">itertools</span> <span class="kn">import</span> <span class="n">izip</span><span class="p">,</span> <span class="n">cycle</span>
+<span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">import</span> <span class="n">time</span>
 
 <span class="k">def</span> <span class="nf">xor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">a</span><span class="o">^</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="nf">bytearray</span><span class="p">(</span><span class="n">a</span><span class="o">^</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="o">*</span><span class="nf">map</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">])))</span>
 
 <span class="n">flag</span><span class="o">=</span><span class="s">""</span>
 
-<span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">print</span> <span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
-<span class="n">key</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))).</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+<span class="k">print</span> <span class="nf">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+<span class="n">key</span> <span class="o">=</span> <span class="nf">md5</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))).</span><span class="nf">hexdigest</span><span class="p">()</span>
 <span class="n">my_hexdata</span> <span class="o">=</span> <span class="n">key</span>
 
 <span class="n">scale</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">num_of_bits</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">noobda</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">my_hexdata</span><span class="p">,</span> <span class="n">scale</span><span class="p">))[</span><span class="mi">2</span><span class="p">:].</span><span class="n">zfill</span><span class="p">(</span><span class="n">num_of_bits</span><span class="p">)</span>
+<span class="n">noobda</span> <span class="o">=</span> <span class="nf">bin</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">my_hexdata</span><span class="p">,</span> <span class="n">scale</span><span class="p">))[</span><span class="mi">2</span><span class="p">:].</span><span class="nf">zfill</span><span class="p">(</span><span class="n">num_of_bits</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">noobda</span>
-<span class="n">xorer</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span><span class="n">noobda</span><span class="p">)</span>
-<span class="n">noobie</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">encodestring</span><span class="p">(</span><span class="n">xorer</span><span class="p">).</span><span class="n">strip</span><span class="p">()</span>
+<span class="nf">xorer</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span><span class="n">noobda</span><span class="p">)</span>
+<span class="n">noobie</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">encodestring</span><span class="p">(</span><span class="n">xorer</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">noobie</span>
 </code></pre></div></div>
 <p>Hmm, python2 <img class="emoji" title=":disappointed:" alt=":disappointed:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61e.png" height="20" width="20"> and quite a wierd script.</p>
@@ -2055,29 +2055,29 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"></path>
 thinking I can bruteforce starting from current time backwards.</p>
 
 <p>But it was actually xoring the flag with two values <code class="language-plaintext highlighter-rouge">b'0' or b'1'</code>, So there are a very little number of possiblities to try.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">from</span> <span class="n">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
+<span class="kn">import</span> <span class="n">time</span>
 
 <span class="k">def</span> <span class="nf">xor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">a</span><span class="o">^</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">])))</span>
+        <span class="k">return</span> <span class="nf">bytearray</span><span class="p">(</span><span class="n">a</span><span class="o">^</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="o">*</span><span class="nf">map</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">])))</span>
 
-<span class="n">timestamp_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">())</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'noob.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ct_file</span><span class="p">:</span>
-    <span class="n">ct</span> <span class="o">=</span> <span class="n">ct_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">timestamp_initial</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">())</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'noob.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ct_file</span><span class="p">:</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">ct_file</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
 
-<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">):</span>
     <span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp_initial</span> <span class="o">-</span> <span class="n">i</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))).</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="nf">md5</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))).</span><span class="nf">hexdigest</span><span class="p">()</span>
     <span class="n">my_hexdata</span> <span class="o">=</span> <span class="n">key</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="mi">16</span>
     <span class="n">num_of_bits</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">noobda</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">my_hexdata</span><span class="p">,</span> <span class="n">scale</span><span class="p">))[</span><span class="mi">2</span><span class="p">:].</span><span class="n">zfill</span><span class="p">(</span><span class="n">num_of_bits</span><span class="p">)</span>
-    <span class="n">xorer</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">noobda</span><span class="p">)</span>
+    <span class="n">noobda</span> <span class="o">=</span> <span class="nf">bin</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">my_hexdata</span><span class="p">,</span> <span class="n">scale</span><span class="p">))[</span><span class="mi">2</span><span class="p">:].</span><span class="nf">zfill</span><span class="p">(</span><span class="n">num_of_bits</span><span class="p">)</span>
+    <span class="n">xorer</span> <span class="o">=</span> <span class="nf">xor</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">noobda</span><span class="p">)</span>
     <span class="k">if</span> <span class="s">'batpwn{'</span> <span class="ow">in</span> <span class="n">xorer</span> <span class="ow">and</span> <span class="s">'}'</span> <span class="ow">in</span> <span class="n">xorer</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">xorer</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">xorer</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>batpwn{bsxptogr`qhy^is_cd`uuigtl^ast}

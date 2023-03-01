@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - Randomization 1 | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - Randomization 1" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2039,9 +2039,9 @@ Taking a quick look of decompilaton of next</p>
 <p>As the start value is printed out before beginning the loop, we can predict all the values by writing a simple function</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">next_10</span><span class="p">(</span><span class="n">curr</span><span class="p">):</span>
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
 		<span class="n">curr</span> <span class="o">=</span> <span class="p">(</span><span class="n">curr</span> <span class="o">*</span> <span class="mh">0x25</span> <span class="o">+</span> <span class="mh">0x41</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span> 
+		<span class="nf">print</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span> 
 </code></pre></div></div>
 
 <p>We dont need to bother about automating nc, just input all 10 values in one go as timing is not really an issue</p>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>zh3r0 2020 Crypto - Hastads Message | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - Hastads Message" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2013,31 +2013,31 @@ So if we can get <code class="language-plaintext highlighter-rouge">e</code> mes
 No problems, we can request the server as many times we wish, 
 Basic idea is to apply <a href="https://en.wikipedia.org/wiki/Chinese_Remainder_Theorem">Chinese Remainder Theorem</a> over the set of C’s and N’s till we get a valid decryption.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">sympy.ntheory.modular</span> <span class="kn">import</span> <span class="n">crt</span>
-<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">iroot</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">sympy.ntheory.modular</span> <span class="kn">import</span> <span class="n">crt</span>
+<span class="kn">from</span> <span class="n">gmpy2</span> <span class="kn">import</span> <span class="n">iroot</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"crypto.zh3r0.ml"</span><span class="p">,</span> <span class="mi">7419</span>
 <span class="n">n</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-<span class="n">n</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]))</span>
-<span class="n">c</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]))</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">n</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]))</span>
+<span class="n">c</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]))</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 <span class="n">e</span><span class="o">=</span><span class="mi">2</span>
 <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-    <span class="n">n</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]))</span>
-    <span class="n">c</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]))</span>
-    <span class="n">resultant</span><span class="p">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="n">crt</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
-    <span class="n">value</span><span class="p">,</span> <span class="n">is_perfect</span> <span class="o">=</span> <span class="n">iroot</span><span class="p">(</span><span class="n">resultant</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+    <span class="n">n</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]))</span>
+    <span class="n">c</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]))</span>
+    <span class="n">resultant</span><span class="p">,</span> <span class="n">mod</span> <span class="o">=</span> <span class="nf">crt</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">is_perfect</span> <span class="o">=</span> <span class="nf">iroot</span><span class="p">(</span><span class="n">resultant</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">is_perfect</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="n">decode</span><span class="p">())</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="nf">decode</span><span class="p">())</span>
         <span class="k">break</span>
     <span class="n">e</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 
 </code></pre></div></div>
 

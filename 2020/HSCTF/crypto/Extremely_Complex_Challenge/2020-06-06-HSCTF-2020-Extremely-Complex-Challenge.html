@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - Extremely Complex Challenge | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - Extremely Complex Challenge" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1993,7 +1993,7 @@ a = (x1 - x2)^-1 (y1^2 - x1^3) - (y2^2 - x2^3)  (mod p)
 
 <p>Now as we have all parameters, we can solve <a href="https://en.wikipedia.org/wiki/Discrete_logarithm#Cryptography">ECDLP</a> easily since the sizes are too small.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gmpy2</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">gmpy2</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="mi">404993569381</span>
 <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="mi">391109997465</span><span class="p">,</span> <span class="mi">167359562362</span><span class="p">)</span>
@@ -2002,15 +2002,15 @@ a = (x1 - x2)^-1 (y1^2 - x1^3) - (y2^2 - x2^3)  (mod p)
 
 <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">diff</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">%</span> <span class="n">p</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">diff</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="p">.</span><span class="nf">invert</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">diff</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">p</span>
 
-<span class="n">E</span> <span class="o">=</span> <span class="n">EllipticCurve</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">])</span>
+<span class="n">E</span> <span class="o">=</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="nc">GF</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">])</span>
 
-<span class="n">G</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-<span class="n">P</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-<span class="n">PK</span> <span class="o">=</span> <span class="n">G</span><span class="p">.</span><span class="n">discrete_log</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="nc">E</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">P</span> <span class="o">=</span> <span class="nc">E</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="n">PK</span> <span class="o">=</span> <span class="n">G</span><span class="p">.</span><span class="nf">discrete_log</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">PK</span><span class="p">)</span>
 <span class="n">G</span><span class="o">*</span><span class="n">PK</span> <span class="o">==</span> <span class="n">P</span>
 <span class="c1">#17683067357
 </span></code></pre></div></div>

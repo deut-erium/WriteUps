@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - XORed | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - XORed" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1999,19 +1999,19 @@ Hence we get Flag as
 <code class="language-plaintext highlighter-rouge">(Flag ^ Key 1^ Key2 ^ Key3 ^ Key4 ^ Key5) ^ (Key1 ^ Key3) ^ (Key2 ^ Key3 ^ Key5) ^ (Key3 ^ Key4))</code></p>
 
 <p>Here are multiple ways of doing it in python</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">xor</span>
-<span class="n">K13</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b'</span><span class="p">)</span>
-<span class="n">K235</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05'</span><span class="p">)</span>
-<span class="n">K34</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a'</span><span class="p">)</span>
-<span class="n">F12345</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s">'306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">xor</span>
+<span class="n">K13</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="s">'9a13ea39f27a12000e083a860f1bd26e4a126e68965cc48bee3fa11b'</span><span class="p">)</span>
+<span class="n">K235</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="s">'557ce6335808f3b812ce31c7230ddea9fb32bbaeaf8f0d4a540b4f05'</span><span class="p">)</span>
+<span class="n">K34</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="s">'996e59a867c171397fc8342b5f9a61d90bda51403ff6326303cb865a'</span><span class="p">)</span>
+<span class="n">F12345</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="s">'306d34c5b6dda0f53c7a0f5a2ce4596cfea5ecb676169dd7d5931139'</span><span class="p">)</span>
 
 <span class="c1">#1 xor from pwntools
-</span><span class="n">flag</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">K13</span><span class="p">,</span> <span class="n">K235</span><span class="p">,</span> <span class="n">K34</span><span class="p">,</span> <span class="n">F12345</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+</span><span class="n">flag</span> <span class="o">=</span> <span class="nf">xor</span><span class="p">(</span><span class="n">K13</span><span class="p">,</span> <span class="n">K235</span><span class="p">,</span> <span class="n">K34</span><span class="p">,</span> <span class="n">F12345</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 
 <span class="c1">#2 Doing shit yourself
-</span><span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">([</span> <span class="nb">chr</span><span class="p">(</span><span class="n">K13</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K235</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K34</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">F12345</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">K13</span><span class="p">)</span> <span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span><span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span> <span class="nf">chr</span><span class="p">(</span><span class="n">K13</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K235</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K34</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">F12345</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">K13</span><span class="p">)</span> <span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 
 <span class="c1">#flag{n0t_t00_h4rD_h0p3fully} YES
 </span></code></pre></div></div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Redpwn 2020 Crypto - 12 Shades of Redpwn | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - 12 Shades of Redpwn" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2014,8 +2014,8 @@ I don't even know where to start, the wheel looks more like a clock than a ciphe
 <p>Voila, here we go</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">EXTRACTED</span> <span class="o">=</span> <span class="s">'86 90 81 87 a3 49 99 43 97 97 41 92 49 7b 41 97 7b 44 92 7b 44 96 98 a5'</span>
 
-<span class="n">flag</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">EXTRACTED</span><span class="p">.</span><span class="n">split</span><span class="p">()])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span><span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">EXTRACTED</span><span class="p">.</span><span class="nf">split</span><span class="p">()])</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="flag--flag9u3ss1n9_1s_4n_4rt">flag = flag{9u3ss1n9_1s_4n_4rt}</h3>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>RACTF 2020 Crypto - Its as easy as access=0000 | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="RACTF 2020 Crypto - Its as easy as access=0000" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2027,59 +2027,59 @@ We found a strange service, it looks like you can generate an access token for t
 
 <p>And we are provided with server file <a href="access.py">access.py</a>, whose contents read</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">m</span> <span class="n">Crypto</span><span class="p">.</span><span class="n">Util</span><span class="p">.</span><span class="n">Padding</span> <span class="kn">import</span> <span class="nn">pad</span><span class="p">,</span> <span class="n">unpad</span>
-<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="kn">from</span> <span class="nn">Crypto.Random</span> <span class="kn">import</span> <span class="n">get_random_bytes</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="n">m</span> <span class="n">Crypto</span><span class="p">.</span><span class="n">Util</span><span class="p">.</span><span class="n">Padding</span> <span class="kn">import</span> <span class="n">pad</span><span class="p">,</span> <span class="n">unpad</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">Crypto.Random</span> <span class="kn">import</span> <span class="n">get_random_bytes</span>
+<span class="kn">from</span> <span class="n">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="n">challenge_description</span><span class="p">(</span><span class="s">"You can generate an access token for my network service, but you shouldn't be able to read the flag... I think."</span><span class="p">)</span>
+<span class="nf">challenge_description</span><span class="p">(</span><span class="s">"You can generate an access token for my network service, but you shouldn't be able to read the flag... I think."</span><span class="p">)</span>
 <span class="n">challenge_name</span> <span class="o">=</span> <span class="s">"It's as easy as access=0000"</span>
 <span class="n">FLAG</span> <span class="o">=</span> <span class="s">"ractf{XXX}"</span>
-<span class="n">KEY</span> <span class="o">=</span> <span class="n">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">KEY</span> <span class="o">=</span> <span class="nf">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">get_flag</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">iv</span><span class="p">):</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">iv</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">iv</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
-        <span class="n">decrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-        <span class="n">unpadded</span> <span class="o">=</span> <span class="n">unpad</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+        <span class="n">decrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+        <span class="n">unpadded</span> <span class="o">=</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
     <span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">"error"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
     <span class="k">if</span> <span class="sa">b</span><span class="s">"access=0000"</span> <span class="ow">in</span> <span class="n">unpadded</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">"flag"</span><span class="p">:</span> <span class="n">FLAG</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">"error"</span><span class="p">:</span> <span class="s">"not authorized to read flag"</span><span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">generate_token</span><span class="p">():</span>
-    <span class="n">expires_at</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)).</span><span class="n">strftime</span><span class="p">(</span><span class="s">"%s"</span><span class="p">)</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"access=9999;expiry=</span><span class="si">{</span><span class="n">expires_at</span><span class="si">}</span><span class="s">"</span><span class="p">.</span><span class="n">encode</span><span class="p">()</span>
-    <span class="n">iv</span> <span class="o">=</span> <span class="n">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">padded</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-    <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
-    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span>
-    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">iv</span><span class="p">.</span><span class="nb">hex</span><span class="p">()</span> <span class="o">+</span> <span class="n">encrypted</span><span class="p">.</span><span class="nb">hex</span><span class="p">()</span>
+    <span class="n">expires_at</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="nf">today</span><span class="p">()</span> <span class="o">+</span> <span class="nf">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)).</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%s"</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"access=9999;expiry=</span><span class="si">{</span><span class="n">expires_at</span><span class="si">}</span><span class="s">"</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="nf">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="nf">pad</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span>
+    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">iv</span><span class="p">.</span><span class="nf">hex</span><span class="p">()</span> <span class="o">+</span> <span class="n">encrypted</span><span class="p">.</span><span class="nf">hex</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span><span class="s">"token"</span><span class="p">:</span> <span class="n">ciphertext</span><span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">start_challenge</span><span class="p">():</span>
   <span class="n">menu</span> <span class="o">=</span> <span class="s">"Would you like to:</span><span class="se">\n</span><span class="s">[1] Create a guest token</span><span class="se">\n</span><span class="s">[2] Read the flag"</span>
   <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
-    <span class="n">choice</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"Your choice: "</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">input</span><span class="p">(</span><span class="s">"Your choice: "</span><span class="p">))</span>
     <span class="k">while</span> <span class="n">choice</span> <span class="o">!=</span> <span class="s">"1"</span> <span class="ow">and</span> <span class="n">choice</span> <span class="o">!=</span> <span class="s">"2"</span><span class="p">:</span>
-        <span class="n">choice</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"Please enter a valid choice. Try again: "</span><span class="p">))</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">input</span><span class="p">(</span><span class="s">"Please enter a valid choice. Try again: "</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s">"1"</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">generate_token</span><span class="p">())</span>
+      <span class="nf">print</span><span class="p">(</span><span class="nf">generate_token</span><span class="p">())</span>
     <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s">"2"</span><span class="p">:</span>
-      <span class="n">token</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Please enter your admin token: "</span><span class="p">)</span>
+      <span class="n">token</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Please enter your admin token: "</span><span class="p">)</span>
       <span class="k">while</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
-        <span class="n">token</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Tokens can't be empty. Try again: "</span><span class="p">)</span>
-      <span class="n">iv</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Please enter your token's initialization vector: "</span><span class="p">)</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Tokens can't be empty. Try again: "</span><span class="p">)</span>
+      <span class="n">iv</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Please enter your token's initialization vector: "</span><span class="p">)</span>
       <span class="k">while</span> <span class="ow">not</span> <span class="n">iv</span><span class="p">:</span>
-        <span class="n">iv</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Initialization vectors can't be empty. Try again: "</span><span class="p">)</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">get_flag</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">iv</span><span class="p">))</span>
+        <span class="n">iv</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"Initialization vectors can't be empty. Try again: "</span><span class="p">)</span>
+      <span class="nf">print</span><span class="p">(</span><span class="nf">get_flag</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">iv</span><span class="p">))</span>
 
-<span class="n">start_challenge</span><span class="p">()</span>
+<span class="nf">start_challenge</span><span class="p">()</span>
 </code></pre></div></div>
 <p>Without reading through whole bunch of code, we can start analyzing from the last, <code class="language-plaintext highlighter-rouge">start_challenge()</code> is called, which is an infite loop <code class="language-plaintext highlighter-rouge">while True</code>,
 asks for two choices <code class="language-plaintext highlighter-rouge">1</code> and <code class="language-plaintext highlighter-rouge">2</code>.<br>
@@ -2088,13 +2088,13 @@ Choice <code class="language-plaintext highlighter-rouge">2</code> would invoke 
 
 <p>Now quickly running through <code class="language-plaintext highlighter-rouge">generate_token</code> line-by-line</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate_token</span><span class="p">():</span>
-    <span class="n">expires_at</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)).</span><span class="n">strftime</span><span class="p">(</span><span class="s">"%s"</span><span class="p">)</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"access=9999;expiry=</span><span class="si">{</span><span class="n">expires_at</span><span class="si">}</span><span class="s">"</span><span class="p">.</span><span class="n">encode</span><span class="p">()</span>
-    <span class="n">iv</span> <span class="o">=</span> <span class="n">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">padded</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-    <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
-    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span>
-    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">iv</span><span class="p">.</span><span class="nb">hex</span><span class="p">()</span> <span class="o">+</span> <span class="n">encrypted</span><span class="p">.</span><span class="nb">hex</span><span class="p">()</span>
+    <span class="n">expires_at</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="nf">today</span><span class="p">()</span> <span class="o">+</span> <span class="nf">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)).</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%s"</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"access=9999;expiry=</span><span class="si">{</span><span class="n">expires_at</span><span class="si">}</span><span class="s">"</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="nf">get_random_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="nf">pad</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">padded</span><span class="p">)</span>
+    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">iv</span><span class="p">.</span><span class="nf">hex</span><span class="p">()</span> <span class="o">+</span> <span class="n">encrypted</span><span class="p">.</span><span class="nf">hex</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span><span class="s">"token"</span><span class="p">:</span> <span class="n">ciphertext</span><span class="p">}</span>
 </code></pre></div></div>
 <ul>
@@ -2111,14 +2111,14 @@ Choice <code class="language-plaintext highlighter-rouge">2</code> would invoke 
 
 <p>Running through <code class="language-plaintext highlighter-rouge">get_flag</code>, one could read</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_flag</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">iv</span><span class="p">):</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">iv</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">iv</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
-        <span class="n">decrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-        <span class="n">unpadded</span> <span class="o">=</span> <span class="n">unpad</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">KEY</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+        <span class="n">decrypted</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+        <span class="n">unpadded</span> <span class="o">=</span> <span class="nf">unpad</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
     <span class="k">except</span> <span class="nb">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">"error"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
     <span class="k">if</span> <span class="sa">b</span><span class="s">"access=0000"</span> <span class="ow">in</span> <span class="n">unpadded</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">"flag"</span><span class="p">:</span> <span class="n">FLAG</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
@@ -2160,28 +2160,28 @@ Decrypt(<code class="language-plaintext highlighter-rouge">token</code>) ^ <code
 <p>VOILA! we did it. Lets write a script.
 One could do that manually, as time is not constrained, but automating stuff is quite a satisfaction.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span><span class="p">,</span> <span class="n">xor</span>
-<span class="kn">import</span> <span class="nn">json</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span><span class="p">,</span> <span class="n">xor</span>
+<span class="kn">import</span> <span class="n">json</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"95.216.233.106"</span><span class="p">,</span> <span class="mi">58891</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Your choice: '</span><span class="p">).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Your choice: '</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>  <span class="c1">#get a guest token
-</span><span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s">"'"</span><span class="p">,</span><span class="sa">b</span><span class="s">'"'</span><span class="p">)</span> <span class="c1"># badly formatted json
-</span><span class="n">token</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s">'token'</span><span class="p">]</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>  <span class="c1">#get a guest token
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">replace</span><span class="p">(</span><span class="sa">b</span><span class="s">"'"</span><span class="p">,</span><span class="sa">b</span><span class="s">'"'</span><span class="p">)</span> <span class="c1"># badly formatted json
+</span><span class="n">token</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s">'token'</span><span class="p">]</span>
 
 <span class="n">admin_token</span> <span class="o">=</span> <span class="n">token</span><span class="p">[</span><span class="mi">32</span><span class="p">:]</span> <span class="c1"># first 32 is iv
-</span><span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">[:</span><span class="mi">32</span><span class="p">])</span>
-<span class="n">iv_xor</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="o">*</span><span class="mi">7</span> <span class="o">+</span> <span class="n">xor</span><span class="p">(</span><span class="sa">b</span><span class="s">'9'</span><span class="p">,</span><span class="s">'0'</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span> <span class="o">+</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="o">*</span><span class="mi">5</span>
-<span class="n">iv_for_admin</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">iv_xor</span><span class="p">,</span> <span class="n">iv</span><span class="p">).</span><span class="nb">hex</span><span class="p">()</span>
+</span><span class="n">iv</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">token</span><span class="p">[:</span><span class="mi">32</span><span class="p">])</span>
+<span class="n">iv_xor</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="o">*</span><span class="mi">7</span> <span class="o">+</span> <span class="nf">xor</span><span class="p">(</span><span class="sa">b</span><span class="s">'9'</span><span class="p">,</span><span class="s">'0'</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span> <span class="o">+</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="o">*</span><span class="mi">5</span>
+<span class="n">iv_for_admin</span> <span class="o">=</span> <span class="nf">xor</span><span class="p">(</span><span class="n">iv_xor</span><span class="p">,</span> <span class="n">iv</span><span class="p">).</span><span class="nf">hex</span><span class="p">()</span>
 
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">admin_token</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">iv_for_admin</span><span class="p">.</span><span class="n">encode</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvlines</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">admin_token</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">iv_for_admin</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvlines</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 
 <span class="c1"># ractf{cbc_b17_fl1pp1n6_F7W!}
 </span></code></pre></div></div>

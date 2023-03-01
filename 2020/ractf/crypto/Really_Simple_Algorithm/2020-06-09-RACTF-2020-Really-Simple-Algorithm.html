@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>RACTF 2020 Crypto - Really Simple Algorithm | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="RACTF 2020 Crypto - Really Simple Algorithm" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2009,23 +2009,23 @@ It is calculated using <a href="https://en.wikipedia.org/wiki/Extended_Euclidean
 
 <p>Now, this process can be automated too, but since time is not concerned with this task as with the next <a href="">Really Speedy Algorithm</a>, I like to do it anyways</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">invert</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">gmpy2</span> <span class="kn">import</span> <span class="n">invert</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"95.216.233.106"</span><span class="p">,</span> <span class="mi">20391</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
-<span class="n">p</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
-<span class="n">q</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
-<span class="n">e</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
-<span class="n">ct</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">decode</span><span class="p">().</span><span class="n">strip</span><span class="p">()[</span><span class="mi">4</span><span class="p">:])</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
+<span class="n">e</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">3</span><span class="p">:])</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">4</span><span class="p">:])</span>
 
 
 <span class="n">PHI</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">D</span> <span class="o">=</span> <span class="n">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">PHI</span><span class="p">)</span>
-<span class="n">MESSAGE</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">MESSAGE</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">D</span> <span class="o">=</span> <span class="nf">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">PHI</span><span class="p">)</span>
+<span class="n">MESSAGE</span> <span class="o">=</span> <span class="nf">pow</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">MESSAGE</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 <p>And we get our flag</p>
 <h4 id="ractfjustlikeinthesimulations">ractf{JustLikeInTheSimulations}</h4>

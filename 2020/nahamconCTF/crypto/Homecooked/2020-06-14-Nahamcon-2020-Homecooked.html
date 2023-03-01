@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - Homecooked | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Homecooked" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1982,15 +1982,15 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 
 <p>We are provided <a href="decrypt.py">decrypt.py</a>, the contents of which read</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base64</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
 <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">cipher_b64</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA="</span>
 
 <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nf">if </span><span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>
+            <span class="nf">if </span><span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">False</span>
                 <span class="k">break</span>
         <span class="k">return</span> <span class="bp">True</span>
@@ -1998,36 +1998,36 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
         <span class="k">return</span> <span class="bp">False</span>
 
 <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="n">my_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="n">rev_str</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">rev_str</span><span class="p">):</span>
+    <span class="n">my_str</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">rev_str</span> <span class="o">=</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">list</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span> <span class="o">==</span> <span class="nf">list</span><span class="p">(</span><span class="n">rev_str</span><span class="p">):</span>
        <span class="k">return</span> <span class="bp">True</span>
     <span class="k">else</span><span class="p">:</span>
        <span class="k">return</span> <span class="bp">False</span>
 
 
-<span class="n">cipher</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">cipher_b64</span><span class="p">).</span><span class="n">decode</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">cipher_b64</span><span class="p">).</span><span class="nf">decode</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
 
-<span class="k">while</span><span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
-            <span class="k">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">count</span><span class="p">])</span> <span class="o">^</span> <span class="n">num</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nf">while</span><span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)):</span>
+    <span class="nf">if </span><span class="p">(</span><span class="nf">a</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
+        <span class="nf">if </span><span class="p">(</span><span class="nf">b</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">count</span><span class="p">])</span> <span class="o">^</span> <span class="n">num</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="nf">if </span><span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">13</span><span class="p">):</span>
                 <span class="n">num</span> <span class="o">=</span> <span class="mi">50000</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">26</span><span class="p">):</span>
+            <span class="nf">if </span><span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">26</span><span class="p">):</span>
                 <span class="n">num</span> <span class="o">=</span> <span class="mi">500000</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="n">num</span><span class="o">+=</span><span class="mi">1</span>
 
-<span class="k">print</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">()</span>
 </code></pre></div></div>
 <p>Here two functions <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> are of primary focus,</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>  <span class="c1">#From all numbers from 2 to num - 1
-</span>            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1">#check if the number i divides num
+    <span class="nf">if </span><span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">num</span><span class="p">):</span>  <span class="c1">#From all numbers from 2 to num - 1
+</span>            <span class="nf">if </span><span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1">#check if the number i divides num
 </span>                <span class="k">return</span> <span class="bp">False</span>    <span class="c1">#if it divides, then its composite
 </span>                <span class="k">break</span>
         <span class="k">return</span> <span class="bp">True</span>  <span class="c1"># No such number found hence prime
@@ -2037,9 +2037,9 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
 <p>Seems like, its looping over all possible numbers to check if the provided number <code class="language-plaintext highlighter-rouge">num</code> is a prime or not</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="n">my_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="c1"># string representation of number
-</span>    <span class="n">rev_str</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>  <span class="c1"># reverse the string
-</span>    <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">rev_str</span><span class="p">):</span> <span class="c1"># check if both equal
+    <span class="n">my_str</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="c1"># string representation of number
+</span>    <span class="n">rev_str</span> <span class="o">=</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>  <span class="c1"># reverse the string
+</span>    <span class="k">if</span> <span class="nf">list</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span> <span class="o">==</span> <span class="nf">list</span><span class="p">(</span><span class="n">rev_str</span><span class="p">):</span> <span class="c1"># check if both equal
 </span>       <span class="k">return</span> <span class="bp">True</span>  <span class="c1"># the input is a palindrome
 </span>    <span class="k">else</span><span class="p">:</span>
        <span class="k">return</span> <span class="bp">False</span>
@@ -2060,35 +2060,35 @@ The issue is with function <code class="language-plaintext highlighter-rouge">a<
 This can be done pretty efficiently by better <a href="https://en.wikipedia.org/wiki/Primality_test">primality tests</a>.<br />
 One could simply use <code class="language-plaintext highlighter-rouge">is_prime</code> from <code class="language-plaintext highlighter-rouge">gmpy2</code> library of python and replace the function <code class="language-plaintext highlighter-rouge">a</code></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">import</span> <span class="nn">gmpy2</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">import</span> <span class="n">gmpy2</span>
 <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">cipher_b64</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"MTAwLDExMSwxMDAsOTYsMTEyLDIxLDIwOSwxNjYsMjE2LDE0MCwzMzAsMzE4LDMyMSw3MDIyMSw3MDQxNCw3MDU0NCw3MTQxNCw3MTgxMCw3MjIxMSw3MjgyNyw3MzAwMCw3MzMxOSw3MzcyMiw3NDA4OCw3NDY0Myw3NTU0MiwxMDAyOTAzLDEwMDgwOTQsMTAyMjA4OSwxMDI4MTA0LDEwMzUzMzcsMTA0MzQ0OCwxMDU1NTg3LDEwNjI1NDEsMTA2NTcxNSwxMDc0NzQ5LDEwODI4NDQsMTA4NTY5NiwxMDkyOTY2LDEwOTQwMDA="</span>
 
 <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">gmpy2</span><span class="p">.</span><span class="n">is_prime</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gmpy2</span><span class="p">.</span><span class="nf">is_prime</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">==</span> <span class="nf">str</span><span class="p">(</span><span class="n">num</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="n">cipher</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">cipher_b64</span><span class="p">).</span><span class="n">decode</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">cipher_b64</span><span class="p">).</span><span class="nf">decode</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
 
-<span class="k">while</span><span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
-            <span class="k">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">count</span><span class="p">])</span> <span class="o">^</span> <span class="n">num</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nf">while</span><span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)):</span>
+    <span class="nf">if </span><span class="p">(</span><span class="nf">a</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
+        <span class="nf">if </span><span class="p">(</span><span class="nf">b</span><span class="p">(</span><span class="n">num</span><span class="p">)):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">count</span><span class="p">])</span> <span class="o">^</span> <span class="n">num</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">13</span><span class="p">):</span>
+            <span class="nf">if </span><span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">13</span><span class="p">):</span>
                 <span class="n">num</span> <span class="o">=</span> <span class="mi">50000</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">26</span><span class="p">):</span>
+            <span class="nf">if </span><span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">26</span><span class="p">):</span>
                 <span class="n">num</span> <span class="o">=</span> <span class="mi">500000</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="n">num</span><span class="o">+=</span><span class="mi">1</span>
 
-<span class="k">print</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">()</span>
 </code></pre></div></div>
 <p>Now running <a href="./solve.py">solve.py</a> spews the flag instantly</p>
 

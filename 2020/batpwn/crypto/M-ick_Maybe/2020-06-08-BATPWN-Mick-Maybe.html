@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>BATPWN 2020 Crypto: M-ick Maybe | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="BATPWN 2020 Crypto: M-ick Maybe" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2034,17 +2034,17 @@ And I got the text <a href="http://pd.sparknotes.com/lit/mobydick/section7.html"
 
 <p>Saving the obtained text in <a href="mobydick.txt">mobydick.txt</a>, I can simply write a script, which spits out non-matching words</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'mobydick.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f1</span><span class="p">:</span>
-    <span class="n">m1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">split</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'mobydick.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f1</span><span class="p">:</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">split</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'solved.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
-    <span class="n">m2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">split</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'solved.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">split</span><span class="p">()</span>
 
-<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">m1</span><span class="p">)):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">m1</span><span class="p">)):</span>
     <span class="k">if</span> <span class="n">m1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">m2</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">m1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">m2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">m1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">m2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
 <span class="c1"># quickly bquickly
 # landlord alandlord

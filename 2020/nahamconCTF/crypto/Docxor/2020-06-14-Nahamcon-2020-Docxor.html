@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - Docxor | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Docxor" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1992,17 +1992,17 @@ Using the magic bytes, we can recover the xor key and hence the full document af
 <p>The magic bytes we seek are <code class="language-plaintext highlighter-rouge">50 4B 03 04</code>.
 The first four bytes of the <code class="language-plaintext highlighter-rouge">homework</code> are <code class="language-plaintext highlighter-rouge">0a0a 9abf</code>, the xor key should be <code class="language-plaintext highlighter-rouge">0a0a9abf ^ 504b0304</code> = <code class="language-plaintext highlighter-rouge">5a4199bb</code> 
 Lets write a quick script.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">xor</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">xor</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'homework'</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">homework_file</span><span class="p">:</span>
-    <span class="n">homework_data</span> <span class="o">=</span> <span class="n">homework_file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'homework'</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">homework_file</span><span class="p">:</span>
+    <span class="n">homework_data</span> <span class="o">=</span> <span class="n">homework_file</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
 
 <span class="n">HEADER</span> <span class="o">=</span> <span class="n">homework_data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
 <span class="n">MAGIC</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"</span><span class="se">\x50\x4B\x03\x04</span><span class="s">"</span>
-<span class="n">XOR_KEY</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">HEADER</span><span class="p">,</span> <span class="n">MAGIC</span><span class="p">)</span>
+<span class="n">XOR_KEY</span> <span class="o">=</span> <span class="nf">xor</span><span class="p">(</span><span class="n">HEADER</span><span class="p">,</span> <span class="n">MAGIC</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'decrypted.doc'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">decrypted</span><span class="p">:</span>
-    <span class="n">decrypted</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">xor</span><span class="p">(</span><span class="n">XOR_KEY</span><span class="p">,</span> <span class="n">homework_data</span><span class="p">))</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'decrypted.doc'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">decrypted</span><span class="p">:</span>
+    <span class="n">decrypted</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="nf">xor</span><span class="p">(</span><span class="n">XOR_KEY</span><span class="p">,</span> <span class="n">homework_data</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>This produces <a href="decrypted.doc">decrypted.doc</a> which when opened looks like

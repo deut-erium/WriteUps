@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>RACTF 2020 Crypto - B007L36 CRYP70 A641N | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="RACTF 2020 Crypto - B007L36 CRYP70 A641N" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2016,22 +2016,22 @@ Your encrypted message is: w4M=
 <p>Notice the encrypted message appears to be base64 encoded.<br />
 Lets check the decoded values</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
-<span class="n">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="nf">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">)</span>
 <span class="c1"># b'\xc3\x83'
-</span><span class="n">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">)</span>
+</span><span class="nf">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">)</span>
 <span class="c1"># b'\xc3\x82'
 </span></code></pre></div></div>
 <p>EWW, looks odd probably because of <a href="https://en.wikipedia.org/wiki/Unicode">unicode</a>. Lets deal with string-objects instead of byte-objects by simply calling <code class="language-plaintext highlighter-rouge">decode()</code></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
-<span class="n">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="nf">d64</span><span class="p">(</span><span class="s">'w4M='</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
 <span class="c1"># 'Ã'
-</span><span class="n">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">).</span><span class="n">decode</span><span class="p">()</span>
+</span><span class="nf">d64</span><span class="p">(</span><span class="s">'w4I='</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
 <span class="c1"># 'Â'
-</span><span class="nb">ord</span><span class="p">(</span><span class="s">'Ã'</span><span class="p">)</span>
+</span><span class="nf">ord</span><span class="p">(</span><span class="s">'Ã'</span><span class="p">)</span>
 <span class="c1"># 195
-</span><span class="nb">ord</span><span class="p">(</span><span class="s">'Â'</span><span class="p">)</span>
+</span><span class="nf">ord</span><span class="p">(</span><span class="s">'Â'</span><span class="p">)</span>
 <span class="c1"># 194
 </span></code></pre></div></div>
 
@@ -2039,42 +2039,42 @@ Lets check the decoded values</p>
 
 <p>To help with encryption process, I created a small helper function <code class="language-plaintext highlighter-rouge">encrypt</code>which calls encrypt on the server and return the <code class="language-plaintext highlighter-rouge">ord</code> values of base64 decoded string.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span> <span class="k">as</span> <span class="n">e64</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64decode</span> <span class="k">as</span> <span class="n">d64</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64encode</span> <span class="k">as</span> <span class="n">e64</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"95.216.233.106"</span><span class="p">,</span> <span class="mi">60246</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'password.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">password_file</span><span class="p">:</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">d64</span><span class="p">(</span><span class="n">password_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'password.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">password_file</span><span class="p">:</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="nf">d64</span><span class="p">(</span><span class="n">password_file</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'ciphertext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ciphertext_file</span><span class="p">:</span>
-    <span class="n">ct</span> <span class="o">=</span> <span class="n">d64</span><span class="p">(</span><span class="n">ciphertext_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()).</span><span class="n">decode</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'ciphertext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">ciphertext_file</span><span class="p">:</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="nf">d64</span><span class="p">(</span><span class="n">ciphertext_file</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()).</span><span class="nf">decode</span><span class="p">()</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'plaintext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">plaintext_file</span><span class="p">:</span>
-    <span class="n">pt</span> <span class="o">=</span> <span class="n">plaintext_file</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'plaintext.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">plaintext_file</span><span class="p">:</span>
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">plaintext_file</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
 
-<span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">())</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">())</span>
 
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'data with:'</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">)</span>
-    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'message is: '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">strip</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">d64</span><span class="p">(</span><span class="n">encrypted</span><span class="p">).</span><span class="n">decode</span><span class="p">()]</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'data with:'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\n\n</span><span class="s">'</span><span class="p">)</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">'message is: '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">d64</span><span class="p">(</span><span class="n">encrypted</span><span class="p">).</span><span class="nf">decode</span><span class="p">()]</span>
 </code></pre></div></div>
 
 <p>Lets play around a little bit more…</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'a'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'a'</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">194</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'ab'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'ab'</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'abcd'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'aaaa'</span><span class="p">,</span><span class="s">'abcd'</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">197</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'abcd'</span><span class="p">,</span><span class="s">'aaaa'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'abcd'</span><span class="p">,</span><span class="s">'aaaa'</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">197</span><span class="p">]</span>
 </code></pre></div></div>
 <p>We can make the following observations :-</p>
@@ -2087,10 +2087,10 @@ Lets check the decoded values</p>
 <p>So, all we need to do now is to figure out what the provided files mean.<br />
 Let us try checking the key with which <a href="ciphertext.txt">ciphertext.txt</a> and <a href="plaintext.txt">plaintext.txt</a> are related.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">]</span>
-<span class="n">pt_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">]</span>
-<span class="n">diff_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct_arr</span><span class="p">))]</span>
-<span class="k">print</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">diff_arr</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">]</span>
+<span class="n">pt_arr</span> <span class="o">=</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">]</span>
+<span class="n">diff_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">ct_arr</span><span class="p">))]</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">diff_arr</span><span class="p">))</span>
 </code></pre></div></div>
 <p><code class="language-plaintext highlighter-rouge">ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ractf{n0t_th3_fl49_y3t}ra</code></p>
 
@@ -2098,8 +2098,8 @@ Let us try checking the key with which <a href="ciphertext.txt">ciphertext.txt</
 
 <p>Lets quickly decrypt the contents of <a href="password.txt">password.txt</a> with the key</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">key</span> <span class="o">=</span> <span class="s">"ractf{n0t_th3_fl49_y3t}"</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">password</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">))</span> <span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">password</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nf">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">password</span><span class="p">))</span> <span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div></div>
 <p>And we finally get our flag <code class="language-plaintext highlighter-rouge">ractf{f00l_m3_7w1c3_5h4m3_0n_m3}</code><br />
 CHEERS YOU ALL!</p>

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>zh3r0 2020 Crypto - Mix | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="zh3r0 2020 Crypto - Mix" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1999,14 +1999,14 @@ Author : Whit3_D3vi1
 <p><a href="Mix/chall_encrypted.txt">chall_encrypted.txt</a> contains some seemingly chinese.<br />
 since BASE65536 is a <strong>BIG</strong> hint to <a href="https://pypi.org/project/base65536/">base 65536</a>, We do stuff.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">base65536</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'chall_encrypted.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">chall_enc</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">chall_enc</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base65536</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'chall_encrypted.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">chall_enc</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">chall_enc</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
 
-<span class="n">data1</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span><span class="p">)</span><span class="o">+</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">//</span><span class="mi">256</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span> <span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span><span class="p">)</span><span class="o">+</span><span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">//</span><span class="mi">256</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span> <span class="p">)</span>
 
-<span class="n">d</span> <span class="o">=</span> <span class="n">base65536</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">base65536</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <p>Which prints out some neat stuff</p>
@@ -2029,19 +2029,19 @@ At this point, I am wondering why is <a href="https://www.dcode.fr/keyboard-shif
 
 <p>Now moving to second part, we dont even need a hint,</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f2</span> <span class="o">=</span> <span class="s">"3030313130313030203031313130303130203030313130303131203031303131313131203030313130313030203031313130313131203030313130303131203031313130303131203030313130303030203031313031313031203030313130303131203031303131313131203031313130313131203031313031303031203030313130313131203031313031303030"</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">f2</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">f2</span><span class="p">))</span>
 
 <span class="c1"># b'00110100 01110010 00110011 01011111 00110100 01110111 00110011 01110011 00110000 01101101 00110011 01011111 01110111 01101001 00110111 01101000'
 </span>
-<span class="n">flag2</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">f2</span><span class="p">).</span><span class="n">split</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag2</span><span class="p">)</span>
+<span class="n">flag2</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">f2</span><span class="p">).</span><span class="nf">split</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag2</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>And just like that, we have <code class="language-plaintext highlighter-rouge">4r3_4w3s0m3_wi7h</code> as second part of flag</p>
 
 <p>Coming to third part, it seemingly is base64 encoding,</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">'MTExMTExMTExMTAwMTAwMDEwMTAxMDExMTAxMDExMTExMTEwMTAxMTExMTExMTExMDExMDExMDExMDExMDAwMDAxMTAxMDAxMDAxMDAxMDAwMDAwMDAwMDAwMDAwMDAwMTAxMDAxMTAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMTAxMDAwMDAwMDAwMDAwMTAxMDAwMTAxMDAxMDAwMTAxMDAxMTExMTExMTAwMTAxMDAxMDExMTExMTExMTAwMTAxMDAxMTAwMDAwMDAwMDAwMDAwMTAxMDAxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMTAxMDExMTExMTExMTExMTExMTExMTExMDAxMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMDEwMDAwMDAwMDAxMDEwMDExMDAwMDAwMDAxMDEwMDAxMDEwMTExMTAwMTAxMDAxMDExMTExMTExMTExMTExMTExMTExMDAxMDEwMDExMDExMDExMTExMTExMTExMTAwMTAxMA=='</span>
-<span class="k">print</span><span class="p">(</span><span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">f3</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">f3</span><span class="p">))</span>
 
 <span class="c1"># b'1111111111001000101010111010111111101011111111110110110110110000011010010010010000000000000000001010011000000000000000000000000000000000000000000000000000000001010000000000001010001010010001010011111111001010010111111111001010011000000000000001010010000000000000000000000000000001010111111111111111111110010100000000000000000000000000010100000000010100110000000010100010101111001010010111111111111111111110010100110110111111111111001010'
 </span></code></pre></div></div>

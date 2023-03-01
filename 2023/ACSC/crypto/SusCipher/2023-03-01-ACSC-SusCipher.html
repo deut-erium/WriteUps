@@ -1,21 +1,21 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>RACTF 2020 Crypto - Mysterious Masquerading Message | CTF Writeups</title>
+<title>ACSC qualifiers 2023 Crypto - SusCipher | CTF Writeups</title>
 <meta name="generator" content="Jekyll v4.3.2" />
-<meta property="og:title" content="RACTF 2020 Crypto - Mysterious Masquerading Message" />
+<meta property="og:title" content="ACSC qualifiers 2023 Crypto - SusCipher" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="Mysteriuos Masquerading Message We found a file that looks to be like an ssh private key... but it doesn&#39;t seem quite right. Maybe you can shed some light on it? The contents of id_rsa.txt read tbbq yhpx:) -----BEGIN OPENSSH PRIVATE KEY----- SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= -----END OPENSSH PRIVATE KEY----- 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 Now the contents of proclaimed private key seems weird, I tried giving it a base64 decode import base64 priv_key = &quot;&quot;&quot; SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= &quot;&quot;&quot; decoded_priv_key = base64.b64decode(&quot;&quot;.join(priv_key.split())) print(decoded_priv_key.decode()) Voila! It reads If you are reading this, then you probably figured out that it wasn&#39;t actually an SSH key but a disguise. So you have made it this far and for that I say well done. It wasn&#39;t very hard, that I know, but nevertheless you have still made it here so congrats. Now you are probably reading this and thinking about annoying the person who made this, and you want to read the whole thing to check for clues, but you cant find any. You are starting to get frustrated at the person who made this as they still haven&#39;t mentioned anything to do with the challenge, except &quot;well done you have got this far&quot;. You start slamming desks, and soon the monitor will follow. You are wondering where this is going and realising it&#39;s coming to the end of the paragraph, and you might not have seen anything. I have given you some things, although you will need something else as well good luck. 696e656564746f6f70656e6c6f636b73 696e697469616c69736174696f6e3132 trying out hex decoding the last two strings part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) print(p1.decode()) print(p2.decode()) ineedtoopenlocks initialisation12 hmm, no hint whats going on. Lets try decoding the binary data at the end of the private key m2 = &quot;&quot;&quot; 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 &quot;&quot;&quot; bin_decoded_m2 = &quot;&quot;.join( chr(int(i,2)) for i in m2.split()) print(bin_decoded_m2) Producing the hex string 90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718 Now this got confusing at this point of time. I got 3 strings and not knowing what to do with them. I failed so many times XORing the strings creatively LOL. Later did I realise the ineedtoopenlocks is a hint to KEY And initialisation12 is a huge hint to IV And the third string could be our ciphertext. By this time one would consider it to be AES encrypted. Which mode? The mode which has IV and should be easy to guess :- CBC from Crypto.Cipher import AES part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; bin_decoded_m2 = &quot;90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) cipher = AES.new(p1, AES.MODE_CBC, IV=p2) flag = cipher.decrypt(p3) print(flag.decode()) ractf{3Asy_F1aG_0n_aEs_rAcTf} and we get our flag sans padding!" />
-<meta property="og:description" content="Mysteriuos Masquerading Message We found a file that looks to be like an ssh private key... but it doesn&#39;t seem quite right. Maybe you can shed some light on it? The contents of id_rsa.txt read tbbq yhpx:) -----BEGIN OPENSSH PRIVATE KEY----- SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= -----END OPENSSH PRIVATE KEY----- 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 Now the contents of proclaimed private key seems weird, I tried giving it a base64 decode import base64 priv_key = &quot;&quot;&quot; SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= &quot;&quot;&quot; decoded_priv_key = base64.b64decode(&quot;&quot;.join(priv_key.split())) print(decoded_priv_key.decode()) Voila! It reads If you are reading this, then you probably figured out that it wasn&#39;t actually an SSH key but a disguise. So you have made it this far and for that I say well done. It wasn&#39;t very hard, that I know, but nevertheless you have still made it here so congrats. Now you are probably reading this and thinking about annoying the person who made this, and you want to read the whole thing to check for clues, but you cant find any. You are starting to get frustrated at the person who made this as they still haven&#39;t mentioned anything to do with the challenge, except &quot;well done you have got this far&quot;. You start slamming desks, and soon the monitor will follow. You are wondering where this is going and realising it&#39;s coming to the end of the paragraph, and you might not have seen anything. I have given you some things, although you will need something else as well good luck. 696e656564746f6f70656e6c6f636b73 696e697469616c69736174696f6e3132 trying out hex decoding the last two strings part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) print(p1.decode()) print(p2.decode()) ineedtoopenlocks initialisation12 hmm, no hint whats going on. Lets try decoding the binary data at the end of the private key m2 = &quot;&quot;&quot; 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 &quot;&quot;&quot; bin_decoded_m2 = &quot;&quot;.join( chr(int(i,2)) for i in m2.split()) print(bin_decoded_m2) Producing the hex string 90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718 Now this got confusing at this point of time. I got 3 strings and not knowing what to do with them. I failed so many times XORing the strings creatively LOL. Later did I realise the ineedtoopenlocks is a hint to KEY And initialisation12 is a huge hint to IV And the third string could be our ciphertext. By this time one would consider it to be AES encrypted. Which mode? The mode which has IV and should be easy to guess :- CBC from Crypto.Cipher import AES part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; bin_decoded_m2 = &quot;90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) cipher = AES.new(p1, AES.MODE_CBC, IV=p2) flag = cipher.decrypt(p3) print(flag.decode()) ractf{3Asy_F1aG_0n_aEs_rAcTf} and we get our flag sans padding!" />
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message" />
-<meta property="og:url" content="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message" />
+<meta name="description" content="Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag CTF hacking cybersecurity SAT SMT solvers and computer science" />
+<meta property="og:description" content="Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag CTF hacking cybersecurity SAT SMT solvers and computer science" />
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher" />
+<meta property="og:url" content="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher" />
 <meta property="og:site_name" content="CTF Writeups" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-06-09T00:00:00+05:30" />
+<meta property="article:published_time" content="2023-03-01T00:00:00+05:30" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="RACTF 2020 Crypto - Mysterious Masquerading Message" />
+<meta property="twitter:title" content="ACSC qualifiers 2023 Crypto - SusCipher" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-06-09T00:00:00+05:30","datePublished":"2020-06-09T00:00:00+05:30","description":"Mysteriuos Masquerading Message We found a file that looks to be like an ssh private key... but it doesn&#39;t seem quite right. Maybe you can shed some light on it? The contents of id_rsa.txt read tbbq yhpx:) -----BEGIN OPENSSH PRIVATE KEY----- SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= -----END OPENSSH PRIVATE KEY----- 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 Now the contents of proclaimed private key seems weird, I tried giving it a base64 decode import base64 priv_key = &quot;&quot;&quot; SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3 YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9 1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2 tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5 kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2 l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2 NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE 3NDY5NmY2ZTMxMzI= &quot;&quot;&quot; decoded_priv_key = base64.b64decode(&quot;&quot;.join(priv_key.split())) print(decoded_priv_key.decode()) Voila! It reads If you are reading this, then you probably figured out that it wasn&#39;t actually an SSH key but a disguise. So you have made it this far and for that I say well done. It wasn&#39;t very hard, that I know, but nevertheless you have still made it here so congrats. Now you are probably reading this and thinking about annoying the person who made this, and you want to read the whole thing to check for clues, but you cant find any. You are starting to get frustrated at the person who made this as they still haven&#39;t mentioned anything to do with the challenge, except &quot;well done you have got this far&quot;. You start slamming desks, and soon the monitor will follow. You are wondering where this is going and realising it&#39;s coming to the end of the paragraph, and you might not have seen anything. I have given you some things, although you will need something else as well good luck. 696e656564746f6f70656e6c6f636b73 696e697469616c69736174696f6e3132 trying out hex decoding the last two strings part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) print(p1.decode()) print(p2.decode()) ineedtoopenlocks initialisation12 hmm, no hint whats going on. Lets try decoding the binary data at the end of the private key m2 = &quot;&quot;&quot; 00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010 01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110 00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101 00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111 00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000 00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000 01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011 01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000 &quot;&quot;&quot; bin_decoded_m2 = &quot;&quot;.join( chr(int(i,2)) for i in m2.split()) print(bin_decoded_m2) Producing the hex string 90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718 Now this got confusing at this point of time. I got 3 strings and not knowing what to do with them. I failed so many times XORing the strings creatively LOL. Later did I realise the ineedtoopenlocks is a hint to KEY And initialisation12 is a huge hint to IV And the third string could be our ciphertext. By this time one would consider it to be AES encrypted. Which mode? The mode which has IV and should be easy to guess :- CBC from Crypto.Cipher import AES part_1 = &quot;696e656564746f6f70656e6c6f636b73&quot; part_2 = &quot;696e697469616c69736174696f6e3132&quot; bin_decoded_m2 = &quot;90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718&quot; p1 = bytes.fromhex(part_1) p2 = bytes.fromhex(part_2) p3 = bytes.fromhex(bin_decoded_m2) cipher = AES.new(p1, AES.MODE_CBC, IV=p2) flag = cipher.decrypt(p3) print(flag.decode()) ractf{3Asy_F1aG_0n_aEs_rAcTf} and we get our flag sans padding!","headline":"RACTF 2020 Crypto - Mysterious Masquerading Message","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message"},"url":"https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-03-01T00:00:00+05:30","datePublished":"2023-03-01T00:00:00+05:30","description":"Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag CTF hacking cybersecurity SAT SMT solvers and computer science","headline":"ACSC qualifiers 2023 Crypto - SusCipher","mainEntityOfPage":{"@type":"WebPage","@id":"https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher"},"url":"https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher"}</script>
 <!-- End Jekyll SEO tag -->
 
   <head><!-- Global site tag (gtag.js) - Google Analytics -->
@@ -38,10 +38,10 @@
 		
 	</script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RACTF 2020 Crypto - Mysterious Masquerading Message - CTF Writeups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>ACSC qualifiers 2023 Crypto - SusCipher - CTF Writeups</title>
 
-<meta name="description" content="Mysteriuos Masquerading MessageWe found a file that looks to be like an ssh private key... but it doesn't seem quite right. Maybe you can shed some light on ...">
-<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
+<meta name="description" content="">
+<link rel="canonical" href="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher"><link rel="alternate" type="application/rss+xml" title="CTF Writeups" href="/WriteUps/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/WriteUps/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/WriteUps/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/WriteUps/assets/favicon-16x16.png"><link rel="manifest" href="/WriteUps/assets/site.webmanifest"><link rel="mask-icon" href="/WriteUps/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/WriteUps/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/WriteUps/assets/browserconfig.xml">
 
@@ -1949,175 +1949,568 @@ m38 4 c6 -18 -15 -14 -22 4 -4 10 -1 14 6 12 6 -2 14 -10 16 -16z"/>
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>RACTF 2020 Crypto - Mysterious Masquerading Message</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>ACSC qualifiers 2023 Crypto - SusCipher</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2020/ractf/crypto/Mysterious_Masquerading_Message/2020-06-09-RACTF-2020-Mysterious-masquerading-message.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="RACTF 2020 Crypto - Mysterious Masquerading Message"><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=RACTF">RACTF</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=2020">2020</a>
-            </li><li>
+            href="https://github.com/deut-erium/WriteUps/tree/master/_posts/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="ACSC qualifiers 2023 Crypto - SusCipher"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/WriteUps/archive.html?tag=cryptography">cryptography</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=base64">base64</a>
+                href="/WriteUps/archive.html?tag=2023">2023</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/WriteUps/archive.html?tag=guess">guess</a>
-            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Jun 09, 2020</span>
-            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2020-06-09T00:00:00+05:30">
-    <meta itemprop="keywords" content="RACTF,2020,cryptography,base64,guess"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/WriteUps/archive.html?tag=ACSC">ACSC</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=cryptanalysis">cryptanalysis</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=z3">z3</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=smt">smt</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=SPN">SPN</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/WriteUps/archive.html?tag=differential">differential</a>
+            </li></ul><ul class="right-col menu"><li><i class="fas fa-user"></i> <span>deuterium</span></li><li><i class="far fa-calendar-alt"></i> <span>Mar 01, 2023</span>
+            </li></ul></div><meta itemprop="author" content="deuterium"/><meta itemprop="datePublished" content="2023-03-01T00:00:00+05:30">
+    <meta itemprop="keywords" content="cryptography,2023,ACSC,cryptanalysis,z3,smt,SPN,differential"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h1 id="mysteriuos-masquerading-message">Mysteriuos Masquerading Message</h1>
+<div class="article__content" itemprop="articleBody"><!--more-->
 
-<p><code class="language-plaintext highlighter-rouge">We found a file that looks to be like an ssh private key... but it doesn't seem quite right. Maybe you can shed some light on it?</code></p>
+<h2 id="challenge-description">Challenge Description</h2>
 
-<p>The contents of <a href="id_rsa.txt">id_rsa.txt</a> read</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tbbq yhpx:)
+<blockquote>
+  <p>SusCipher
+400 pts (6 solves)</p>
 
------BEGIN OPENSSH PRIVATE KEY-----
-SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ
-pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX
-kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY
-XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl
-cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh
-hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG
-FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I
-GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3
-YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV
-lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH
-RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc
-yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv
-IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9
-1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2
-tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ
-SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n
-IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5
-kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2
-l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI
-HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2
-NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE
-3NDY5NmY2ZTMxMzI=
------END OPENSSH PRIVATE KEY-----
+  <p>authored by rbtree</p>
 
+  <p>I made SusCipher, which is a vulnerable block cipher so everyone can break it!</p>
+
+  <p>Please, try it and find a key.
+nc suscipher.chal.ctf.acsc.asia 13579
+nc suscipher-2.chal.ctf.acsc.asia 13579 (Backup)
+Hint: Differential cryptanalysis is useful.
+SusCipher.tar.gz</p>
+</blockquote>
+
+<h2 id="source-files">Source files</h2>
+<blockquote>
+  <p><a href="./task.py">task.py</a></p>
+</blockquote>
+
+<h2 id="source-analysis">Source Analysis</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">#!/usr/bin/env python3
+</span><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">signal</span>
 
 
-00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010
-01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110
-00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101
-00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111
-00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000
-00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000
-01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011
-01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000
+<span class="k">class</span> <span class="nc">SusCipher</span><span class="p">:</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">43</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span>
+         <span class="mi">7</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="mi">42</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span>
+         <span class="mi">0</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span>
+        <span class="mi">25</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span>
+        <span class="mi">62</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="mi">29</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+        <span class="mi">45</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">56</span>
+    <span class="p">]</span>
+
+    <span class="n">P</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">21</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span>
+        <span class="mi">22</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span>
+        <span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span>
+        <span class="mi">29</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span>
+        <span class="mi">45</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+        <span class="mi">27</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="mi">2</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="mi">44</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span>
+    <span class="p">]</span>
+
+    <span class="n">ROUND</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">BLOCK_NUM</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">MASK</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">BLOCK_NUM</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_divide</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">l</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">):</span>
+            <span class="n">l</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">v</span> <span class="o">&amp;</span> <span class="mb">0b111111</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">&gt;&gt;=</span> <span class="mi">6</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="n">block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">&lt;&lt;=</span> <span class="mi">6</span>
+            <span class="n">res</span> <span class="o">|=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_sub</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">cls</span><span class="p">.</span><span class="n">S</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_perm</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">bits</span> <span class="o">=</span> <span class="s">""</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">bits</span> <span class="o">+=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="mi">06</span><span class="n">b</span><span class="si">}</span><span class="s">"</span>
+
+        <span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="s">"_"</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">):</span>
+            <span class="n">buf</span><span class="p">[</span><span class="n">cls</span><span class="p">.</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">permd</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">permd</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_xor</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">key</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">MASK</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">digest</span><span class="p">()</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s">"big"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">self</span><span class="p">.</span><span class="n">MASK</span>
+            <span class="n">keys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_combine</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+
+    <span class="c1"># TODO: Implement decryption
+</span>    <span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">NotImplementedError</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">_signum</span><span class="p">,</span> <span class="n">_frame</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Time out!"</span><span class="p">)</span>
+    <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">signal</span><span class="p">.</span><span class="nf">signal</span><span class="p">(</span><span class="n">signal</span><span class="p">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">.</span><span class="nf">alarm</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="s">"big"</span><span class="p">)</span>
+
+    <span class="n">cipher</span> <span class="o">=</span> <span class="nc">SusCipher</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">inp</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"&gt; "</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="nf">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">inp</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s">","</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Wrong input!"</span><span class="p">)</span>
+            <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mh">0x100</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Long input!"</span><span class="p">)</span>
+            <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'flag'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="s">", "</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">cipher</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Now the contents of proclaimed private key seems weird, I tried giving it a base64 decode</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
-<span class="n">priv_key</span> <span class="o">=</span> <span class="s">"""
-SWYgeW91IGFyZSByZWFkaW5nIHRoaXMsIHRoZW4geW91IHByb2JhYmx5IGZ
-pZ3VyZWQgb3V0IHRoYXQgaXQgd2Fzbid0IGFjdHVhbGx5IGFuIFNTSCBrZX
-kgYnV0IGEgZGlzZ3Vpc2UuIFNvIHlvdSBoYXZlIG1hZGUgaXQgdGhpcyBmY
-XIgYW5kIGZvciB0aGF0IEkgc2F5IHdlbGwgZG9uZS4gSXQgd2Fzbid0IHZl
-cnkgaGFyZCwgdGhhdCBJIGtub3csIGJ1dCBuZXZlcnRoZWxlc3MgeW91IGh
-hdmUgc3RpbGwgbWFkZSBpdCBoZXJlIHNvIGNvbmdyYXRzLiBOb3cgeW91IG
-FyZSBwcm9iYWJseSByZWFkaW5nIHRoaXMgYW5kIHRoaW5raW5nIGFib3V0I
-GFubm95aW5nIHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpcywgYW5kIHlvdSB3
-YW50IHRvIHJlYWQgdGhlIHdob2xlIHRoaW5nIHRvIGNoZWNrIGZvciBjbHV
-lcywgYnV0IHlvdSBjYW50IGZpbmQgYW55LiBZb3UgYXJlIHN0YXJ0aW5nIH
-RvIGdldCBmcnVzdHJhdGVkIGF0IHRoZSBwZXJzb24gd2hvIG1hZGUgdGhpc
-yBhcyB0aGV5IHN0aWxsIGhhdmVuJ3QgbWVudGlvbmVkIGFueXRoaW5nIHRv
-IGRvIHdpdGggdGhlIGNoYWxsZW5nZSwgZXhjZXB0ICJ3ZWxsIGRvbmUgeW9
-1IGhhdmUgZ290IHRoaXMgZmFyIi4gWW91IHN0YXJ0IHNsYW1taW5nIGRlc2
-tzLCBhbmQgc29vbiB0aGUgbW9uaXRvciB3aWxsIGZvbGxvdy4gWW91IGFyZ
-SB3b25kZXJpbmcgd2hlcmUgdGhpcyBpcyBnb2luZyBhbmQgcmVhbGlzaW5n
-IGl0J3MgY29taW5nIHRvIHRoZSBlbmQgb2YgdGhlIHBhcmFncmFwaCwgYW5
-kIHlvdSBtaWdodCBub3QgaGF2ZSBzZWVuIGFueXRoaW5nLiBJIGhhdmUgZ2
-l2ZW4geW91IHNvbWUgdGhpbmdzLCBhbHRob3VnaCB5b3Ugd2lsbCBuZWVkI
-HNvbWV0aGluZyBlbHNlIGFzIHdlbGwgZ29vZCBsdWNrLiAKNjk2ZTY1NjU2
-NDc0NmY2ZjcwNjU2ZTZjNmY2MzZiNzMKNjk2ZTY5NzQ2OTYxNmM2OTczNjE
-3NDY5NmY2ZTMxMzI=
-"""</span>
+<p>Let’s take a look at the relevant parts</p>
 
-<span class="n">decoded_priv_key</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">priv_key</span><span class="p">.</span><span class="nf">split</span><span class="p">()))</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">decoded_priv_key</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
-</code></pre></div></div>
-<p>Voila! It reads</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If you are reading this, then you probably figured out that it wasn't actually an SSH key but a disguise.
-So you have made it this far and for that I say well done. It wasn't very hard, that I know, but nevertheless
-you have still made it here so congrats. Now you are probably reading this and thinking about annoying the
-person who made this, and you want to read the whole thing to check for clues, but you cant find any. You
-are starting to get frustrated at the person who made this as they still haven't mentioned anything to do
-with the challenge, except "well done you have got this far". You start slamming desks, and soon the monitor
-will follow. You are wondering where this is going and realising it's coming to the end of the paragraph,
-and you might not have seen anything. I have given you some things, although you will need something else
-as well good luck.
-696e656564746f6f70656e6c6f636b73
-696e697469616c69736174696f6e3132
-</code></pre></div></div>
-<p>trying out hex decoding the last two strings</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">part_1</span> <span class="o">=</span> <span class="s">"696e656564746f6f70656e6c6f636b73"</span>
-<span class="n">part_2</span> <span class="o">=</span> <span class="s">"696e697469616c69736174696f6e3132"</span>
+<h3 id="main">main</h3>
+<p>While True, it asks for an input which is a string of numbers separated by <code class="language-plaintext highlighter-rouge">,</code> 
+As long as we input <code class="language-plaintext highlighter-rouge">0x100</code> or 256 numbers at a time, we can get as many encryptions as we like</p>
 
-<span class="n">p1</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">part_1</span><span class="p">)</span>
-<span class="n">p2</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">part_2</span><span class="p">)</span>
-<span class="n">p3</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">bin_decoded_m2</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ineedtoopenlocks
-initialisation12
-</code></pre></div></div>
+<p>If we only enter a single number, and if that number happens to be the secret round key, we can get the flag</p>
 
-<p>hmm, no hint whats going on.<br />
-Lets try decoding the binary data at the end of the private key</p>
+<p>Sounds easy? lets take a look into the cipher</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">m2</span> <span class="o">=</span> <span class="s">"""
-00111001 00110000 00111001 00111000 00111000 01100011 00111001 01100010
-01100101 01100110 01100101 00110101 01100101 01100001 00110011 01100110
-00110101 01100001 00111001 00110001 01100101 01100110 01100110 01100101
-00110000 00110011 00110000 00110110 00110000 01100001 00111000 00110111
-00110001 00110100 01100100 01100110 01100011 00110010 00110000 00110000
-00111000 00111000 00110100 00110001 00110101 00110101 00110111 00110000
-01100010 00110011 00111001 00110100 01100011 01100101 00111001 01100011
-01100100 00110011 00110010 01100010 01100101 00110111 00110001 00111000
-"""</span>
-
-<span class="n">bin_decoded_m2</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">m2</span><span class="p">.</span><span class="nf">split</span><span class="p">())</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">bin_decoded_m2</span><span class="p">)</span>
+<h3 id="the-cipher">The Cipher</h3>
+<p>The above construction is <a href="https://en.wikipedia.org/wiki/Substitution%E2%80%93permutation_network">Substitution Permutation Network (SPN)</a> which is essentially a repeated operation of substitution with a fixed predefined array<br />
+here which is</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">S</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">43</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span>
+         <span class="mi">7</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="mi">42</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span>
+         <span class="mi">0</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span>
+        <span class="mi">25</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span>
+        <span class="mi">62</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="mi">29</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+        <span class="mi">45</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">56</span>
+    <span class="p">]</span>
 </code></pre></div></div>
-<p>Producing the hex string</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718
+<p>I.e a number <code class="language-plaintext highlighter-rouge">n</code> is replaced with <code class="language-plaintext highlighter-rouge">S[n]</code></p>
+
+<p>followed by a permutation of bits here defined by</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">P</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">21</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span>
+        <span class="mi">22</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span>
+        <span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span>
+        <span class="mi">29</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span>
+        <span class="mi">45</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+        <span class="mi">27</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="mi">2</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="mi">44</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span>
+    <span class="p">]</span>
+</code></pre></div></div>
+<p>Which means <code class="language-plaintext highlighter-rouge">P[t]</code>th bit of the output is actually the <code class="language-plaintext highlighter-rouge">t</code>th bit of inpute.g. <code class="language-plaintext highlighter-rouge">P[0] = 21</code> means the <code class="language-plaintext highlighter-rouge">21</code>th bit of output is <code class="language-plaintext highlighter-rouge">0</code>th bit of input as is</p>
+
+<p>followed by a xor operation with a secret key</p>
+
+<p>This process is repeated a fixed number of rounds times with a new secret key each round (which are called the round keys or subkeys)</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">encrypt</code> function hence looks like as below</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_combine</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+</code></pre></div></div>
+<p>(<code class="language-plaintext highlighter-rouge">_divide</code> and <code class="language-plaintext highlighter-rouge">_combine</code> are just helper functions to make programmers life easier)</p>
+
+<p>One might question, why are we <code class="language-plaintext highlighter-rouge">_dividing</code> a good enough input of 48 bits into 8 chunks of 6 bits each? 
+Well, in an ideal world, we would like to have a substitution box of 48 bits, but that would eat up a whopping <code class="language-plaintext highlighter-rouge">2^48</code> number of entries (which we are somehow fooling with <code class="language-plaintext highlighter-rouge">2^6</code> entries here</p>
+
+<p>Hence the functions <code class="language-plaintext highlighter-rouge">_sub</code> acts as if it sees 8 different values and substitutes them and acts as if it just did 48 bits of substitution</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_sub</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">cls</span><span class="p">.</span><span class="n">S</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>Now this got confusing at this point of time. I got 3 strings and not knowing what to do with them. I failed so many times XORing the strings creatively LOL.</p>
+<p>So does <code class="language-plaintext highlighter-rouge">_perm</code> pretend (because of our design) that it sees a big block of 48 bits which it permutes to a block of 48 bits, but what it does is to take 8 blocks of 6 bits each and create 8 blocks of 6 bits each if they were all connected</p>
 
-<p>Later did I realise the <code class="language-plaintext highlighter-rouge">ineedtoopenlocks</code> is a hint to <strong>KEY</strong><br />
-And <code class="language-plaintext highlighter-rouge">initialisation12</code> is a huge hint to <strong>IV</strong><br />
-And the third string could be our ciphertext. By this time one would consider it to be AES encrypted.<br />
-Which mode?<br />
-The mode which has <code class="language-plaintext highlighter-rouge">IV</code> and should be easy to guess :- <code class="language-plaintext highlighter-rouge">CBC</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_perm</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">bits</span> <span class="o">=</span> <span class="s">""</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">bits</span> <span class="o">+=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="mi">06</span><span class="n">b</span><span class="si">}</span><span class="s">"</span>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="n">part_1</span> <span class="o">=</span> <span class="s">"696e656564746f6f70656e6c6f636b73"</span>
-<span class="n">part_2</span> <span class="o">=</span> <span class="s">"696e697469616c69736174696f6e3132"</span>
-<span class="n">bin_decoded_m2</span> <span class="o">=</span> <span class="s">"90988c9befe5ea3f5a91effe03060a8714dfc20088415570b394ce9cd32be718"</span>
-<span class="n">p1</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">part_1</span><span class="p">)</span>
-<span class="n">p2</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">part_2</span><span class="p">)</span>
-<span class="n">p3</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">bin_decoded_m2</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="s">"_"</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">):</span>
+            <span class="n">buf</span><span class="p">[</span><span class="n">cls</span><span class="p">.</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">IV</span><span class="o">=</span><span class="n">p2</span><span class="p">)</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+        <span class="n">permd</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">permd</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">cls</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">ractf{3Asy_F1aG_0n_aEs_rAcTf}</code> and we get our flag sans padding!</p>
-</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-06-09T00:00:00+05:30"><!-- start custom article footer snippet -->
+<h4 id="where-do-subkeys-come-from">Where do subkeys come from?</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">key</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">MASK</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">digest</span><span class="p">()</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s">"big"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">self</span><span class="p">.</span><span class="n">MASK</span>
+            <span class="n">keys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">subkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+</code></pre></div></div>
+<p>As you may have observed from the init function, subkeys are “derived” from a single 48-bit key in a way that we cant recover subkey i from the knowledge of any of the subkeys j&gt;i (to make the challenge hard so that we will definitely need to recover subkey[0] which is the original key</p>
+
+<h2 id="vulnerability">Vulnerability?</h2>
+<p>If you have seen some cipher constructions before, you may have observed, that the <code class="language-plaintext highlighter-rouge">ROUND = 3</code> is really very low and <code class="language-plaintext highlighter-rouge">6-bit</code> sboxes are still not as robust as you may imagine them to be.</p>
+
+<p>Another hint as provided by the author is <a href="https://en.wikipedia.org/wiki/Differential_cryptanalysis">Differential Cryptanalysis</a>, and since I am obsessed with SAT solvers, I will overlook the hint and cheeze it with z3</p>
+
+<h2 id="modelling">Modelling</h2>
+<p>While the general methodology to solve a problem with a SAT solver is to write the output as a (symbolic) function of the inputs, and finding an input which leads to the observed output.</p>
+
+<p>So what’s the symbolic input and output here?</p>
+
+<p>For an input <code class="language-plaintext highlighter-rouge">inp</code> to the <code class="language-plaintext highlighter-rouge">SusCipher(key)</code> producing an encryption <code class="language-plaintext highlighter-rouge">out</code> We can write <code class="language-plaintext highlighter-rouge">out</code> as <code class="language-plaintext highlighter-rouge">symbolic_function(subkeys, inp)</code></p>
+
+<p>With <code class="language-plaintext highlighter-rouge">subkeys</code> acting as unknown <code class="language-plaintext highlighter-rouge">inp</code> which we aim for, we can easily get the desired outcome.</p>
+
+<p>Taking heavy inspiration from the implementaion of the challenge cipher, we can similary create the z3 model of suscipher</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CrackSusCipher</span><span class="p">:</span>
+    <span class="n">ROUND</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">BLOCK_NUM</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="k">def</span> <span class="nf">_divide</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">):</span>
+            <span class="n">l</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">v</span><span class="o">&amp;</span><span class="mb">0b111111</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">&gt;&gt;=</span><span class="mi">6</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">&lt;&lt;=</span><span class="mi">6</span>
+            <span class="n">res</span> <span class="o">|=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">_xor</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">^</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)]</span>
+</code></pre></div></div>
+<p>These functions look identical.</p>
+
+<h3 id="modelling-substitution">Modelling substitution</h3>
+<p>First hurdle most of the people face modelling a SPN network or any other cipher is to model substitution.<br />
+But z3 is equipped with powerful theories of arrays (and functions)</p>
+
+<p>Thus to model substitution, we can define a symbolic function S, which takes 6-bit inputs and generates 6-bit outputs</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">self</span><span class="p">.</span><span class="n">S</span> <span class="o">=</span> <span class="nc">Function</span><span class="p">(</span><span class="s">'S'</span><span class="p">,</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+</code></pre></div></div>
+<p>then <code class="language-plaintext highlighter-rouge">self.S(i)</code> would indeed be exactly what we desire<br />
+But wait, we just specified that <code class="language-plaintext highlighter-rouge">S</code> can be <em>any</em> function, not the exact substitution function we are provided with.<br />
+Worry not, we can specify this as a constraint to the solver</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">S</span><span class="p">):</span> <span class="c1">#original S as provided in the challenge
+</span>    <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nc">S</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">==</span><span class="n">v</span><span class="p">)</span>
+</code></pre></div></div>
+<p>i.e we want <code class="language-plaintext highlighter-rouge">S(0)</code> to be nothing else than 43 and so on</p>
+
+<p>And we treat keys as 6 bit unknowns, so there will be <code class="language-plaintext highlighter-rouge">(ROUND+1)*8</code> variables.</p>
+
+<p>Overall our init function will look like</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">S</span> <span class="o">=</span> <span class="nc">Function</span><span class="p">(</span><span class="s">'S'</span><span class="p">,</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">solver</span> <span class="o">=</span> <span class="nc">Solver</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nc">S</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">==</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="nc">BitVec</span><span class="p">(</span><span class="sa">f</span><span class="s">'k_</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">'</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<p>hence <code class="language-plaintext highlighter-rouge">_sub</code> function would be</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">_sub</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="nc">S</span><span class="p">(</span><span class="nf">simplify</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">block</span><span class="p">]</span>
+</code></pre></div></div>
+<p>Note that it could have been <code class="language-plaintext highlighter-rouge">self.S(i)</code> instead of <code class="language-plaintext highlighter-rouge">self.S(simplify(i))</code> which I used, just to simplify the expression (if possible) before substituting to hopefully speed things up</p>
+
+<h3 id="modelling-permutation">Modelling permutation</h3>
+<p>Now what about the permutation? We can model it exactly how we would have calculated a permutation
+Take the <code class="language-plaintext highlighter-rouge">i</code>th bit, put it <code class="language-plaintext highlighter-rouge">P[i]</code>th place in the output, just the way to deal with BitVectors vary</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">_perm</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nc">Concat</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        <span class="c1"># treat the 8 6-bit vectors as a single 48 bit-vector 
+</span>        <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">48</span> <span class="c1"># temporary placeholder for output
+</span>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+            <span class="c1"># extract the ith bit from the MSB put it at the correct place
+</span>            <span class="n">output</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Extract</span><span class="p">(</span><span class="mi">47</span><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="mi">47</span><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c1"># rechunk in 6 bit bitvectors
+</span>        <span class="k">return</span> <span class="p">[</span><span class="nc">Concat</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">6</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">48</span><span class="p">,</span><span class="mi">6</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<h3 id="modelling-encryption">Modelling encryption</h3>
+<p>Finally after getting the required blocks to perform our symbolic encryption, we can model it</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">enc</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">block</span>
+</code></pre></div></div>
+<p>Which you can see is almost like the original except we are not _dividing and _combining the 48-bits but rather assume that it operates on 8 6-bit values. And <code class="language-plaintext highlighter-rouge">self.keys</code> here are the symbolic unknowns.</p>
+
+<h3 id="checking-if-our-model-is-correct">Checking if our model is correct</h3>
+<p>Now a CTF player will be anxious whether the efforts they put in to model the cipher were fruitful or did they mess up the model somewhere?</p>
+
+<p>Worry not, we can always check our symbolic model by plugging in real values and comparing with the original cipher</p>
+
+<p>We will use random values and keys just to check if they match (kinda funny that we have to informally verify a formal verifier XD)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">print</span><span class="p">(</span><span class="s">"verifying our modelling"</span><span class="p">)</span>
+<span class="kn">import</span> <span class="n">random</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">random_key</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">48</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sus</span> <span class="o">=</span> <span class="nc">SusCipher</span><span class="p">(</span><span class="n">random_key</span><span class="p">)</span>
+    <span class="n">sus_model</span> <span class="o">=</span> <span class="nf">crack</span><span class="p">()</span>
+    <span class="n">sus_model</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">check</span><span class="p">()</span> <span class="c1"># to fill in the `S` as the original substitution function
+</span>    <span class="n">sus_model</span><span class="p">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="nc">BitVecVal</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sus</span><span class="p">.</span><span class="n">subkeys</span><span class="p">]</span> <span class="c1"># BitVecVal as a symbolic constant value
+</span>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">inp</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">48</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">real_out</span> <span class="o">=</span> <span class="n">sus</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+        <span class="n">sym_out_chunks</span> <span class="o">=</span> <span class="n">sus_model</span><span class="p">.</span><span class="nf">enc</span><span class="p">(</span><span class="n">sus_model</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">inp</span><span class="p">))</span>
+        <span class="c1"># evaluating the symbolic output as per the symbolic model
+</span>        <span class="n">sym_out</span> <span class="o">=</span> <span class="n">sus_model</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">model</span><span class="p">().</span><span class="nf">eval</span><span class="p">(</span><span class="nc">Concat</span><span class="p">(</span><span class="n">sym_out_chunks</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">sym_out</span><span class="p">.</span><span class="nf">as_long</span><span class="p">()</span> <span class="o">==</span> <span class="n">real_out</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"success"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="adding-input-output-points">Adding input output points</h3>
+<p>Taking care of the _divide business, we will equate the 6-bit chunks of the output and our symbolic output for a given input</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">add_sample</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">oup</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">enc</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">inp</span><span class="p">)),</span> <span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">oup</span><span class="p">)):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="o">==</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="getting-the-key">Getting the key</h3>
+<p>It’s really simple, just check if there is any satisfying model which would make our constraints possible, and get the first subkey according to that model</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">check</span><span class="p">()</span><span class="o">==</span><span class="n">sat</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">model</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">.</span><span class="nf">eval</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">as_long</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_combine</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="putting-our-class-together">Putting our class together</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">S</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="mi">43</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span>
+     <span class="mi">7</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="mi">42</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span>
+     <span class="mi">0</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span>
+    <span class="mi">25</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span>
+    <span class="mi">62</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="mi">29</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="mi">45</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">56</span>
+<span class="p">]</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="mi">21</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="mi">22</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span>
+    <span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span>
+    <span class="mi">29</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span>
+    <span class="mi">45</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="mi">27</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span>
+     <span class="mi">2</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span>
+    <span class="mi">44</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span>
+<span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">crack</span><span class="p">:</span>
+    <span class="n">ROUND</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">BLOCK_NUM</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">S</span> <span class="o">=</span> <span class="nc">Function</span><span class="p">(</span><span class="s">'S'</span><span class="p">,</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="nc">BitVecSort</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">solver</span> <span class="o">=</span> <span class="nc">Solver</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nc">S</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">==</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">[[</span><span class="nc">BitVec</span><span class="p">(</span><span class="sa">f</span><span class="s">'k_</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">'</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_divide</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">BLOCK_NUM</span><span class="p">):</span>
+            <span class="n">l</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">v</span><span class="o">&amp;</span><span class="mb">0b111111</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">&gt;&gt;=</span><span class="mi">6</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">&lt;&lt;=</span><span class="mi">6</span>
+            <span class="n">res</span> <span class="o">|=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">_xor</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">^</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_perm</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nc">Concat</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">48</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Extract</span><span class="p">(</span><span class="mi">47</span><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="mi">47</span><span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nc">Concat</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">6</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">48</span><span class="p">,</span><span class="mi">6</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_sub</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="nc">S</span><span class="p">(</span><span class="nf">simplify</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">block</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">enc</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">ROUND</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_sub</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_perm</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_xor</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">block</span>
+
+    <span class="k">def</span> <span class="nf">add_sample</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">oup</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">enc</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">inp</span><span class="p">)),</span> <span class="n">self</span><span class="p">.</span><span class="nf">_divide</span><span class="p">(</span><span class="n">oup</span><span class="p">)):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="o">==</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">check</span><span class="p">()</span><span class="o">==</span><span class="n">sat</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">solver</span><span class="p">.</span><span class="nf">model</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">.</span><span class="nf">eval</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">as_long</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_combine</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>So how many input-output pairs do we need to figure out the key uniquely?<br />
+I guess atmost 256?<br />
+Let’s try it out</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="nf">crack</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">48</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="nf">server</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="c1">#whatever
+</span>    <span class="n">c</span><span class="p">.</span><span class="nf">add_sample</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Hmmm, something’s not right, it seems to be stuck indefinitely.<br />
+We can get the intuition of difficulty of the solver to find key by reducing the number of constraints i.e the number of input output pairs.</p>
+
+<p>By playing around, one quickly comes to the realisation that it wont workeven for 5 random samples and will time out &gt;200s</p>
+
+<h3 id="moment-of-inspiration">Moment of inspiration</h3>
+<p>How about we address the difficulty of the solver (by addressing the difficulty of the problem being asked to solve)</p>
+
+<p>When we take a random input-output pair, what we ask the solver for <code class="language-plaintext highlighter-rouge">Substitution(key[i] ^ some_random)</code><br />
+But if it were just <code class="language-plaintext highlighter-rouge">0</code> instead of some_random, it would have to guess one less step.<br />
+So how about we make 7 out of 8 <code class="language-plaintext highlighter-rouge">0</code> and only keep one <code class="language-plaintext highlighter-rouge">key</code> place active in substitution?.</p>
+
+<p>This is really easy with <code class="language-plaintext highlighter-rouge">input = (1&lt;&lt;i)</code> for (0&lt;=i&lt;48)</p>
+
+<p>And most importantly, it works!<br />
+(To an amazement that it works in around a second with 48 samples as opposed to ~5000 seconds for 5 random samples!)</p>
+
+<h3 id="getting-the-flag">Getting the flag</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">pwn</span>
+<span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"suscipher.chal.ctf.acsc.asia"</span><span class="p">,</span> <span class="mi">13579</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="n">pwn</span><span class="p">.</span><span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="s">","</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">str</span><span class="p">((</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)))</span>
+<span class="n">response</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()[</span><span class="mi">2</span><span class="p">:].</span><span class="nf">strip</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">', '</span><span class="p">)))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="nf">crack</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="n">c</span><span class="p">.</span><span class="nf">add_sample</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="acscthere_may_be_a_better_solution_to_solve_this_but_i_used_diff_analysis_">ACSC{There_may_be_a_better_solution_to_solve_this_but_I_used_diff_analysis_:(}</h4>
+
+<p>As expected, the author knew there might be other interesting ways like this one ;)</p>
+
+<h3 id="get-the-solve-script">Get the <a href="./solve.py">Solve Script</a></h3>
+
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2023-03-01T00:00:00+05:30"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div itemscope itemtype="http://schema.org/Person" class="author-profile card card--flat item"><a href="https://deut-erium.github.io" class="item__image"><img class="author-profile__avatar" itemprop="image" src="https://deut-erium.github.io/Circle-limit-IV.jpg" /></a><div class="item__content"><meta itemprop="name" content="deuterium">

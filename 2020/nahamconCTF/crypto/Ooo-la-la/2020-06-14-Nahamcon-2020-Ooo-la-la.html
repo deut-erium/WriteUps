@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Nahamcon 2020 Crypto - Oo la la | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Nahamcon 2020 Crypto - Oo la la" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1991,7 +1991,7 @@ c = 8776057555426699101543111092257626153215937671876570174951376666623918901210
 Which almost instantly factors the <code class="language-plaintext highlighter-rouge">N</code> using <a href="https://en.wikipedia.org/wiki/Lenstra_elliptic-curve_factorization">Elliptic Curve Method</a></p>
 
 <p>Knowing the factors or phi, rest of the job is easy</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">gmpy2</span> <span class="kn">import</span> <span class="n">invert</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">gmpy2</span> <span class="kn">import</span> <span class="n">invert</span>
 <span class="n">p</span> <span class="o">=</span> <span class="mi">1830213987675567884451892843232991595746198390911664175679946063194531096037459873211879206428207</span>
 <span class="n">q</span> <span class="o">=</span> <span class="mi">1830213987675567884451892843232991595746198390911664175679946063194531096037459873211879206428213</span>
 
@@ -1999,10 +1999,10 @@ Which almost instantly factors the <code class="language-plaintext highlighter-r
 <span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
 <span class="n">c</span> <span class="o">=</span> <span class="mi">87760575554266991015431110922576261532159376718765701749513766666239189012106797683148334771446801021047078003121816710825033894805743112580942399985961509685534309879621205633997976721084983</span>
 
-<span class="n">d</span> <span class="o">=</span> <span class="n">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">invert</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
-<span class="n">pt</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="n">decode</span><span class="p">())</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="nf">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]).</span><span class="nf">decode</span><span class="p">())</span>
 </code></pre></div></div>
 
 <h3 id="flagooo_la_la_those_are_sexy_primes">flag{ooo_la_la_those_are_sexy_primes}</h3>

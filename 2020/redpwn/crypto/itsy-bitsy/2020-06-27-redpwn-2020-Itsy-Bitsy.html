@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Redpwn 2020 Crypto - Itsy Bitsy | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - Itsy Bitsy" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1996,67 +1996,67 @@ Ciphertext: 00100010010111011110000011000000100000110001111001001111000110001000
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
 </span>
-<span class="kn">from</span> <span class="nn">Crypto.Random.random</span> <span class="kn">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="n">Crypto.Random.random</span> <span class="kn">import</span> <span class="n">randint</span>
 
 <span class="k">def</span> <span class="nf">str_to_bits</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nf">bin</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">bit_str</span>
 
 <span class="k">def</span> <span class="nf">recv_input</span><span class="p">():</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'Enter an integer i such that i &gt; 0: '</span><span class="p">)</span>
-    <span class="n">j</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'Enter an integer j such that j &gt; i &gt; 0: '</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">'Enter an integer i such that i &gt; 0: '</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">'Enter an integer j such that j &gt; i &gt; 0: '</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>
             <span class="k">raise</span> <span class="nb">Exception</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">'Error! You must adhere to the restrictions!'</span><span class="p">)</span>
-        <span class="nb">exit</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">'Error! You must adhere to the restrictions!'</span><span class="p">)</span>
+        <span class="nf">exit</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span>
 
 <span class="k">def</span> <span class="nf">generate_random_bits</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">):</span>
     <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nf">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nf">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">bit_str</span><span class="p">[:</span><span class="n">number_of_bits</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">bit_str_xor</span><span class="p">(</span><span class="n">bit_str_1</span><span class="p">,</span> <span class="n">bit_str_2</span><span class="p">):</span>
     <span class="n">xor_res</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bit_str_1</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">bit_str_1</span><span class="p">)):</span>
         <span class="n">bit_1</span> <span class="o">=</span> <span class="n">bit_str_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">bit_2</span> <span class="o">=</span> <span class="n">bit_str_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">xor_res</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bit_1</span><span class="p">)</span> <span class="o">^</span> <span class="nb">int</span><span class="p">(</span><span class="n">bit_2</span><span class="p">))</span>
+        <span class="n">xor_res</span> <span class="o">+=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">bit_1</span><span class="p">)</span> <span class="o">^</span> <span class="nf">int</span><span class="p">(</span><span class="n">bit_2</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">xor_res</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'flag.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'flag.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">:</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">7</span><span class="p">)</span>
-    <span class="n">flag_bits</span> <span class="o">=</span> <span class="n">str_to_bits</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
-    <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">recv_input</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">flag_bits</span> <span class="o">=</span> <span class="nf">str_to_bits</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="nf">recv_input</span><span class="p">()</span>
     <span class="n">lb</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">i</span>
     <span class="n">ub</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">)</span>
-    <span class="n">random_bits</span> <span class="o">=</span> <span class="n">generate_random_bits</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">encrypted_bits</span> <span class="o">=</span> <span class="n">bit_str_xor</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">,</span><span class="n">random_bits</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Ciphertext: </span><span class="si">{</span><span class="n">encrypted_bits</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">)</span>
+    <span class="n">random_bits</span> <span class="o">=</span> <span class="nf">generate_random_bits</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">encrypted_bits</span> <span class="o">=</span> <span class="nf">bit_str_xor</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">,</span><span class="n">random_bits</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Ciphertext: </span><span class="si">{</span><span class="n">encrypted_bits</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="nf">main</span><span class="p">()</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">generate_random_bits</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">):</span>
     <span class="n">bit_str</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
-        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">bit_str</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">number_of_bits</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nf">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+        <span class="n">bit_str</span> <span class="o">+=</span> <span class="nf">bin</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">bit_str</span><span class="p">[:</span><span class="n">number_of_bits</span><span class="p">]</span>
 </code></pre></div></div>
 <p>It will generate a random bitstring of length <code class="language-plaintext highlighter-rouge">number_of_bits</code> from <code class="language-plaintext highlighter-rouge">lower_bound</code> to <code class="language-plaintext highlighter-rouge">upper_bound</code> and if the <code class="language-plaintext highlighter-rouge">lower_bound</code> itself is greater than the requirement, it will truncate it.</p>
@@ -2069,44 +2069,44 @@ The generated bitstream is xored (bit-wise) with the flag and returned</p>
 The pecularity being the first bit would always be <code class="language-plaintext highlighter-rouge">1</code> because of <code class="language-plaintext highlighter-rouge">2**i</code> and all the bits at positions multiples of <code class="language-plaintext highlighter-rouge">i</code> would be <code class="language-plaintext highlighter-rouge">1</code></p>
 
 <h4 id="example">Example</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">generate_random_bits</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">generate_random_bits</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
 <span class="s">'10101111111010111010111110111010101010101111101111111010101010111111111011111011'</span>
 </code></pre></div></div>
 <p>Notice the 0th, 2nd, 4th index and so on is always <code class="language-plaintext highlighter-rouge">1</code>
 My unoptimized script <a href="./solve.py">solve.py</a> which just concerns about knowing the bit at position <code class="language-plaintext highlighter-rouge">i</code> by sending the index <code class="language-plaintext highlighter-rouge">i-1</code> and <code class="language-plaintext highlighter-rouge">i</code>.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="n">remote</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"2020.redpwnc.tf"</span><span class="p">,</span> <span class="mi">31284</span>
 
 <span class="k">def</span> <span class="nf">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">):</span>
-    <span class="n">REM</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
-    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">':'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">REM</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">num_bits</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">encode</span><span class="p">())</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">num_bits</span><span class="p">).</span><span class="nf">encode</span><span class="p">())</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
+    <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">':'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">strip</span><span class="p">()</span>
     <span class="c1">#print(data)
-</span>    <span class="n">REM</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</span>    <span class="n">REM</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">ciphertext</span>
 
-<span class="n">flag_bits</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">301</span><span class="p">)</span>  <span class="c1">#flag size known 
+<span class="n">flag_bits</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">(</span><span class="mi">301</span><span class="p">)</span>  <span class="c1">#flag size known 
 </span><span class="n">flag_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">49</span>  <span class="c1"># ord('1') known from the first character 'f' of flag
 </span><span class="n">flag_bits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">49</span>  <span class="c1"># ord('1') 
-</span><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
-    <span class="n">ct</span> <span class="o">=</span> <span class="n">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+</span><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="nf">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
     <span class="n">flag_bits</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">=</span> <span class="mi">48</span> <span class="k">if</span> <span class="n">ct</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">==</span> <span class="mi">49</span> <span class="k">else</span> <span class="mi">49</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>This can be improved just by noting the fact we knew most of the bits <code class="language-plaintext highlighter-rouge">i</code> before reaching the index <code class="language-plaintext highlighter-rouge">i</code>, we will only make a request if bit <code class="language-plaintext highlighter-rouge">i</code> is not known</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">num_bits</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">301</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">flag_bits</span><span class="p">[</span><span class="n">num_bits</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ct</span> <span class="o">=</span> <span class="n">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">301</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="nf">get_ct</span><span class="p">(</span><span class="n">num_bits</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">num_bits</span><span class="p">,</span> <span class="mi">301</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">):</span>
             <span class="n">flag_bits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">48</span> <span class="k">if</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">49</span> <span class="k">else</span> <span class="mi">49</span>
-<span class="k">print</span><span class="p">(</span><span class="n">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">bits_to_str</span><span class="p">(</span><span class="n">flag_bits</span><span class="p">))</span>
 </code></pre></div></div>
 <p>Which takes 62 requests instead of 300 as in original</p>
 

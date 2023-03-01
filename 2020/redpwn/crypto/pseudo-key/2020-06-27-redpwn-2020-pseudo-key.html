@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Redpwn 2020 Crypto - Pseudo-key | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Redpwn 2020 Crypto - Pseudo-key" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -1986,16 +1986,16 @@ Note: Make sure to wrap the plaintext with flag{} before you submit!
 <p>Lets take a quick look at the contents of <a href="pseudo-key.py">pseudo-key.py</a></p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
 </span>
-<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_lowercase</span>
+<span class="kn">from</span> <span class="n">string</span> <span class="kn">import</span> <span class="n">ascii_lowercase</span>
 
-<span class="n">chr_to_num</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
-<span class="n">num_to_chr</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
+<span class="n">chr_to_num</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
+<span class="n">num_to_chr</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">ascii_lowercase</span><span class="p">)}</span>
 
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">ptxt</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-    <span class="n">ptxt</span> <span class="o">=</span> <span class="n">ptxt</span><span class="p">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ptxt</span><span class="p">))).</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">ptxt</span> <span class="o">=</span> <span class="n">ptxt</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">ptxt</span><span class="p">))).</span><span class="nf">lower</span><span class="p">()</span>
     <span class="n">ctxt</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ptxt</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">ptxt</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">ptxt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'_'</span><span class="p">:</span>
             <span class="n">ctxt</span> <span class="o">+=</span> <span class="s">'_'</span>
             <span class="k">continue</span>
@@ -2004,17 +2004,17 @@ Note: Make sure to wrap the plaintext with flag{} before you submit!
         <span class="n">ctxt</span> <span class="o">+=</span> <span class="n">num_to_chr</span><span class="p">[(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ctxt</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'flag.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">'key.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">k</span><span class="p">:</span>
-    <span class="n">flag</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">k</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'flag.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="nf">open</span><span class="p">(</span><span class="s">'key.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">k</span><span class="p">:</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">k</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
 
 <span class="n">ptxt</span> <span class="o">=</span> <span class="n">flag</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="n">ctxt</span> <span class="o">=</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">ptxt</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
-<span class="n">pseudo_key</span> <span class="o">=</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+<span class="n">ctxt</span> <span class="o">=</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">ptxt</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+<span class="n">pseudo_key</span> <span class="o">=</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s">'Ciphertext:'</span><span class="p">,</span><span class="n">ctxt</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s">'Pseudo-key:'</span><span class="p">,</span><span class="n">pseudo_key</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">'Ciphertext:'</span><span class="p">,</span><span class="n">ctxt</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">'Pseudo-key:'</span><span class="p">,</span><span class="n">pseudo_key</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Encryption is just vignere cipher over ASCII-lower with a given key.</p>
@@ -2040,23 +2040,23 @@ And hence, if we encrypt the $key$ with \(key\) itself, we get,</p>
 
 <p>Since the length of \(pseudoKey\) is 11, we have \(2^{11} = 2048\) possibilities, which we could simply go through and check if we get a valid flag</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="n">ct</span> <span class="o">=</span> <span class="s">"z_jjaoo_rljlhr_gauf_twv_shaqzb_ljtyut"</span>
 <span class="n">pseudo_key</span> <span class="o">=</span> <span class="s">"iigesssaemk"</span>
 
-<span class="n">pseudo_key_to_num</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">97</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pseudo_key</span><span class="p">]</span>
+<span class="n">pseudo_key_to_num</span> <span class="o">=</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">97</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pseudo_key</span><span class="p">]</span>
 <span class="n">possible_keys</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">i</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">13</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pseudo_key_to_num</span> <span class="p">]</span>
 
-<span class="n">ct_to_num</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">97</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">97</span> <span class="k">else</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span> <span class="p">]</span>
+<span class="n">ct_to_num</span> <span class="o">=</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">97</span> <span class="k">if</span> <span class="nf">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">97</span> <span class="k">else</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ct</span> <span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ct</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
-    <span class="n">keylen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">==</span><span class="s">'_'</span> <span class="k">else</span> <span class="nb">chr</span><span class="p">((</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">keylen</span><span class="p">]</span> <span class="o">+</span><span class="mi">26</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span> <span class="o">+</span><span class="mi">97</span> <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct</span><span class="p">))</span> <span class="p">)</span>
+    <span class="n">keylen</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="nf">str</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">==</span><span class="s">'_'</span> <span class="k">else</span> <span class="nf">chr</span><span class="p">((</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="n">keylen</span><span class="p">]</span> <span class="o">+</span><span class="mi">26</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span> <span class="o">+</span><span class="mi">97</span> <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">ct</span><span class="p">))</span> <span class="p">)</span>
 
 
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">possible_keys</span><span class="p">):</span>
-    <span class="n">decrypted</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">ct_to_num</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">))</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nf">product</span><span class="p">(</span><span class="o">*</span><span class="n">possible_keys</span><span class="p">):</span>
+    <span class="n">decrypted</span> <span class="o">=</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">ct_to_num</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">decrypted</span><span class="p">,</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">97</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">))</span>
 </code></pre></div></div>
 
 <p>Scrolling over the produced ciphertext, one could easily identify the correct flag</p>

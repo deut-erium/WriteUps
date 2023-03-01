@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Google CTF 2021 Crypto - Pythia | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="Google CTF 2021 Crypto - Pythia" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2001,82 +2001,82 @@ with them.
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">max_queries</span> <span class="o">=</span> <span class="mi">150</span>
 <span class="n">query_delay</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="n">passwords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">)</span> \
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s">'UTF-8'</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"flag.txt"</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+<span class="n">passwords</span> <span class="o">=</span> <span class="p">[</span><span class="nf">bytes</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="nf">choice</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">)</span> \
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s">'UTF-8'</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="s">"flag.txt"</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">).</span><span class="nf">read</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">menu</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"What you wanna do?"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"1- Set key"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"2- Read flag"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"3- Decrypt text"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"4- Exit"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"What you wanna do?"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"1- Set key"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"2- Read flag"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"3- Decrypt text"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"4- Exit"</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nf">int</span><span class="p">(</span><span class="nf">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s">"Welcome!</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Welcome!</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
 
 <span class="n">key_used</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_queries</span><span class="p">):</span>
-    <span class="n">option</span> <span class="o">=</span> <span class="n">menu</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">max_queries</span><span class="p">):</span>
+    <span class="n">option</span> <span class="o">=</span> <span class="nf">menu</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Which key you want to use [0-2]?"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Which key you want to use [0-2]?"</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">))</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
           <span class="n">key_used</span> <span class="o">=</span> <span class="n">i</span>
         <span class="k">else</span><span class="p">:</span>
-          <span class="k">print</span><span class="p">(</span><span class="s">"Please select a valid key."</span><span class="p">)</span>
+          <span class="nf">print</span><span class="p">(</span><span class="s">"Please select a valid key."</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Password?"</span><span class="p">)</span>
-        <span class="n">passwd</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">),</span> <span class="s">'UTF-8'</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Password?"</span><span class="p">)</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">(</span><span class="nf">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">),</span> <span class="s">'UTF-8'</span><span class="p">)</span>
 
-        <span class="k">print</span><span class="p">(</span><span class="s">"Checking..."</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Checking..."</span><span class="p">)</span>
         <span class="c1"># Prevent bruteforce attacks...
-</span>        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
+</span>        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">passwd</span> <span class="o">==</span> <span class="p">(</span><span class="n">passwords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">passwords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">passwords</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"ACCESS GRANTED: "</span> <span class="o">+</span> <span class="n">flag</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'UTF-8'</span><span class="p">))</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"ACCESS GRANTED: "</span> <span class="o">+</span> <span class="n">flag</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="s">'UTF-8'</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"ACCESS DENIED!"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"ACCESS DENIED!"</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Send your ciphertext "</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Send your ciphertext "</span><span class="p">)</span>
 
-        <span class="n">ct</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Decrypting..."</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="s">"&gt;&gt;&gt; "</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Decrypting..."</span><span class="p">)</span>
         <span class="c1"># Prevent bruteforce attacks...
-</span>        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
+</span>        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">query_delay</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">ct</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
-            <span class="n">nonce</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">nonce</span><span class="p">)</span>
-            <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
+            <span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">ct</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+            <span class="n">nonce</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">nonce</span><span class="p">)</span>
+            <span class="n">ciphertext</span> <span class="o">=</span> <span class="nf">b64decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"ERROR: Ciphertext has invalid format. </span><span class="se">\
+            <span class="nf">print</span><span class="p">(</span><span class="s">"ERROR: Ciphertext has invalid format. </span><span class="se">\
 </span><span class="s">            Must be of the form </span><span class="se">\"</span><span class="s">nonce,ciphertext</span><span class="se">\"</span><span class="s">, where </span><span class="se">\
 </span><span class="s">            nonce and ciphertext are base64 strings."</span><span class="p">)</span>
             <span class="k">continue</span>
 
-        <span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="n">derive</span><span class="p">(</span><span class="n">passwords</span><span class="p">[</span><span class="n">key_used</span><span class="p">])</span>
+        <span class="n">kdf</span> <span class="o">=</span> <span class="nc">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="nf">default_backend</span><span class="p">())</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="nf">derive</span><span class="p">(</span><span class="n">passwords</span><span class="p">[</span><span class="n">key_used</span><span class="p">])</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">cipher</span> <span class="o">=</span> <span class="n">AESGCM</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">plaintext</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span><span class="p">,</span> <span class="n">associated_data</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+            <span class="n">cipher</span> <span class="o">=</span> <span class="nc">AESGCM</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="n">cipher</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">nonce</span><span class="p">,</span> <span class="n">ciphertext</span><span class="p">,</span> <span class="n">associated_data</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"ERROR: Decryption failed. Key was not correct."</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"ERROR: Decryption failed. Key was not correct."</span><span class="p">)</span>
             <span class="k">continue</span>
 
-        <span class="k">print</span><span class="p">(</span><span class="s">"Decryption successful"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Decryption successful"</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">option</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">)</span>
         <span class="k">break</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Invalid option!"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"You have "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">max_queries</span> <span class="o">-</span> <span class="n">query</span><span class="p">)</span> <span class="o">+</span> <span class="s">" trials left...</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Invalid option!"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"You have "</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="n">max_queries</span> <span class="o">-</span> <span class="n">query</span><span class="p">)</span> <span class="o">+</span> <span class="s">" trials left...</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="recon">Recon</h2>
@@ -2176,15 +2176,15 @@ What we can do is to first check for a few groups of smaller sizes, then proceed
 If we form groups of size $k$, the total number of calls should be roughly (for worst case number of calls)
 $17576/k + \lceil log_{2}k \rceil= 49 \implies k\approx 367$
 Time taken to find a multicollision for $k=367$ keys,</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">statistics</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">statistics</span>
 <span class="n">k</span><span class="o">=</span><span class="mi">367</span>
 <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
-    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">multi</span> <span class="o">=</span> <span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="p">])</span>
-    <span class="n">times</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="nf">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">k</span><span class="p">])</span>
+    <span class="n">times</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
 <span class="c1">#4.06
 </span></code></pre></div></div>
 <p>It takes around 4 seconds on an i9 processor. For the binary search part the times for computation
@@ -2196,46 +2196,46 @@ Overall it should take average case \((10+4)*(17576/367)*1/2 + 9*10 + 1.5 \appro
 <p>Borrowing logic from <a href="https://github.com/julialen/key_multicollision/blob/main/collide_gcm.sage">collide_gcm.sage</a>, <a href="./collide.sage">local copy</a> here is a dirty script</p>
 
 <h3 id="solve-script"><a href="./solve.sage">Solve script</a></h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="n">string</span>
+<span class="kn">import</span> <span class="n">time</span>
 
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
-<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.ciphers.aead</span> <span class="kn">import</span> <span class="n">AESGCM</span>
-<span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.kdf.scrypt</span> <span class="kn">import</span> <span class="n">Scrypt</span>
-<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">bitstring</span> <span class="kn">import</span> <span class="n">BitArray</span><span class="p">,</span> <span class="n">Bits</span>
-<span class="kn">import</span> <span class="nn">pwn</span>
+<span class="kn">from</span> <span class="n">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="n">cryptography.hazmat.backends</span> <span class="kn">import</span> <span class="n">default_backend</span>
+<span class="kn">from</span> <span class="n">cryptography.hazmat.primitives.ciphers.aead</span> <span class="kn">import</span> <span class="n">AESGCM</span>
+<span class="kn">from</span> <span class="n">cryptography.hazmat.primitives.kdf.scrypt</span> <span class="kn">import</span> <span class="n">Scrypt</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="n">bitstring</span> <span class="kn">import</span> <span class="n">BitArray</span><span class="p">,</span> <span class="n">Bits</span>
+<span class="kn">import</span> <span class="n">pwn</span>
 
 <span class="n">derived_keys</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># keys derived from scrypt of password
 </span><span class="n">rev_keys</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># holds mapping from derived key to password
-</span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                 <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
-    <span class="n">derived_key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="n">derive</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">k</span><span class="p">).</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">derived_keys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">derived_key</span><span class="p">)</span>
-    <span class="n">rev_keys</span><span class="p">[</span><span class="n">derived_key</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nf">product</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">ascii_lowercase</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">kdf</span> <span class="o">=</span> <span class="nc">Scrypt</span><span class="p">(</span><span class="n">salt</span><span class="o">=</span><span class="sa">b</span><span class="s">''</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                 <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="nf">default_backend</span><span class="p">())</span>
+    <span class="n">derived_key</span> <span class="o">=</span> <span class="n">kdf</span><span class="p">.</span><span class="nf">derive</span><span class="p">(</span><span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">k</span><span class="p">).</span><span class="nf">encode</span><span class="p">())</span>
+    <span class="n">derived_keys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">derived_key</span><span class="p">)</span>
+    <span class="n">rev_keys</span><span class="p">[</span><span class="n">derived_key</span><span class="p">]</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
 <span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"pythia.2021.ctfcompetition.com"</span><span class="p">,</span> <span class="mi">1337</span>
-<span class="n">REM</span> <span class="o">=</span> <span class="n">pwn</span><span class="p">.</span><span class="n">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="n">pwn</span><span class="p">.</span><span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
     <span class="s">"""Converting a bytes object to an element in `field`"""</span>
-    <span class="n">bits</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="p">.</span><span class="n">fetch_int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bits</span><span class="p">)):</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="nc">BitArray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="p">.</span><span class="nf">fetch_int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">bits</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="n">a</span><span class="o">**</span><span class="n">i</span>
     <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="n">P</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">P</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">PolynomialRing</span><span class="p">(</span><span class="nc">GF</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">128</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">7</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="n">GFghash</span><span class="p">.</span><span class="o">&lt;</span><span class="n">a</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">128</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="n">modulus</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
-<span class="n">R</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">GFghash</span><span class="p">,</span> <span class="s">'x'</span><span class="p">)</span>
+<span class="n">GFghash</span><span class="p">.</span><span class="o">&lt;</span><span class="n">a</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">GF</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">128</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="n">modulus</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="nc">PolynomialRing</span><span class="p">(</span><span class="n">GFghash</span><span class="p">,</span> <span class="s">'x'</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">multicollision</span><span class="p">(</span><span class="n">keyset</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span> <span class="o">*</span> <span class="mi">12</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="sa">b</span><span class="s">'</span><span class="se">\x01</span><span class="s">'</span> <span class="o">*</span> <span class="mi">16</span><span class="p">):</span>
@@ -2243,80 +2243,80 @@ Overall it should take average case \((10+4)*(17576/367)*1/2 + 9*10 + 1.5 \appro
     and so is nonce for all the key encryptions
     x_bf corresponds byte object x transformed to the field element
     """</span>
-    <span class="n">L_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keyset</span><span class="p">)</span> <span class="o">*</span> <span class="mi">128</span><span class="p">).</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
-    <span class="n">L_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">L_bytes</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
-    <span class="n">nonce_plus</span> <span class="o">=</span> <span class="n">nonce</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="n">tag_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">L_bytes</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">keyset</span><span class="p">)</span> <span class="o">*</span> <span class="mi">128</span><span class="p">).</span><span class="nf">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
+    <span class="n">L_bf</span> <span class="o">=</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">L_bytes</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">nonce_plus</span> <span class="o">=</span> <span class="n">nonce</span> <span class="o">+</span> <span class="nf">bytes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">tag_bf</span> <span class="o">=</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyset</span><span class="p">:</span>
         <span class="c1"># compute H
-</span>        <span class="n">aes</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
-        <span class="n">H</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
-        <span class="n">h_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span>        <span class="n">aes</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="s">'</span><span class="se">\x00</span><span class="s">'</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">h_bf</span> <span class="o">=</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 
-        <span class="n">s</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">nonce_plus</span><span class="p">)</span>
-        <span class="n">s_bf</span> <span class="o">=</span> <span class="n">bytes_to_element</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">aes</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">nonce_plus</span><span class="p">)</span>
+        <span class="n">s_bf</span> <span class="o">=</span> <span class="nf">bytes_to_element</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GFghash</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
         <span class="c1"># assign (lens * H) + s + T to b
 </span>        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">L_bf</span> <span class="o">*</span> <span class="n">h_bf</span><span class="p">)</span> <span class="o">+</span> <span class="n">s_bf</span> <span class="o">+</span> <span class="n">tag_bf</span>
         <span class="c1"># get pair (H, b*(H^-2))
 </span>        <span class="n">y</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">h_bf</span><span class="o">**-</span><span class="mi">2</span>
-        <span class="n">pairs</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">h_bf</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="n">pairs</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">h_bf</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     <span class="c1"># compute Lagrange interpolation
-</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="n">lagrange_polynomial</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+</span>    <span class="n">f</span> <span class="o">=</span> <span class="n">R</span><span class="p">.</span><span class="nf">lagrange_polynomial</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
     <span class="n">ct</span> <span class="o">=</span> <span class="s">''</span>
-    <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">f</span><span class="p">.</span><span class="nb">list</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">ct_pad</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">coeff</span><span class="p">.</span><span class="n">polynomial</span><span class="p">().</span><span class="nb">list</span><span class="p">()))</span>
-        <span class="n">ct</span> <span class="o">+=</span> <span class="n">Bits</span><span class="p">(</span><span class="nb">bin</span><span class="o">=</span><span class="n">ct_pad</span><span class="p">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="s">'0'</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">f</span><span class="p">.</span><span class="nf">list</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">ct_pad</span> <span class="o">=</span> <span class="s">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">coeff</span><span class="p">.</span><span class="nf">polynomial</span><span class="p">().</span><span class="nf">list</span><span class="p">()))</span>
+        <span class="n">ct</span> <span class="o">+=</span> <span class="nc">Bits</span><span class="p">(</span><span class="nb">bin</span><span class="o">=</span><span class="n">ct_pad</span><span class="p">.</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="s">'0'</span><span class="p">))</span>
     <span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span><span class="p">.</span><span class="nb">bytes</span>
     <span class="k">return</span> <span class="n">ct</span> <span class="o">+</span> <span class="n">tag</span>
 
 
 <span class="k">def</span> <span class="nf">decrypt_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">'A'</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">+</span> <span class="s">','</span> <span class="o">+</span> <span class="n">pwn</span><span class="p">.</span><span class="n">b64e</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt; '</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'3'</span><span class="p">)</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="s">'A'</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">+</span> <span class="s">','</span> <span class="o">+</span> <span class="n">pwn</span><span class="p">.</span><span class="nf">b64e</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt; '</span><span class="p">)</span>
     <span class="k">return</span> <span class="sa">b</span><span class="s">'successful'</span> <span class="ow">in</span> <span class="n">data</span>
 
 
 <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">367</span><span class="p">):</span>
-    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
     <span class="n">api_count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">))</span>
         <span class="n">api_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">])):</span>
+        <span class="k">if</span> <span class="nf">decrypt_text</span><span class="p">(</span><span class="nf">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">])):</span>
             <span class="k">break</span>
     <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span>
     <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">:</span>
         <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
         <span class="n">api_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"trying range ({},{})"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nf">decrypt_text</span><span class="p">(</span><span class="nf">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
             <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">decrypt_text</span><span class="p">(</span><span class="n">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
+    <span class="k">if</span> <span class="nf">decrypt_text</span><span class="p">(</span><span class="nf">multicollision</span><span class="p">(</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">lo</span><span class="p">:</span><span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
         <span class="n">keyindex</span> <span class="o">=</span> <span class="n">lo</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">keyindex</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">password</span> <span class="o">=</span> <span class="n">rev_keys</span><span class="p">[</span><span class="n">derived_keys</span><span class="p">[</span><span class="n">keyindex</span><span class="p">]]</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"key:{} found in {} calls"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">api_count</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"time taken :"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"key:{} found in {} calls"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">api_count</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"time taken :"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">password</span>
 
 
-<span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
 <span class="n">password</span> <span class="o">=</span> <span class="s">""</span>
-<span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>  <span class="c1"># option1
-</span>    <span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key_index</span><span class="p">))</span>
-    <span class="n">REM</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
-    <span class="n">password</span> <span class="o">+=</span> <span class="n">search</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'1'</span><span class="p">)</span>  <span class="c1"># option1
+</span>    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">key_index</span><span class="p">))</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">'Exit</span><span class="se">\n</span><span class="s">&gt;&gt;&gt;'</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">+=</span> <span class="nf">search</span><span class="p">()</span>
 
 
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
-<span class="n">REM</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="n">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'CTF{.*}'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">'2'</span><span class="p">)</span>
+<span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvregex</span><span class="p">(</span><span class="sa">b</span><span class="s">'CTF{.*}'</span><span class="p">)</span>
 <span class="c1"># CTF{gCm_1s_n0t_v3ry_r0bust_4nd_1_sh0uld_us3_s0m3th1ng_els3_h3r3}
 </span></code></pre></div></div>
 

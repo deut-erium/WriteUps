@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>BATPWN 2020 Crypto - Prefixes | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="BATPWN 2020 Crypto - Prefixes" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2083,18 +2083,18 @@ Which simply replaces all occurences of <code class="language-plaintext highligh
 
 <p>Here is a quick script to do the same</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ct</span> <span class="o">=</span> <span class="s">"eae4a5b1aad7964ec9f1f0bff0229cf1a11b22b11bfefecc9922aaf4bff0dd3c88"</span>
-<span class="n">ct</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
 <span class="n">flag</span> <span class="o">=</span> <span class="s">""</span>
 
 <span class="n">initialize</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ct</span><span class="p">)):</span>
-    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">initialize</span> <span class="o">^</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="n">val</span><span class="p">)</span><span class="o">&amp;</span><span class="mh">0xff</span> <span class="o">==</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-            <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1">#the value val is found
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">ct</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+        <span class="nf">if </span><span class="p">(</span><span class="n">initialize</span> <span class="o">^</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="n">val</span><span class="p">)</span><span class="o">&amp;</span><span class="mh">0xff</span> <span class="o">==</span> <span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">flag</span> <span class="o">+=</span> <span class="nf">chr</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1">#the value val is found
 </span>            <span class="n">initialize</span> <span class="o">^=</span> <span class="p">(</span><span class="n">val</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="n">val</span>  <span class="c1">#to get the value of initialize for nex iteration of i
 </span>            <span class="n">initialize</span> <span class="o">&gt;&gt;=</span><span class="mi">8</span> <span class="c1"># initialize is [0-3] since (val&lt;&lt;2)^(val) is 10 bits, which is right shifted 8 bits each iteration
 </span>            <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 <span class="c1">#batpwn{Ch00se_y0uR_pR3fix_w1selY}
 </span></code></pre></div></div>
 

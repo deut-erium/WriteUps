@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>HSCTF 2020 Crypto - Smol E | CTF Writeups</title>
-<meta name="generator" content="Jekyll v4.2.2" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="HSCTF 2020 Crypto - Smol E" />
 <meta name="author" content="deuterium" />
 <meta property="og:locale" content="en" />
@@ -2008,24 +2008,24 @@ But for that, we need the difference between the two messages. But since the mes
 <span class="n">C2</span> <span class="o">=</span> <span class="mi">42406837735093367941682857892181550522346220427504754988544140886997339709785380303682471368168102002682892652577294324286913907635616629790484019421641636805493203989143298536257296680179745122126655008200829607192191208919525797616523271426092158734972067387818678258432674493723618035248340048171787246777</span>
 
 
-<span class="n">PRxy</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="n">PRx</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xn</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-<span class="n">PRZZ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xz</span><span class="p">,</span><span class="n">yz</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">PRxy</span><span class="p">.</span><span class="o">&lt;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">PolynomialRing</span><span class="p">(</span><span class="nc">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">PRx</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xn</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">PolynomialRing</span><span class="p">(</span><span class="nc">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">PRZZ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">xz</span><span class="p">,</span><span class="n">yz</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">PolynomialRing</span><span class="p">(</span><span class="nc">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 
 <span class="n">g1</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="n">e</span> <span class="o">-</span> <span class="n">C1</span>
 <span class="n">g2</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="n">e</span> <span class="o">-</span> <span class="n">C2</span>
 
-<span class="n">q1</span> <span class="o">=</span> <span class="n">g1</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
-<span class="n">q2</span> <span class="o">=</span> <span class="n">g2</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">g1</span><span class="p">.</span><span class="nf">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">g2</span><span class="p">.</span><span class="nf">change_ring</span><span class="p">(</span><span class="n">PRZZ</span><span class="p">)</span>
 
-<span class="n">h</span> <span class="o">=</span> <span class="n">q2</span><span class="p">.</span><span class="n">resultant</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">q2</span><span class="p">.</span><span class="nf">resultant</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
 <span class="c1"># need to switch to univariate polynomial ring
 # because .small_roots is implemented only for univariate
-</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">univariate_polynomial</span><span class="p">()</span> <span class="c1"># x is hopefully eliminated
-</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">change_ring</span><span class="p">(</span><span class="n">PRx</span><span class="p">).</span><span class="n">subs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">xn</span><span class="p">)</span>
-<span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">monic</span><span class="p">()</span>
+</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="nf">univariate_polynomial</span><span class="p">()</span> <span class="c1"># x is hopefully eliminated
+</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="nf">change_ring</span><span class="p">(</span><span class="n">PRx</span><span class="p">).</span><span class="nf">subs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">xn</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="nf">monic</span><span class="p">()</span>
 
-<span class="n">roots</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="n">small_roots</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">60</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">roots</span> <span class="o">=</span> <span class="n">h</span><span class="p">.</span><span class="nf">small_roots</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">60</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">roots</span><span class="p">,</span> <span class="s">"Failed1"</span>
 
 <span class="n">diff</span> <span class="o">=</span> <span class="n">roots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2034,17 +2034,17 @@ But for that, we need the difference between the two messages. But since the mes
     <span class="n">C1</span><span class="p">,</span> <span class="n">C2</span> <span class="o">=</span> <span class="n">C2</span><span class="p">,</span> <span class="n">C1</span>
 
 <span class="n">r</span> <span class="o">=</span> <span class="n">diff</span>
-<span class="n">R</span><span class="p">.</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">)[]</span>
+<span class="n">R</span><span class="p">.</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nc">Zmod</span><span class="p">(</span><span class="n">n</span><span class="p">)[]</span>
 <span class="n">f1</span> <span class="o">=</span> <span class="n">X</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="n">C1</span>
 <span class="n">f2</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="n">C2</span>
 
 <span class="c1"># GCD is not implemented for rings over composite modulus in Sage
 </span><span class="k">def</span> <span class="nf">my_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">monic</span><span class="p">()</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">my_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="nf">monic</span><span class="p">()</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nf">my_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">)</span>
 
-<span class="n">mint</span><span class="o">=-</span><span class="n">my_gcd</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">).</span><span class="n">coefficients</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">mint</span><span class="p">)</span> <span class="c1"># coefficient 0 = -m
-</span><span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">mint</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]))</span>
+<span class="n">mint</span><span class="o">=-</span><span class="nf">my_gcd</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">).</span><span class="nf">coefficients</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mint</span><span class="p">)</span> <span class="c1"># coefficient 0 = -m
+</span><span class="nf">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">mint</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]))</span>
 </code></pre></div></div>
 
 <p>Probably the most annoying part of the callenge was that pad was odd, making me think that the message is gibberish or I may be doing something wrong. Well smashing your head over something is the best part of ctf challenges I guess</p>
