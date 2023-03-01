@@ -31,13 +31,11 @@ excerpt_separator: <!--more-->
 > Please, try it and find a key.
 > nc suscipher.chal.ctf.acsc.asia 13579
 > nc suscipher-2.chal.ctf.acsc.asia 13579 (Backup)
-
 > Hint: Differential cryptanalysis is useful.
-
 > SusCipher.tar.gz 
 
 ## Source files
-> [task.py][./task.py]
+> [task.py](./task.py)
 
 ## Source Analysis
 ```python
@@ -177,7 +175,7 @@ if __name__ == "__main__":
 
 Let's take a look at the relevant parts
 
-### `main`
+### main
 While True, it asks for an input which is a string of numbers separated by `,` 
 As long as we input `0x100` or 256 numbers at a time, we can get as many encryptions as we like
 
@@ -563,4 +561,6 @@ REM.interactive()
 
 As expected, the author knew there might be other interesting ways like this one ;)  
 
+
+### Get the [Solve Script](./solve.py)
 
