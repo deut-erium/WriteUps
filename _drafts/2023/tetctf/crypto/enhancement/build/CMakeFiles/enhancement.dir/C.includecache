@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/d/files/n00b/github/WriteUps/_drafts/2023/tetctf/crypto/enhancement/main.c
+stdio.h
+-
+string.h
+-
+stdint.h
+-
+sys/random.h
+/mnt/d/files/n00b/github/WriteUps/_drafts/2023/tetctf/crypto/enhancement/sys/random.h
+secp256k1.h
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/enhancement.dir/main.c.o  -o enhancement  -lsecp256k1 -v 
