@@ -68,6 +68,8 @@ aboutnav:
         url:   https://deut-erium.github.io/
   - title:      CTFs
     children:
+      - title:   CTFs-2023
+        url:     /archive.html?tag=2023
       - title:   CTFs-2022
         url:     /archive.html?tag=2022
       - title:   CTFs-2021
