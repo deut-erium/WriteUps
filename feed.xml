@@ -1,6 +1,497 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://deut-erium.github.io/WriteUps/feed.xml" rel="self" type="application/atom+xml" /><link href="https://deut-erium.github.io/WriteUps/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-03-01T16:03:28+05:30</updated><id>https://deut-erium.github.io/WriteUps/feed.xml</id><title type="html">CTF Writeups</title><subtitle>Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag  CTF hacking cybersecurity SAT SMT solvers and computer science
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://deut-erium.github.io/WriteUps/feed.xml" rel="self" type="application/atom+xml" /><link href="https://deut-erium.github.io/WriteUps/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-22T02:24:42+05:30</updated><id>https://deut-erium.github.io/WriteUps/feed.xml</id><title type="html">CTF Writeups</title><subtitle>Himanshu Sheoran deut-erium deuterium cryptography Capture The Flag  CTF hacking cybersecurity SAT SMT solvers and computer science
   
-</subtitle><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><entry><title type="html">ACSC qualifiers 2023 Crypto - SusCipher</title><link href="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher" rel="alternate" type="text/html" title="ACSC qualifiers 2023 Crypto - SusCipher" /><published>2023-03-01T00:00:00+05:30</published><updated>2023-03-01T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/ACSC-SusCipher</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher"><![CDATA[<!--more-->
+</subtitle><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><entry><title type="html">Nullcon HackIM 2023 Crypto - Curvy Decryptor</title><link href="https://deut-erium.github.io/WriteUps/2023/nullcon_hackim/crypto/curvy_decryptor/2023-08-21-Nullcon-HackIM-Curvy-Decryptor" rel="alternate" type="text/html" title="Nullcon HackIM 2023 Crypto - Curvy Decryptor" /><published>2023-08-21T00:00:00+05:30</published><updated>2023-08-21T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2023/nullcon_hackim/crypto/curvy_decryptor/Nullcon-HackIM-Curvy-Decryptor</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2023/nullcon_hackim/crypto/curvy_decryptor/2023-08-21-Nullcon-HackIM-Curvy-Decryptor"><![CDATA[<!--more-->
+
+<h2 id="challenge-description">Challenge Description</h2>
+
+<blockquote>
+  <p>Curvy Decryptor
+473 points
+Alice has hidden 2 flags in this challenge. And even though she is willing to decrypt most ciphers, she has some basic saveguards against stealing flags.
+Please submit flag1 here.
+nc 52.59.124.14 10005</p>
+</blockquote>
+
+<h2 id="source-files">Source Files</h2>
+
+<blockquote>
+  <p><a href="./curvy_decryptor.py">curvy_decryptor.py</a><br />
+<a href="./ec.py">ec.py</a><br />
+<a href="./utils.py">utils.py</a></p>
+</blockquote>
+
+<h2 id="source-analysis">Source Analysis</h2>
+<p>From <code class="language-plaintext highlighter-rouge">curvy_decryptor.py</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">string</span>
+<span class="kn">from</span> <span class="n">Crypto.Util</span> <span class="kn">import</span> <span class="n">number</span>
+<span class="kn">from</span> <span class="n">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">bytes_to_long</span><span class="p">,</span> <span class="n">long_to_bytes</span>
+<span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">from</span> <span class="n">binascii</span> <span class="kn">import</span> <span class="n">hexlify</span>
+
+<span class="kn">from</span> <span class="n">ec</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">secret</span> <span class="kn">import</span> <span class="n">flag1</span><span class="p">,</span> <span class="n">flag2</span>
+
+<span class="c1">#P-256 parameters
+</span><span class="n">p</span> <span class="o">=</span> <span class="mh">0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff</span>
+<span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mh">0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mh">0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="mh">0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296</span><span class="p">,</span> <span class="mh">0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5</span><span class="p">)</span>
+
+<span class="n">d_a</span> <span class="o">=</span> <span class="nf">bytes_to_long</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+<span class="n">P_a</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">d_a</span>
+
+<span class="n">printable</span> <span class="o">=</span> <span class="p">[</span><span class="nf">ord</span><span class="p">(</span><span class="n">char</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">msg</span> <span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pubkey</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nf">bytes_to_long</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nf">modular_sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">d_b</span> <span class="o">=</span> <span class="n">number</span><span class="p">.</span><span class="nf">getRandomRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">G</span> <span class="o">*</span> <span class="n">d_b</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="p">(</span><span class="n">pubkey</span> <span class="o">*</span> <span class="n">d_b</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">B</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">,</span> <span class="n">c</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">,</span> <span class="n">d_a</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">B</span><span class="p">.</span><span class="n">inf</span> <span class="ow">or</span> <span class="n">c</span><span class="p">.</span><span class="n">inf</span><span class="p">:</span> <span class="k">return</span> <span class="sa">b</span><span class="s">''</span>
+    <span class="k">return</span> <span class="nf">long_to_bytes</span><span class="p">((</span><span class="n">c</span> <span class="o">-</span> <span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="n">d_a</span><span class="p">)).</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'I will decrypt anythin as long as it does not talk about flags.'</span><span class="p">)</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">'B:'</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="s">''</span><span class="p">)</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">flush</span><span class="p">()</span>
+        <span class="n">B_input</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">stdin</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="nf">readline</span><span class="p">().</span><span class="nf">strip</span><span class="p">().</span><span class="nf">decode</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">'c:'</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="s">''</span><span class="p">)</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">flush</span><span class="p">()</span>
+        <span class="n">c_input</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">stdin</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="nf">readline</span><span class="p">().</span><span class="nf">strip</span><span class="p">().</span><span class="nf">decode</span><span class="p">()</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">B_input</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s">','</span><span class="p">)])</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">c_input</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s">','</span><span class="p">)])</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d_a</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sa">b</span><span class="s">'ENO'</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="n">balance</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">balance</span> <span class="o">-=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nf">len</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">msg</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">balance</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">'balance left: %d'</span> <span class="o">%</span> <span class="n">balance</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">'You cannot afford any more decryptions.'</span><span class="p">)</span>
+            <span class="k">return</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'My public key is:'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">P_a</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">'Good luck decrypting this cipher.'</span><span class="p">)</span>
+    <span class="n">B</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">flag1</span><span class="p">,</span> <span class="n">P_a</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="nf">long_to_bytes</span><span class="p">((</span><span class="n">d_a</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">16</span><span class="p">))</span> <span class="o">^</span> <span class="p">(</span><span class="n">d_a</span> <span class="o">&amp;</span> <span class="mh">0xffffffffffffffffffffffffffffffff</span><span class="p">))</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">enc</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">flag2</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">hexlify</span><span class="p">(</span><span class="n">cipher</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nf">loop</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nf">repr</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="curvy-decryptor-part-1">Curvy Decryptor part 1</h2>
+<p>The solution of Curvy Decryptor part 1 is to find out <code class="language-plaintext highlighter-rouge">flag1</code></p>
+
+<h2 id="curvy-decryptor-part-2">Curvy Decryptor part 2</h2>
+<p>The solution of Curvy Decryptor part 1 is to find out <code class="language-plaintext highlighter-rouge">flag2</code><br />
+The <code class="language-plaintext highlighter-rouge">flag2</code> appears to be AES encrypted with a key which is</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>key = long_to_bytes((d_a &gt;&gt; (8*16)) ^ (d_a &amp; 0xffffffffffffffffffffffffffffffff))
+</code></pre></div></div>
+<p>The xor of most significant and least significant 64 bits of the 128 bits private key <code class="language-plaintext highlighter-rouge">d_a</code><br />
+So in order to recover the <code class="language-plaintext highlighter-rouge">flag2</code> we will need to break the ECC and recover <code class="language-plaintext highlighter-rouge">d_a</code></p>
+
+<h3 id="analysing-curvy_decryptorpy">Analysing curvy_decryptor.py</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#P-256 parameters
+</span><span class="n">p</span> <span class="o">=</span> <span class="mh">0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff</span>
+<span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mh">0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mh">0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="mh">0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296</span><span class="p">,</span> <span class="mh">0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5</span><span class="p">)</span>
+
+<span class="n">d_a</span> <span class="o">=</span> <span class="nf">bytes_to_long</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="nf">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+<span class="n">P_a</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">d_a</span>
+</code></pre></div></div>
+<p>indeed look like a standard curve P-256 (note that a = -3 is equivalent to a = p - 3)<br />
+So there doesnt appear to be any standard weakness based on weak curve parameters.<br />
+The private key <code class="language-plaintext highlighter-rouge">d_a</code> is initialized to be per-instance system-random 128 bit number<br />
+And the Public key <code class="language-plaintext highlighter-rouge">P_a</code> is simply <code class="language-plaintext highlighter-rouge">G*d_a</code></p>
+
+<h4 id="encryption">Encryption</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">msg</span> <span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">pubkey</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nf">bytes_to_long</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nf">modular_sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">d_b</span> <span class="o">=</span> <span class="n">number</span><span class="p">.</span><span class="nf">getRandomRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">G</span> <span class="o">*</span> <span class="n">d_b</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="p">(</span><span class="n">pubkey</span> <span class="o">*</span> <span class="n">d_b</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">msg</code> is encoded as the x coordinate of the point, the corresponding <code class="language-plaintext highlighter-rouge">y</code> is found
+so as to find the point on the curve to generate the point <code class="language-plaintext highlighter-rouge">m</code><br />
+A secure random number <code class="language-plaintext highlighter-rouge">d_b</code> in range (0 - curve order) is generated as the nonce,
+The points <code class="language-plaintext highlighter-rouge">G*d_b</code> and <code class="language-plaintext highlighter-rouge">m + (pubkey * d_b)</code> are returned</p>
+
+<h4 id="decryption">Decryption</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">B</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">,</span> <span class="n">c</span> <span class="p">:</span> <span class="n">ECPoint</span><span class="p">,</span> <span class="n">d_a</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">B</span><span class="p">.</span><span class="n">inf</span> <span class="ow">or</span> <span class="n">c</span><span class="p">.</span><span class="n">inf</span><span class="p">:</span> <span class="k">return</span> <span class="sa">b</span><span class="s">''</span>
+    <span class="k">return</span> <span class="nf">long_to_bytes</span><span class="p">((</span><span class="n">c</span> <span class="o">-</span> <span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="n">d_a</span><span class="p">)).</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>It simply reverses the encrypt function if correct <code class="language-plaintext highlighter-rouge">d_a</code> is provided<br />
+i.e if we do</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">flag1</span><span class="p">,</span> <span class="n">P_a</span><span class="p">)</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We will get,</p>
+
+\[\text{decrypt}((G * d_b * d_a), \text{flag}_m + (P_a * d_b))\]
+
+\[= (\text{flag}_m + (P_a * d_b) - G * d_b * d_a).x\]
+
+\[= (\text{flag}_m + G * d_a * d_b - G * d_b * d_a).x\]
+
+\[= (\text{flag}_m).x = \text{flag}\]
+
+<h4 id="main-loop">Main Loop</h4>
+<p>The main loop of the program just repeatedly asks for input of two EC points <code class="language-plaintext highlighter-rouge">B</code> and <code class="language-plaintext highlighter-rouge">c</code>  and tries to decrypt it with the servers private key <code class="language-plaintext highlighter-rouge">d_a</code><br />
+BUT<br />
+if the decryption contains <code class="language-plaintext highlighter-rouge">b'ENO'</code> i.e the start of the flag, it exits.<br />
+Otherwise it decreases the balance proportionate to the number of printable characters in the decryption.</p>
+
+<p>So If we directly input the <code class="language-plaintext highlighter-rouge">B</code> and <code class="language-plaintext highlighter-rouge">c</code> corresponding to the <code class="language-plaintext highlighter-rouge">flag1</code>, it will abort and hence no flags for us :’(</p>
+
+<p>But it doesnt care what points we ask it to decrypt.<br />
+So what if we try to decrypt the points <code class="language-plaintext highlighter-rouge">B</code>, <code class="language-plaintext highlighter-rouge">c + A</code></p>
+
+<p>We will get,</p>
+
+\[\text{decrypt}((G * d_b * d_a), \text{flag}_m + (P_a * d_b) + A)\]
+
+\[= (\text{flag}_m + (P_a * d_b) + A - G * d_b * d_a).x\]
+
+\[= (\text{flag}_m + A + G * d_a * d_b - G * d_b * d_a).x\]
+
+\[= (\text{flag}_m + A).x\]
+
+<p>As long as we know A, we can always get the point from the x coordinate, and subtract A from it to get the original point from the curve for the sake of simplicity, we can even pick it to be <code class="language-plaintext highlighter-rouge">G</code></p>
+
+<p>or we can even try decrypting the points <code class="language-plaintext highlighter-rouge">B + A</code>, <code class="language-plaintext highlighter-rouge">c</code> which will lead to</p>
+
+\[\text{decrypt}((G * d_b * d_a) + A, \text{flag}_m + (P_a * d_b))\]
+
+\[= (\text{flag}_m + (P_a * d_b) - (G * d_b + A) * d_a).x\]
+
+\[= (\text{flag}_m + G * d_a * d_b - G * d_b * d_a - A * d_a).x\]
+
+\[= (\text{flag}_m - A * d_a).x\]
+
+<p>if we choose <code class="language-plaintext highlighter-rouge">A</code> to be <code class="language-plaintext highlighter-rouge">G</code> or <code class="language-plaintext highlighter-rouge">-G</code>, we will end up with the point <code class="language-plaintext highlighter-rouge">flag - P_a</code> or <code class="language-plaintext highlighter-rouge">flag + P_a</code> and since we even know <code class="language-plaintext highlighter-rouge">P_a</code>, it will also work<br />
+With a high probability, we wont observe any <code class="language-plaintext highlighter-rouge">b'ENO'</code> in the resulting point, and if we do, we can always pick countless possibilities of <code class="language-plaintext highlighter-rouge">A</code> to make it work</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">ec</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="n">pwn</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="mh">0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff</span>
+<span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mh">0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mh">0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="mh">0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296</span><span class="p">,</span> <span class="mh">0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5</span><span class="p">)</span>
+
+<span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="s">"52.59.124.14"</span><span class="p">,</span> <span class="mi">10005</span>
+<span class="n">REM</span> <span class="o">=</span> <span class="n">pwn</span><span class="p">.</span><span class="nf">remote</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span> <span class="c1"># My public key is:
+</span><span class="n">pubkey</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">','</span><span class="p">)</span>
+<span class="n">P_a</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">pubkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">int</span><span class="p">(</span><span class="n">pubkey</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span> <span class="c1"># Good luck decrypting this cipher.
+</span><span class="n">B_text</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">','</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">B_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">int</span><span class="p">(</span><span class="n">B_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">c_text</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">','</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">c_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">int</span><span class="p">(</span><span class="n">c_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">flag2_enc</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">().</span><span class="nf">decode</span><span class="p">())</span>
+
+<span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span> <span class="c1"># I will decrypt anythin as long as it does not talk about flags.
+</span>
+<span class="k">def</span> <span class="nf">get_decryption</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="s">"{},{}"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">B</span><span class="p">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">REM</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="s">"{},{}"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
+    <span class="k">if</span> <span class="sa">b</span><span class="s">'cannot afford'</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">None</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">REM</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">strip</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="s">': '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">balance</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="n">status</span><span class="p">.</span><span class="nf">strip</span><span class="p">()[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">decode</span><span class="p">())</span>
+
+<span class="n">bal</span><span class="p">,</span> <span class="n">BG</span> <span class="o">=</span> <span class="nf">get_decryption</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">c</span><span class="o">+</span><span class="n">G</span><span class="p">)</span>
+<span class="n">BG_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">BG</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nf">modular_sqrt</span><span class="p">(</span><span class="n">BG_int</span><span class="o">**</span><span class="mi">3</span><span class="o">+</span><span class="n">a</span><span class="o">*</span><span class="n">BG_int</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># getting the valid y coordinate for the x
+</span><span class="n">point_BG1</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">BG_int</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">point_BG2</span> <span class="o">=</span> <span class="o">-</span><span class="n">point_BG1</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">int</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">((</span><span class="n">point_BG1</span><span class="o">-</span><span class="n">G</span><span class="p">).</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span><span class="s">'big'</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">int</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">((</span><span class="n">point_BG2</span><span class="o">-</span><span class="n">G</span><span class="p">).</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span><span class="s">'big'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Note that we only get the x coordinate of the given point lifting the point would
+result in two points and we will need to try with both of them (x,y) and (x,-y)</p>
+</blockquote>
+
+<p>The last part will also work with</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bal</span><span class="p">,</span> <span class="n">BG</span> <span class="o">=</span> <span class="nf">get_decryption</span><span class="p">(</span><span class="n">B</span><span class="o">-</span><span class="n">G</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">BG_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">BG</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nf">modular_sqrt</span><span class="p">(</span><span class="n">BG_int</span><span class="o">**</span><span class="mi">3</span><span class="o">+</span><span class="n">a</span><span class="o">*</span><span class="n">BG_int</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># getting the valid y coordinate for the x
+</span><span class="n">point_BG1</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">BG_int</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">point_BG2</span> <span class="o">=</span> <span class="o">-</span><span class="n">point_BG1</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">int</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">((</span><span class="n">point_BG1</span><span class="o">-</span><span class="n">P_a</span><span class="p">).</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span><span class="s">'big'</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nb">int</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">((</span><span class="n">point_BG2</span><span class="o">-</span><span class="n">P_a</span><span class="p">).</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span><span class="s">'big'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>And we get the flag to part 1
+<code class="language-plaintext highlighter-rouge">b'\x00\x00ENO{ElGam4l_1s_mult1pl1cativ3}'</code></p>
+
+<h3 id="analysing-ecpy">Analysing ec.py</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">inverse</span>
+
+<span class="k">class</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">order</span>
+
+        <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s">'y^2 = x^3 + %dx + %d modulo %d'</span> <span class="o">%</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+                <span class="nf">return </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">p</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">inf</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">%</span> <span class="n">curve</span><span class="p">.</span><span class="n">p</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">%</span> <span class="n">curve</span><span class="p">.</span><span class="n">p</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">curve</span> <span class="o">=</span> <span class="n">curve</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">inf</span> <span class="o">=</span> <span class="n">inf</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">inf</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">inf</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">.</span><span class="n">p</span>
+                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">inf</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">point</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">point</span><span class="p">.</span><span class="n">inf</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span> <span class="ow">and</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">:</span>
+                        <span class="n">lamb</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="nf">inverse</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span>
+                <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lamb</span> <span class="o">=</span> <span class="p">(</span><span class="n">point</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="nf">inverse</span><span class="p">(</span><span class="n">point</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">lamb</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">lamb</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span>
+                <span class="k">return</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">self</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">point</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">inf</span><span class="p">:</span> <span class="k">return</span> <span class="s">'Point(inf)'</span>
+                <span class="k">return</span> <span class="s">'Point(%d, %d)'</span> <span class="o">%</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">base</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">curve</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">while</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">k</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">base</span>
+                        <span class="n">base</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="n">base</span>
+                        <span class="n">k</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+                <span class="k">return</span> <span class="n">res</span>
+
+        <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+                <span class="nf">return </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">inf</span> <span class="ow">and</span> <span class="n">point</span><span class="p">.</span><span class="n">inf</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+
+</code></pre></div></div>
+<p>Looking closely at the <code class="language-plaintext highlighter-rouge">ECPoint</code> class, one would note that on the initialization of the point with arbitrary <code class="language-plaintext highlighter-rouge">x, y</code> coordinates, it works as usual and doesnt check whether the supplied <code class="language-plaintext highlighter-rouge">x, y</code> satisfy the curve equation $y^2 = x^3 + ax + b \mod p$</p>
+
+<p>This leads to an interesting vulnerability aka <strong>Invalid Curve Attack</strong></p>
+
+<p>Which can be noted by the facts that</p>
+<ol>
+  <li>The point addtion of two points $P$ and $Q$ over the curve $y^2 = x^3 + ax + b \mod p$if $P \ne Q$ is independent of both the curve parameters $a$ and $b$</li>
+  <li>The point doubling i.e $P = Q$ is just dependent on $P$ and $Q$ and $a$ but not on $b$ again</li>
+</ol>
+
+<p>This means that the group addition operation is independent of the parameter $b$, the number of points in the group of some point $P$ is just dependent on $P$ and $a$ but independent of $b$</p>
+
+<p>So if we choose a curve $C’$ with parameter $b’$ and pick a valid point $P’$ on it, and run the point addition over the original curve $C$, the order of point $P’$ when used on $C$ will be the same as order of point $P’$ when used on $C’$</p>
+
+<p>This implies that we are not stuck with the original prime order of P-256, but we can vary $b = -3$ such that the order of the curve $C’$ has small factors. We can then easily find points $P’$ with those small factors as their order by using the fact that -<br />
+If $G’$ is the generator of $C’$ with order $o = f_1f_2f_3…f_n$, the point $G’ * (o/f_1)$ will have the order $f_1$</p>
+
+<p>Once we have sufficient number of small orders, we can take a chinese remainder theorem over them to recover the original private key <code class="language-plaintext highlighter-rouge">d_a</code></p>
+
+<p>To find the order of curve $C’$ and the corresponding generators, we can utilize the greate library of sagemath</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_invalid_curves</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">factors</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">total</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">*</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="nc">EllipticCurve</span><span class="p">(</span><span class="nc">GF</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">E</span><span class="p">.</span><span class="nf">order</span><span class="p">()</span>
+            <span class="n">n_facs</span> <span class="o">=</span> <span class="n">order</span><span class="p">.</span><span class="nf">factor</span><span class="p">()</span>
+        <span class="k">except</span> <span class="nb">ArithmeticError</span><span class="p">:</span> <span class="c1">#the parameter i defines a singular curve
+</span>            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">prime</span><span class="p">,</span> <span class="n">power</span> <span class="ow">in</span> <span class="n">n_facs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prime</span> <span class="o">&gt;</span> <span class="n">cutoff</span><span class="p">:</span> <span class="c1"># dont take any factors bigger than it
+</span>                <span class="k">break</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">E</span><span class="p">.</span><span class="nf">gen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">order</span><span class="o">//</span><span class="n">prime</span><span class="p">)</span>
+            <span class="n">factors</span><span class="p">[</span><span class="n">prime</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">gen</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">int</span><span class="p">(</span><span class="n">gen</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">total</span> <span class="o">*=</span> <span class="n">prime</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+    <span class="c1"># key : [gen_x, gen_y, b']
+</span>    <span class="k">return</span> <span class="n">factors</span>
+</code></pre></div></div>
+
+<p>And we can easily bruteforce a given point</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bruteforce</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">tqdm</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="n">order</span><span class="p">),</span><span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s">"bruteforcing </span><span class="si">{</span><span class="n">order</span><span class="o">=</span><span class="si">}</span><span class="s">"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="p">(</span><span class="n">generator</span><span class="o">*</span><span class="n">i</span><span class="p">).</span><span class="n">y</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+</code></pre></div></div>
+
+<p>We get the following invalid curves and we just searched over 12 values of $b$!</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">invalid_curves</span> <span class="o">=</span> <span class="p">{</span>
+<span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">79692280239272980873245387831874823476097665365069163558817570386218657526967</span><span class="p">,</span>
+   <span class="mi">15885657487155030912288031888128427124936813080859472376494663130798867119982</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+<span class="mi">5</span><span class="p">:</span> <span class="p">[</span><span class="mi">30463586456259052716174121724723788478797318939762291523651966151233767925799</span><span class="p">,</span>
+   <span class="mi">14521026652335616630611219515390291411023400641948957680811406721043438902186</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+<span class="mi">7</span><span class="p">:</span> <span class="p">[</span><span class="mi">7494160963166719022445789448670075468300539216220596044581361034311676798234</span><span class="p">,</span>
+   <span class="mi">98511591492536111584332615786483658886888663084020823615343609813895225923287</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="mi">13</span><span class="p">:</span> <span class="p">[</span><span class="mi">44238399751822344629155927349410921734336660036385908812849527496419061724190</span><span class="p">,</span>
+   <span class="mi">111209137730801733774021088162408683888753865848469665403753663663899601005809</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="mi">17</span><span class="p">:</span> <span class="p">[</span><span class="mi">9274144687945784364291903707116312659963917031850121885976057784793297477861</span><span class="p">,</span>
+   <span class="mi">86301980488975426887521079169756244075123784201450393961147458432303011672794</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="mi">19</span><span class="p">:</span> <span class="p">[</span><span class="mi">108657251488837839710095894743866739052486880271258033613510419634191398226376</span><span class="p">,</span>
+   <span class="mi">8593905934316229092193387452437731577526088690676465668457131094758391852209</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="mi">37</span><span class="p">:</span> <span class="p">[</span><span class="mi">6829338390266237482283310246665103308891228336319477318479644522260556056309</span><span class="p">,</span>
+   <span class="mi">74701668267551028200304338837410580676774474001240882947774298643661074111881</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="mi">71</span><span class="p">:</span> <span class="p">[</span><span class="mi">47689891150662520216418276050802771367044708366511766907543187521601344242001</span><span class="p">,</span>
+   <span class="mi">76986723505258444611874235435887405018513758524921757765033540214285112109625</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="mi">97</span><span class="p">:</span> <span class="p">[</span><span class="mi">109352438132789597676269849271161933029115963700376783044214805643475162939438</span><span class="p">,</span>
+   <span class="mi">40494199582133551395560104592591896448854412368997470369685720658455096277720</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="mi">113</span><span class="p">:</span> <span class="p">[</span><span class="mi">24758423058742208238204864443231318968571918830166822957638906079202832915346</span><span class="p">,</span>
+   <span class="mi">64680694216633390865014362020707904150333340051904806580803858267985332824228</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="mi">179</span><span class="p">:</span> <span class="p">[</span><span class="mi">83115631016490504822328655777895864162660782325660359674792065332260812135544</span><span class="p">,</span>
+   <span class="mi">35707141486916353816358123900356888673488260709581875628819622187261352405569</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="mi">251</span><span class="p">:</span> <span class="p">[</span><span class="mi">22589597796365257246296758128505770638799961769310824687868041010311103597978</span><span class="p">,</span>
+   <span class="mi">22730375842099404560129412560882492093998724011749582473003682871994848593450</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="mi">389</span><span class="p">:</span> <span class="p">[</span><span class="mi">61737418306809996908630595437832052272700263892021361415640028314169193468679</span><span class="p">,</span>
+   <span class="mi">38812622012907358702971098652989910931710935180589252493039839244464470874161</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+<span class="mi">653</span><span class="p">:</span> <span class="p">[</span><span class="mi">96946680343613920300091880607027973891460464096741803273170797219756170839615</span><span class="p">,</span>
+   <span class="mi">82843786165425711709725308210080928839669646246950072002603300248219042690214</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="mi">823</span><span class="p">:</span> <span class="p">[</span><span class="mi">101591078169875595753109991494905506967978136240961172388509275621325253165256</span><span class="p">,</span>
+   <span class="mi">10303457253039461887297603877250453486351456285884301634668455036581356870325</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="mi">1151</span><span class="p">:</span> <span class="p">[</span><span class="mi">4942947285962241518079147671001480777229821084370946279070977308149340420785</span><span class="p">,</span>
+   <span class="mi">16048516228456466259745940658231903287363041924322695524263376011778714624389</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="mi">1229</span><span class="p">:</span> <span class="p">[</span><span class="mi">91709248688928381574970306879959143256779911355970659117798234761550615769703</span><span class="p">,</span>
+   <span class="mi">85856020107303390216619790339131383987393998107943546966635616939179964220668</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="mi">2447</span><span class="p">:</span> <span class="p">[</span><span class="mi">107091037109612570995136294213336682923913717986054179094643922074841981090569</span><span class="p">,</span>
+   <span class="mi">38297847735446351346601186761335949464902974429727652825128988635682228100545</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="mi">4003</span><span class="p">:</span> <span class="p">[</span><span class="mi">69634612360547639692978050736475584000001950346963254134893659331303767659709</span><span class="p">,</span>
+   <span class="mi">7267690154676021708711188497795027916155791784399213931355851351510639163175</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="mi">7103</span><span class="p">:</span> <span class="p">[</span><span class="mi">110323527740892356276833844768860449554291010208201255792825053403232044044793</span><span class="p">,</span>
+   <span class="mi">34702628194678317337541067016532288256370093140368313590333192034888987762792</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="mi">7489</span><span class="p">:</span> <span class="p">[</span><span class="mi">69497610789705595174058737106242513100950130190920702467431032172354669590563</span><span class="p">,</span>
+   <span class="mi">43000989776377667520933328800675765150040604546037676698173382008099239610730</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="mi">13003</span><span class="p">:</span> <span class="p">[</span><span class="mi">69994388431307856080322572731970917270151067511018517619530568914812259046195</span><span class="p">,</span>
+   <span class="mi">51645889020375608054366335957352074257130320976341249224010343992676177045239</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="mi">16033</span><span class="p">:</span> <span class="p">[</span><span class="mi">80150849770701280770379260802876332257245651607220436873841708569583336291111</span><span class="p">,</span>
+   <span class="mi">67454443034144602807761039494179913732280388550455172486599878108995578176702</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="mi">19423</span><span class="p">:</span> <span class="p">[</span><span class="mi">86763316696116146207846209443089376095966542281990071872698734124275764832625</span><span class="p">,</span>
+   <span class="mi">1497373281188841342082112917519408391664673991593710756225816313602284346637</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+<span class="mi">30203</span><span class="p">:</span> <span class="p">[</span><span class="mi">27140306769124364253212826889951250714782929180685455599284687702513066987645</span><span class="p">,</span>
+   <span class="mi">27465668374540052358785326933904597047991904030378513297677516281690992773738</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="mi">52183</span><span class="p">:</span> <span class="p">[</span><span class="mi">20786893006200668135980517481305198967871522130773700571327256180224225598537</span><span class="p">,</span>
+   <span class="mi">38476450712159672989047119873673988596095516096648184067210103163599625447149</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+<span class="mi">72337</span><span class="p">:</span> <span class="p">[</span><span class="mi">16864673136043278693040185572303485743677125999233419976437302471094264721938</span><span class="p">,</span>
+   <span class="mi">39982110747848740588957884598316010802865483814669576940304708444368796141014</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="mi">81173</span><span class="p">:</span> <span class="p">[</span><span class="mi">41965847134675666863089670621412699297207446259915277832939899605119013001686</span><span class="p">,</span>
+   <span class="mi">97595102592346869875749873612676528534971198259624427507680148771098555985918</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="attack-procedure">Attack procedure</h3>
+<ol>
+  <li>For each $b’$ and $G’$ of order $o’$</li>
+  <li>Send $B = -G’$ and $c = G’$ we will get back x coordinate of $G’ * (d_a + 1)$
+    <blockquote>
+      <p>Note that if we send 0, it will just return  <code class="language-plaintext highlighter-rouge">b''</code> so no use</p>
+    </blockquote>
+  </li>
+  <li>Lift the x coordinate <strong>Over C’</strong> to get $G’ * (d_a + 1)$ But this wont help us to figure out of the two possible points. For this</li>
+  <li>Send another $B = -G’$ and $c = G’ * 2$ to get back x coordinate of $G’ * (d_a + 2)$ To figure out the correct lifting of the x coordinate to get $G’ * (d_a + 1)$</li>
+  <li>Bruteforce and recover the ECDLP to get $d_a’ = (d_a + 1) \mod o’$</li>
+  <li>Combine all $d_a’$ using chinese remainder theorem to get back original $d_a$</li>
+  <li>PROFIT ????</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">recovered_order</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">order</span><span class="p">,</span> <span class="p">(</span><span class="n">gen_x</span><span class="p">,</span> <span class="n">gen_y</span><span class="p">,</span> <span class="n">b_i</span><span class="p">)</span> <span class="ow">in</span> <span class="n">invalid_curves</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+    <span class="n">gen</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">gen_x</span><span class="p">,</span> <span class="n">gen_y</span><span class="p">)</span>
+    <span class="n">bal</span><span class="p">,</span> <span class="n">BG</span> <span class="o">=</span> <span class="nf">get_decryption</span><span class="p">(</span><span class="o">-</span><span class="n">gen</span><span class="p">,</span> <span class="n">gen</span><span class="p">)</span> <span class="c1"># gen*(da+1)
+</span>    <span class="n">BG_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">BG</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nf">modular_sqrt</span><span class="p">(</span><span class="n">BG_int</span><span class="o">**</span><span class="mi">3</span><span class="o">+</span><span class="n">a</span><span class="o">*</span><span class="n">BG_int</span><span class="o">+</span><span class="n">b_i</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">point_BG</span> <span class="o">=</span> <span class="nc">ECPoint</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">BG_int</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">bal</span><span class="p">,</span> <span class="n">BG2</span> <span class="o">=</span> <span class="nf">get_decryption</span><span class="p">(</span><span class="o">-</span><span class="n">gen</span><span class="p">,</span> <span class="n">gen</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># gen*(da+2)
+</span>    <span class="n">BG_int2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">BG2</span><span class="p">)</span>
+    <span class="nf">if </span><span class="p">(</span><span class="n">point_BG</span><span class="o">+</span><span class="n">gen</span><span class="p">).</span><span class="n">x</span> <span class="o">==</span> <span class="n">BG_int2</span><span class="p">:</span>
+        <span class="n">recovered_order</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="o">=</span> <span class="nf">bruteforce</span><span class="p">(</span><span class="n">point_BG</span><span class="p">,</span> <span class="n">gen</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+    <span class="nf">elif </span><span class="p">(</span><span class="n">point_BG</span><span class="o">-</span><span class="n">gen</span><span class="p">).</span><span class="n">x</span> <span class="o">==</span> <span class="n">BG_int2</span><span class="p">:</span>
+        <span class="n">recovered_order</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="o">=</span> <span class="nf">bruteforce</span><span class="p">(</span><span class="o">-</span><span class="n">point_BG</span><span class="p">,</span> <span class="n">gen</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"something went wrong"</span><span class="p">)</span>
+
+<span class="n">mods</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="p">[],[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">recovered_order</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+    <span class="n">mods</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">values</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">v</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">i</span><span class="p">)</span>
+
+<span class="n">d_a</span> <span class="o">=</span> <span class="nf">crt</span><span class="p">(</span><span class="n">mods</span><span class="p">,</span><span class="n">values</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">key_int</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_a</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">16</span><span class="p">))</span> <span class="o">^</span> <span class="p">(</span><span class="n">d_a</span> <span class="o">&amp;</span> <span class="mh">0xffffffffffffffffffffffffffffffff</span><span class="p">)</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">key_int</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s">'big'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">).</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">flag2_enc</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h4 id="enobe5t_th1nk_out_0f_th3_curv3">ENO{be5t_th1nk_out_0f_th3_curv3}</h4>
+
+<h2 id="solve-script">Solve script</h2>
+<p><a href="./solve.py">solve.py</a></p>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="Nullcon" /><category term="2023" /><category term="cryptography" /><category term="ECC" /><category term="invalid_curve" /><category term="CRT" /><category term="ECDLP" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">ACSC qualifiers 2023 Crypto - SusCipher</title><link href="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher" rel="alternate" type="text/html" title="ACSC qualifiers 2023 Crypto - SusCipher" /><published>2023-03-01T00:00:00+05:30</published><updated>2023-03-01T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/ACSC-SusCipher</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2023/ACSC/crypto/SusCipher/2023-03-01-ACSC-SusCipher"><![CDATA[<!--more-->
 
 <h2 id="challenge-description">Challenge Description</h2>
 
@@ -2754,98 +3245,4 @@ print(bytes.fromhex(hex(m)[2:]).decode())
 </code></pre></div></div>
 <p>And hurray, we have our flag</p>
 
-<h3 id="flagt0000_m4nyyyy_pr1m355555">flag{t0000_m4nyyyy_pr1m355555}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="alpertron" /><category term="ECM" /><category term="RSA" /><summary type="html"><![CDATA[4k-rsa Description Only n00bz use 2048-bit RSA. True gamers use keys that are at least 4k bits long, no matter how many primes it takes... Files 4k-rsa-public-key.txt which contains a n, e, c triple Seems like there are a lot of primes in the factorization of n, since the factorization process is influenced directly by the size of prime factors and not the size of the number being factored itself, it should be fairly doable by alpetron.ar It took about half an hour to factor, one may engage to other activities or alternatively try if the factors are available on factordb. Anyways, once finished factoring, alpetron produces both the factors and the Euler’s totient phi which will be used to compute d d = pow(e,-1,phi) # on python3.8 # or gmpy2.invert(e,phi) m = pow(c,d,n) print(bytes.fromhex(hex(m)[2:]).decode()) And hurray, we have our flag flag{t0000_m4nyyyy_pr1m355555}]]></summary></entry><entry><title type="html">Redpwn 2020 Crypto - Alien Transmissions v2</title><link href="https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2" rel="alternate" type="text/html" title="Redpwn 2020 Crypto - Alien Transmissions v2" /><published>2020-06-27T00:00:00+05:30</published><updated>2020-06-27T00:00:00+05:30</updated><id>https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/redpwn-2020-alien-transmissions-v2</id><content type="html" xml:base="https://deut-erium.github.io/WriteUps/2020/redpwn/crypto/alien-transmissions-v2/2020-06-27-redpwn-2020-alien-transmissions-v2"><![CDATA[<h1 id="alien-transmissions-v2">Alien-transmissions-v2</h1>
-
-<h2 id="description">Description</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The aliens are at it again! We've discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information:
-  *  This alien language consists of words delimitated by the character represented as 481
-  *  The two keys appear to be of length 21 and 19
-  *  The value of each character in these keys does not exceed 255
-
-Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format.
-</code></pre></div></div>
-
-<h2 id="files">Files</h2>
-<ul>
-  <li><a href="./encrypted.txt">encrypted.txt</a>  (HUGE number of characters)</li>
-</ul>
-
-<h2 id="observations">Observations</h2>
-<ul>
-  <li>Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent.</li>
-  <li>Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately.</li>
-</ul>
-
-<h2 id="combined-xor-key-recovery">Combined XOR key recovery</h2>
-<p>The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext.</p>
-
-<p>Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">'encrypted.txt'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">encrypted</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">.</span><span class="nf">readlines</span><span class="p">()))</span>
-
-<span class="n">key</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">21</span><span class="o">*</span><span class="mi">19</span><span class="p">):</span>
-    <span class="n">data_slice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">::</span><span class="mi">21</span><span class="o">*</span><span class="mi">19</span><span class="p">]</span>
-    <span class="n">key_char_val</span> <span class="o">=</span> <span class="mi">481</span> <span class="o">^</span> <span class="nf">max</span><span class="p">(</span><span class="n">data_slice</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">data_slice</span><span class="p">.</span><span class="n">count</span><span class="p">)</span>
-    <span class="n">key</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">key_char_val</span><span class="p">)</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-</code></pre></div></div>
-<p>It takes a couple of seconds to find the compound key</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">key</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s">'7G</span><span class="se">\x1a\x00</span><span class="s">x</span><span class="se">\x00</span><span class="s">l</span><span class="se">\x17</span><span class="s">X];9</span><span class="se">\x00</span><span class="s">Gj</span><span class="se">\x00</span><span class="s">7Y</span><span class="se">\x01</span><span class="s">3</span><span class="se">\x12\x00\x00</span><span class="s">-</span><span class="se">\x06\x14</span><span class="s">Vo</span><span class="se">\x1a\x0c</span><span class="s">lnSn</span><span class="se">\x06</span><span class="s">]Ej7@</span><span class="se">\x04</span><span class="s">U7</span><span class="se">\x06</span><span class="s">AP</span><span class="se">\x17</span><span class="s">[;+Y</span><span class="se">\x06\x00\x12</span><span class="s">YC</span><span class="se">\x00</span><span class="s">++</span><span class="se">\x00\x07</span><span class="s">3S[PB]CjnA7G7W</span><span class="se">\x04</span><span class="s">-A</span><span class="se">\x1c</span><span class="s">l7</span><span class="se">\x01</span><span class="s">_</span><span class="se">\x05</span><span class="s">X]</span><span class="se">\x16</span><span class="s">l</span><span class="se">\x16\x00\x00\x00\x00\x02</span><span class="s">j9E</span><span class="se">\x1a\x06</span><span class="s">+j[W</span><span class="se">\\\x08\x0c</span><span class="s">lC</span><span class="se">\x06</span><span class="s">xA7E]l+</span><span class="se">\x0e\x02</span><span class="s">-</span><span class="se">\x00</span><span class="s">G&lt;XZ</span><span class="se">\x08</span><span class="s">9Y</span><span class="se">\x06</span><span class="s">-GO</span><span class="se">\x04</span><span class="s">j+</span><span class="se">\x1c</span><span class="s">[l9</span><span class="se">\x04</span><span class="s">AVD1</span><span class="se">\x0c</span><span class="s">k]S7G</span><span class="se">\x1a\x02\x12</span><span class="s">j+</span><span class="se">\x1c</span><span class="s">[ljURB[</span><span class="se">\x10\x00</span><span class="s">Y</span><span class="se">\x01</span><span class="s">3</span><span class="se">\x12\x00\x02</span><span class="s">GlS]l+]</span><span class="se">\x00</span><span class="s">&lt;V_</span><span class="se">\x16</span><span class="s">jEj7@</span><span class="se">\x04</span><span class="s">W]l</span><span class="se">\x06</span><span class="s">[</span><span class="se">\x14</span><span class="s">jjG</span><span class="se">\x0b\x03</span><span class="s">1</span><span class="se">\x02</span><span class="s">nC</span><span class="se">\x00</span><span class="s">++</span><span class="se">\x00\x05</span><span class="s">Y9</span><span class="se">\x1c</span><span class="s">[Al</span><span class="se">\x12\x06</span><span class="s">&lt;D</span><span class="se">\x06</span><span class="s">W</span><span class="se">\x00</span><span class="s">W</span><span class="se">\x04</span><span class="s">-A</span><span class="se">\x1c</span><span class="s">n]k</span><span class="se">\x18\x0e</span><span class="s">[lG</span><span class="se">\x00</span><span class="s">D</span><span class="se">\x05</span><span class="s">1</span><span class="se">\x10</span><span class="s">7</span><span class="se">\x02</span><span class="s">j9E</span><span class="se">\x1a\x04</span><span class="s">A</span><span class="se">\x00\x1c\\</span><span class="s">_9]</span><span class="se">\x00\x11\x03</span><span class="s">IQ</span><span class="se">\x00</span><span class="s">E]l+</span><span class="se">\x0e\x00</span><span class="s">Gj</span><span class="se">\x00</span><span class="s">7[kYU</span><span class="se">\x0b\x03\x1c</span><span class="s">Wx</span><span class="se">\x04</span><span class="s">j+</span><span class="se">\x1c</span><span class="s">[nSn</span><span class="se">\x06</span><span class="s">]G</span><span class="se">\x00</span><span class="s">]</span><span class="se">\x07\x0f</span><span class="s">V</span><span class="se">\x06</span><span class="s">W-</span><span class="se">\x02\x12</span><span class="s">j+</span><span class="se">\x1c</span><span class="s">Y</span><span class="se">\x06\x00\x12</span><span class="s">YAjAl</span><span class="se">\x0b\x04\x02\x02</span><span class="s">7</span><span class="se">\x02</span><span class="s">GlS]nA7G7UnG</span><span class="se">\x06\x17</span><span class="s">o</span><span class="se">\x06</span><span class="s">P3W]l</span><span class="se">\x06</span><span class="s">[</span><span class="se">\x16\x00\x00\x00\x00\x00\x00</span><span class="s">S</span><span class="se">\x02\x11\x05\x1a</span><span class="s">;7</span><span class="se">\x05</span><span class="s">Y9</span><span class="se">\x1c</span><span class="s">[C</span><span class="se">\x06</span><span class="s">xA7G7</span><span class="se">\x06</span><span class="s">l</span><span class="se">\x05\x01\x1c</span><span class="s">Q+n]k</span><span class="se">\x18\x0e</span><span class="s">Y</span><span class="se">\x06</span><span class="s">-GO</span><span class="se">\x06\x00</span><span class="s">A[Po</span><span class="se">\x08</span><span class="s">U-</span><span class="se">\x04</span><span class="s">A</span><span class="se">\x00\x1c\\</span><span class="s">]S'</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa.</p>
-
-<p>First thought, <a href="https://github.com/Z3Prover/z3">Z3</a> go brrrrrr….</p>
-
-<p>Although Z3 produces a feasible solution(model), a quick <a href="https://stackoverflow.com/questions/11867611/z3py-checking-all-solutions-for-equation">stackOverflow</a> post gave me the implementation of finding n models.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">z3</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
-    <span class="s">"""
-    Returns a list of M models (if possible) from the list of constraints F
-    """</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="nc">Solver</span><span class="p">()</span>
-    <span class="n">s</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
-    <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">M</span> <span class="ow">and</span> <span class="n">s</span><span class="p">.</span><span class="nf">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">sat</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="nf">model</span><span class="p">()</span>
-        <span class="n">result</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-        <span class="c1"># Create a new constraint the blocks the current model
-</span>        <span class="n">block</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
-            <span class="c1"># d is a declaration
-</span>            <span class="k">if</span> <span class="n">d</span><span class="p">.</span><span class="nf">arity</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="nc">Z3Exception</span><span class="p">(</span><span class="s">"uninterpreted functions are not supported"</span><span class="p">)</span>
-            <span class="c1"># create a constant from declaration
-</span>            <span class="n">c</span> <span class="o">=</span> <span class="nf">d</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nf">is_array</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">or</span> <span class="n">c</span><span class="p">.</span><span class="nf">sort</span><span class="p">().</span><span class="nf">kind</span><span class="p">()</span> <span class="o">==</span> <span class="n">Z3_UNINTERPRETED_SORT</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="nc">Z3Exception</span><span class="p">(</span><span class="s">"arrays and uninterpreted sorts are not supported"</span><span class="p">)</span>
-            <span class="n">block</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">c</span> <span class="o">!=</span> <span class="n">m</span><span class="p">[</span><span class="n">d</span><span class="p">])</span>
-        <span class="n">s</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nc">Or</span><span class="p">(</span><span class="n">block</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">result</span>
-</code></pre></div></div>
-
-<p>All we need to do is to form constraints and checking if the generated model produces ASCII printable strings.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">key1</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="p">.</span><span class="nc">BitVec</span><span class="p">(</span><span class="s">"k1{}"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">21</span><span class="p">)]</span>
-<span class="n">key2</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="p">.</span><span class="nc">BitVec</span><span class="p">(</span><span class="s">"k2{}"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">19</span><span class="p">)]</span>
-<span class="n">F</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">19</span><span class="o">*</span><span class="mi">21</span><span class="p">):</span>
-    <span class="n">F</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">key1</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">21</span><span class="p">]</span><span class="o">^</span><span class="n">key2</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">19</span><span class="p">]</span><span class="o">==</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
-<span class="c1"># Valid flag characters
-</span><span class="n">VALID_CHARS</span> <span class="o">=</span> <span class="n">string</span><span class="p">.</span><span class="n">printable</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">62</span><span class="p">]</span><span class="o">+</span><span class="s">"_,.'?!@$&lt;&gt;*:-]*</span><span class="se">\\</span><span class="s">"</span>
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="mi">256</span><span class="p">):</span>
-    <span class="c1"># 256 models to get all possible relative strings
-</span>    <span class="n">KEY1</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">chr</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="n">key1</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="nf">as_long</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">21</span><span class="p">))</span>
-    <span class="n">KEY2</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span> <span class="nf">chr</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="n">key2</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="nf">as_long</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">19</span><span class="p">))</span>
-    <span class="n">flag</span> <span class="o">=</span> <span class="n">KEY1</span><span class="o">+</span><span class="n">KEY2</span>
-    <span class="k">if</span> <span class="nf">all</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">VALID_CHARS</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">):</span>
-        <span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
-</code></pre></div></div>
-<p>Turns out there was only one model with all characters printable and which is our flag</p>
-
-<h3 id="flagh3r35_th3_f1r5t_h4lf_th3_53c0nd_15_th15">flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="xor" /><category term="z3" /><summary type="html"><![CDATA[Alien-transmissions-v2 Description The aliens are at it again! We've discovered that their communications are in base 512 and have transcribed them in base 10. However, it seems like they used XOR encryption twice with two different keys! We do have some information: * This alien language consists of words delimitated by the character represented as 481 * The two keys appear to be of length 21 and 19 * The value of each character in these keys does not exceed 255 Find these two keys for me; concatenate their ASCII encodings and wrap it in the flag format. Files encrypted.txt (HUGE number of characters) Observations Hint 1, the delimitated character in plaintext is represented as 481. How does it help? Because in any language delimiter of words (space in our case) is the most frequent character (although we cant be sure about the aliens, what if they have really long words??), we can assume that the plaintext character 481 is the most frequent. Hint 2 states that it is XORed twice, once with the key of length 21 and again by length of key 19. If one ponders more, the two keys would act as a combined key of length of LCM of the two lengths 19 and 21, which is 21x19 = 399. And given the huge number of words (1100151), we can recover the key atleast pretty accurately. Combined XOR key recovery The plaintexts at a difference of keylength are always encrypted by the same key letter, so splitting the ciphertext in keylength number of chunks, we can get a whole chunk, which has been encrypted by the same key byte. And since the character frequency of each chunk would resemble the character frequency distribution of the whole text owing to the huge size of ciphertext. Just find the character with maximum frequency in each chunk, that would be 481 XOR key, XOR it with 481, to get the corresponding compound key character with open('encrypted.txt','r') as encrypted: data = list(map(int, encrypted.readlines())) key = bytearray() for i in range(21*19): data_slice = data[i::21*19] key_char_val = 481 ^ max(data_slice, key=data_slice.count) key.append(key_char_val) print(key) It takes a couple of seconds to find the compound key key = bytearray(b'7G\x1a\x00x\x00l\x17X];9\x00Gj\x007Y\x013\x12\x00\x00-\x06\x14Vo\x1a\x0clnSn\x06]Ej7@\x04U7\x06AP\x17[;+Y\x06\x00\x12YC\x00++\x00\x073S[PB]CjnA7G7W\x04-A\x1cl7\x01_\x05X]\x16l\x16\x00\x00\x00\x00\x02j9E\x1a\x06+j[W\\\x08\x0clC\x06xA7E]l+\x0e\x02-\x00G&lt;XZ\x089Y\x06-GO\x04j+\x1c[l9\x04AVD1\x0ck]S7G\x1a\x02\x12j+\x1c[ljURB[\x10\x00Y\x013\x12\x00\x02GlS]l+]\x00&lt;V_\x16jEj7@\x04W]l\x06[\x14jjG\x0b\x031\x02nC\x00++\x00\x05Y9\x1c[Al\x12\x06&lt;D\x06W\x00W\x04-A\x1cn]k\x18\x0e[lG\x00D\x051\x107\x02j9E\x1a\x04A\x00\x1c\\_9]\x00\x11\x03IQ\x00E]l+\x0e\x00Gj\x007[kYU\x0b\x03\x1cWx\x04j+\x1c[nSn\x06]G\x00]\x07\x0fV\x06W-\x02\x12j+\x1cY\x06\x00\x12YAjAl\x0b\x04\x02\x027\x02GlS]nA7G7UnG\x06\x17o\x06P3W]l\x06[\x16\x00\x00\x00\x00\x00\x00S\x02\x11\x05\x1a;7\x05Y9\x1c[C\x06xA7G7\x06l\x05\x01\x1cQ+n]k\x18\x0eY\x06-GO\x06\x00A[Po\x08U-\x04A\x00\x1c\\]S') Now, we have the XOR of key1 and key2, we need to recover key1 and key2 from it. We have all possible bytes, of key1 XORed with key2 and vice-versa. First thought, Z3 go brrrrrr…. Although Z3 produces a feasible solution(model), a quick stackOverflow post gave me the implementation of finding n models. from z3 import * def get_models(F, M): """ Returns a list of M models (if possible) from the list of constraints F """ result = [] s = Solver() s.add(F) while len(result) &lt; M and s.check() == sat: m = s.model() result.append(m) # Create a new constraint the blocks the current model block = [] for d in m: # d is a declaration if d.arity() &gt; 0: raise Z3Exception("uninterpreted functions are not supported") # create a constant from declaration c = d() if is_array(c) or c.sort().kind() == Z3_UNINTERPRETED_SORT: raise Z3Exception("arrays and uninterpreted sorts are not supported") block.append(c != m[d]) s.add(Or(block)) return result All we need to do is to form constraints and checking if the generated model produces ASCII printable strings. key1 = [z3.BitVec("k1{}".format(i),8) for i in range(21)] key2 = [z3.BitVec("k2{}".format(i),8) for i in range(19)] F = [] for i in range(19*21): F.append(key1[i%21]^key2[i%19]==key[i]) # Valid flag characters VALID_CHARS = string.printable[0:62]+"_,.'?!@$&lt;&gt;*:-]*\\" for model in get_models(F,256): # 256 models to get all possible relative strings KEY1 = "".join( chr(model[key1[i]].as_long()) for i in range(21)) KEY2 = "".join( chr(model[key2[i]].as_long()) for i in range(19)) flag = KEY1+KEY2 if all(i in VALID_CHARS for i in flag): print(flag) Turns out there was only one model with all characters printable and which is our flag flag{h3r3’5_th3_f1r5t_h4lf_th3_53c0nd_15_th15}]]></summary></entry></feed>
+<h3 id="flagt0000_m4nyyyy_pr1m355555">flag{t0000_m4nyyyy_pr1m355555}</h3>]]></content><author><name>deuterium</name><email>farziemailid69@gmail.com</email></author><category term="redpwn" /><category term="2020" /><category term="cryptography" /><category term="alpertron" /><category term="ECM" /><category term="RSA" /><summary type="html"><![CDATA[4k-rsa Description Only n00bz use 2048-bit RSA. True gamers use keys that are at least 4k bits long, no matter how many primes it takes... Files 4k-rsa-public-key.txt which contains a n, e, c triple Seems like there are a lot of primes in the factorization of n, since the factorization process is influenced directly by the size of prime factors and not the size of the number being factored itself, it should be fairly doable by alpetron.ar It took about half an hour to factor, one may engage to other activities or alternatively try if the factors are available on factordb. Anyways, once finished factoring, alpetron produces both the factors and the Euler’s totient phi which will be used to compute d d = pow(e,-1,phi) # on python3.8 # or gmpy2.invert(e,phi) m = pow(c,d,n) print(bytes.fromhex(hex(m)[2:]).decode()) And hurray, we have our flag flag{t0000_m4nyyyy_pr1m355555}]]></summary></entry></feed>
